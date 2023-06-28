@@ -1,5 +1,16 @@
+import Navbar from "./Components/Navbar";
+import Home from "./Views/Home";
+
 function App() {
-  return <h1 className="text-2xl font-bold text-center">React Movie App</h1>;
+  return (
+    <div className="min-h-[100dvh] bg-background text-text">
+      <Navbar />
+
+      <main>
+        <Home />
+      </main>
+    </div>
+  );
 }
 
 export default App;
