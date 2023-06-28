@@ -1,7 +1,23 @@
+import { useEffect, useState } from "react";
 import Icons from "../Components/Icons";
 import MovieCard from "../Components/MovieCard";
 
+const API_KEY = import.meta.env.VITE_API_KEY;
+const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+
 export default function Home() {
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    // fetch movies
+    fetch(`${API_ENDPOINT}/discover/movie?api_key=${API_KEY}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setMovies(data.results);
+      });
+  }, []);
+
   return (
     <div>
       <h1 className="container mx-auto my-4 text-center text-2xl font-bold">
@@ -20,16 +36,14 @@ export default function Home() {
       </div>
 
       <div className="container mx-auto grid grid-cols-2 gap-4 px-4 md:grid-cols-4 lg:grid-cols-6">
-        <MovieCard />
-        <MovieCard />
-        <MovieCard />
-        <MovieCard />
-        <MovieCard />
-        <MovieCard />
-        <MovieCard />
-        <MovieCard />
-        <MovieCard />
-        <MovieCard />
+        {movies.map((movie) => (
+          <MovieCard
+            title={movie.title}
+            poster_url={`https://image.tmdb.org/t/p/original/${movie.poster_path}`}
+            release_date={movie.release_date}
+            key={movie.id}
+          />
+        ))}
       </div>
 
       <div className="flex">
