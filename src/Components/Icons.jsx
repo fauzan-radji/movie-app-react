@@ -63,4 +63,41 @@ export function Search(props) {
   );
 }
 
-export default { Home, UserCircle, ArrowDown, Search };
+export function ChevronLeft(props) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className={props.className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15.75 19.5L8.25 12l7.5-7.5"
+      />
+    </svg>
+  );
+}
+
+export function PriceTag(props) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 50 50"
+      strokeWidth={1.5}
+      fill="currentColor"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeMiterlimit="10"
+      className={props.className}
+    >
+      <circle cx="39" cy="11" r="3" />
+      <path d="M47,5.5  C47,4.119,45.881,3,44.5,3c-0.156,0-14.876,0.002-14.876,0.002c-1.33,0-2.603-0.07-3.341,0.668L3.554,26.398  c-0.739,0.738-0.739,1.936,0,2.674l17.374,17.374c0.738,0.738,1.936,0.738,2.674,0L46.33,23.717c0.738-0.737,0.668-1.98,0.668-3.34  C46.998,20.377,47,5.656,47,5.5z" />
+    </svg>
+  );
+}
+
+export default { Home, UserCircle, ArrowDown, Search, ChevronLeft, PriceTag };
