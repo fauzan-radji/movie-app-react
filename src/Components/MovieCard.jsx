@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 export default function MovieCard(props) {
   return (
@@ -16,10 +17,19 @@ export default function MovieCard(props) {
         50K IDR
       </div>
 
-      <h2 className="text-xl font-bold text-background">{props.title}</h2>
-      <p className="my-2 w-max rounded-md bg-primary/20 px-2 py-1 text-xs text-background">
-        Released: {props.release_date}
+      <h2 className="text-md line-clamp-2 font-bold leading-5 text-background">
+        {props.title}
+      </h2>
+      <p className="mt-1 w-max rounded-md bg-primary/20 px-2 py-1 text-xs text-background">
+        {props.release_date}
       </p>
     </Link>
   );
 }
+
+MovieCard.propTypes = {
+  id: PropTypes.number.isRequired,
+  poster_url: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  release_date: PropTypes.string.isRequired,
+};

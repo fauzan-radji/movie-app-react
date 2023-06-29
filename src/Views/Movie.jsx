@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import Icons from "../Components/Icons";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
@@ -18,36 +18,8 @@ export default function Movie() {
       .then((data) => {
         setMovie(data);
         setIsLoading(false);
-        console.log(data);
       });
   }, [movieId]);
-
-  if (isLoading)
-    // TODO: fix the loading element
-    return (
-      <div className="flex flex-col">
-        <div className="relative my-4 flex h-8 items-center justify-center">
-          <button
-            onClick={() => navigate(-1)}
-            className="absolute left-0 top-0 flex aspect-square h-full items-center justify-center rounded-md bg-secondary px-2 py-1 text-text"
-          >
-            <Icons.ChevronLeft className="h-4 w-4" />
-          </button>
-          <h2 className="text-center font-bold">Movie Details</h2>
-        </div>
-        <div className="flex flex-col">
-          <div className="flex animate-pulse flex-col">
-            <div className="h-80 w-full rounded-3xl bg-gray-300"></div>
-            <div className="my-2 h-6 w-1/2 rounded-md bg-gray-300"></div>
-            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
-            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
-            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
-            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
-            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
-          </div>
-        </div>
-      </div>
-    );
 
   return (
     <div className="flex flex-col">
@@ -61,32 +33,50 @@ export default function Movie() {
         <h2 className="text-center font-bold">Movie Details</h2>
       </div>
 
-      <div className="flex flex-col">
-        <img
-          src={`${IMAGE_ENDPOINT}${movie.poster_path}`}
-          alt={movie.title}
-          className="aspect-[3/4] w-full rounded-3xl object-cover"
-        />
-
-        <h1 className="mt-4 text-2xl font-bold">{`${movie.title} (${
-          movie.release_date.match(/\d{4}/)[0]
-        })`}</h1>
-
-        <div className="mb-2 w-max rounded-md bg-accent/70 px-2 py-1 text-sm text-background">
-          <Icons.PriceTag className="mr-2 inline h-4 w-4" />
-          Rp. 50.000,-
+      {/* TODO: fix the loading element */}
+      {isLoading ? (
+        <div className="flex flex-col">
+          <div className="flex animate-pulse flex-col">
+            <div className="h-80 w-full rounded-3xl bg-gray-300"></div>
+            <div className="my-2 h-6 w-1/2 rounded-md bg-gray-300"></div>
+            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
+            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
+            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
+            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
+            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
+          </div>
         </div>
+      ) : (
+        <div className="flex flex-col">
+          <img
+            src={`${IMAGE_ENDPOINT}${movie.poster_path}`}
+            alt={movie.title}
+            className="aspect-[3/4] w-full rounded-3xl object-cover"
+          />
 
-        <hr className=" border-t-2 border-t-accent" />
+          <h1 className="mt-4 text-2xl font-bold">{`${movie.title} (${
+            movie.release_date.match(/\d{4}/)[0]
+          })`}</h1>
 
-        <p className="my-2 text-text">
-          {movie.overview || "No overview available."}
-        </p>
+          <div className="mb-2 w-max rounded-md bg-accent/70 px-2 py-1 text-sm text-background">
+            <Icons.PriceTag className="mr-2 inline h-4 w-4" />
+            Rp. 50.000,-
+          </div>
 
-        <button className="mx-auto mb-6 flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 text-background">
-          Book Ticket
-        </button>
-      </div>
+          <hr className=" border-t-2 border-t-accent" />
+
+          <p className="my-2 text-text">
+            {movie.overview || "No overview available."}
+          </p>
+
+          <Link
+            to={`/movie/${movie.id}/book`}
+            className="mx-auto mb-6 flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 text-background"
+          >
+            Book Ticket
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

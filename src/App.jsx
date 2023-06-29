@@ -10,7 +10,10 @@ function App() {
       <main className="container mx-auto px-6">
         <Routes>
           <Route element={<View.Home />} path="/" />
-          <Route element={<View.Movie />} path="/movie/:movieId"></Route>
+          <Route path="/movie/:movieId">
+            <Route index element={<View.Movie />} />
+            <Route element={<View.BookTicket />} path="book"></Route>
+          </Route>
         </Routes>
       </main>
     </div>
