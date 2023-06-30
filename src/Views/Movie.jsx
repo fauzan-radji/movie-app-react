@@ -35,7 +35,9 @@ export default function Movie() {
 
       <div className="flex flex-col items-center gap-y-4 landscape:flex-row landscape:items-start landscape:gap-x-8">
         {isLoading ? (
-          <div className="aspect-[3/4] max-h-[calc(100dvh-12rem)] w-full max-w-full animate-pulse rounded-3xl bg-accent/20 object-cover landscape:h-[calc(100dvh-12rem)] landscape:w-auto"></div>
+          <div className="relative aspect-[3/4] max-h-[calc(100dvh-12rem)] w-full max-w-full animate-pulse rounded-3xl bg-accent/20 object-cover landscape:h-[calc(100dvh-12rem)] landscape:w-auto">
+            <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
+          </div>
         ) : (
           <img
             src={`${IMAGE_ENDPOINT}${movie.poster_path}`}
@@ -58,11 +60,20 @@ export default function Movie() {
             Rp. 50.000,-
           </div>
 
-          <hr className=" border-t-2 border-t-accent" />
+          <hr className="border-t-2 border-t-accent" />
 
-          <p className="my-2 text-text">
-            {movie.overview || "No overview available."}
-          </p>
+          {isLoading ? (
+            <div className="my-2 flex w-full animate-pulse flex-col gap-2">
+              <div className="h-6 w-4/5 animate-pulse rounded-md bg-accent/20"></div>
+              <div className="h-6 w-2/3 animate-pulse rounded-md bg-accent/20"></div>
+              <div className="h-6 w-9/12 animate-pulse rounded-md bg-accent/20"></div>
+              <div className="h-6 w-3/5 animate-pulse rounded-md bg-accent/20"></div>
+            </div>
+          ) : (
+            <p className="my-2 text-text">
+              {movie.overview || "No overview available."}
+            </p>
+          )}
 
           <Link
             to={`/movie/${movie.id}/book`}
