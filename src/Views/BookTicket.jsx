@@ -97,7 +97,7 @@ export default function BookTicket() {
           )}
 
           {isLoading ? (
-            <div className="hidden aspect-[3/4] w-full rounded-3xl bg-accent/20 md:block landscape:aspect-video"></div>
+            <div className="hidden aspect-[3/4] w-full animate-pulse rounded-3xl bg-accent/20 md:block landscape:aspect-video"></div>
           ) : (
             <img
               className="hidden aspect-[3/4] w-full rounded-3xl bg-accent/20 object-cover md:block landscape:aspect-video"

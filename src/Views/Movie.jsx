@@ -21,10 +21,6 @@ export default function Movie() {
       });
   }, [movieId]);
 
-  if (isLoading) {
-    return <p className="text-center text-text">Loading...</p>;
-  }
-
   return (
     <div className="flex flex-col">
       <div className="relative my-4 flex h-8 items-center justify-center">
@@ -37,17 +33,25 @@ export default function Movie() {
         <h2 className="text-center font-bold">Movie Details</h2>
       </div>
 
-      <div className="flex flex-col items-center landscape:flex-row landscape:items-start landscape:gap-x-8">
-        <img
-          src={`${IMAGE_ENDPOINT}${movie.poster_path}`}
-          alt={movie.title}
-          className="aspect-[3/4] max-h-[calc(100dvh-12rem)] max-w-full rounded-3xl object-cover"
-        />
+      <div className="flex flex-col items-center gap-y-4 landscape:flex-row landscape:items-start landscape:gap-x-8">
+        {isLoading ? (
+          <div className="aspect-[3/4] max-h-[calc(100dvh-12rem)] w-full max-w-full animate-pulse rounded-3xl bg-accent/20 object-cover landscape:h-[calc(100dvh-12rem)] landscape:w-auto"></div>
+        ) : (
+          <img
+            src={`${IMAGE_ENDPOINT}${movie.poster_path}`}
+            alt={movie.title}
+            className="aspect-[3/4] max-h-[calc(100dvh-12rem)] max-w-full rounded-3xl bg-accent/20 object-cover"
+          />
+        )}
 
-        <div className="flex flex-col">
-          <h1 className="mt-4 text-2xl font-bold">{`${movie.title} (${
-            movie.release_date.match(/\d{4}/)[0]
-          })`}</h1>
+        <div className="flex w-full flex-col">
+          {isLoading ? (
+            <div className="mb-2 h-8 w-2/3 animate-pulse rounded-md bg-accent/20"></div>
+          ) : (
+            <h1 className="mb-2 text-2xl font-bold">{`${movie.title} (${
+              movie.release_date.match(/\d{4}/)[0]
+            })`}</h1>
+          )}
 
           <div className="mb-2 w-max rounded-md bg-accent/70 px-2 py-1 text-sm text-background">
             <Icons.PriceTag className="mr-2 inline h-4 w-4" />
