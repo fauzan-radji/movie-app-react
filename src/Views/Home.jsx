@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Icons from "../Components/Icons";
 import MovieCard from "../Components/MovieCard";
+import Header from "../Components/Header";
+import PrimaryButton from "../Components/PrimaryButton";
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
@@ -21,9 +23,9 @@ export default function Home() {
 
   return (
     <div>
-      <h1 className="my-4 text-center text-2xl font-bold">React Movie App</h1>
+      <Header>React Movie App</Header>
 
-      <form className="my-4 flex items-center gap-2 rounded-md bg-secondary px-4 py-2">
+      <form className="mb-4 flex items-center gap-2 rounded-md bg-secondary px-4 py-2">
         <input
           type="text"
           placeholder="Search movies..."
@@ -32,7 +34,7 @@ export default function Home() {
         <Icons.Search className="h-5 w-5 text-text" />
       </form>
 
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
+      <div className="mb-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
         {isLoading ? (
           <>
             <div className="flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
@@ -73,11 +75,11 @@ export default function Home() {
         )}
       </div>
 
-      <div className="flex">
-        <button className="mx-auto my-4 flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-background">
+      <div className="flex justify-center pb-4">
+        <PrimaryButton>
           Load More
           <Icons.ArrowDown className="h-5 w-5" />
-        </button>
+        </PrimaryButton>
       </div>
     </div>
   );
