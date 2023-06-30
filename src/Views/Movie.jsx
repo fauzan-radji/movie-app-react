@@ -21,6 +21,10 @@ export default function Movie() {
       });
   }, [movieId]);
 
+  if (isLoading) {
+    return <p className="text-center text-text">Loading...</p>;
+  }
+
   return (
     <div className="flex flex-col">
       <div className="relative my-4 flex h-8 items-center justify-center">
@@ -33,27 +37,14 @@ export default function Movie() {
         <h2 className="text-center font-bold">Movie Details</h2>
       </div>
 
-      {/* TODO: fix the loading element */}
-      {isLoading ? (
-        <div className="flex flex-col">
-          <div className="flex animate-pulse flex-col">
-            <div className="h-80 w-full rounded-3xl bg-gray-300"></div>
-            <div className="my-2 h-6 w-1/2 rounded-md bg-gray-300"></div>
-            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
-            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
-            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
-            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
-            <div className="my-2 h-6 w-1/4 rounded-md bg-gray-300"></div>
-          </div>
-        </div>
-      ) : (
-        <div className="flex flex-col">
-          <img
-            src={`${IMAGE_ENDPOINT}${movie.poster_path}`}
-            alt={movie.title}
-            className="aspect-[3/4] w-full rounded-3xl object-cover"
-          />
+      <div className="flex flex-col items-center landscape:flex-row landscape:items-start landscape:gap-x-8">
+        <img
+          src={`${IMAGE_ENDPOINT}${movie.poster_path}`}
+          alt={movie.title}
+          className="aspect-[3/4] max-h-[calc(100dvh-12rem)] max-w-full rounded-3xl object-cover"
+        />
 
+        <div className="flex flex-col">
           <h1 className="mt-4 text-2xl font-bold">{`${movie.title} (${
             movie.release_date.match(/\d{4}/)[0]
           })`}</h1>
@@ -76,7 +67,7 @@ export default function Movie() {
             Book Ticket
           </Link>
         </div>
-      )}
+      </div>
     </div>
   );
 }

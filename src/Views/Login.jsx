@@ -6,10 +6,10 @@ import PrimaryButton from "../Components/PrimaryButton";
 
 export default function Login() {
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col items-center">
       <Header>Login</Header>
 
-      <form className="mb-4 mt-8 flex flex-auto flex-col justify-between">
+      <form className="mb-4 mt-8 flex w-full max-w-md flex-auto flex-col justify-between gap-4 md:justify-start">
         <div className="flex flex-col items-center justify-center gap-y-4">
           <InputIcon type="text" placeholder="Username">
             <Icons.User className="h-5 w-5 text-text" />
@@ -19,7 +19,7 @@ export default function Login() {
           </InputIcon>
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-y-4">
+        <div className="flex flex-col items-center justify-center gap-y-4 md:flex-col-reverse">
           <p className="text-text/80">
             Don&apos;t have an account?{" "}
             <Link to="/register" className="text-accent">
