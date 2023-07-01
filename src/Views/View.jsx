@@ -3,5 +3,6 @@ import Movie from "./Movie";
 import BookTicket from "./BookTicket";
 import Login from "./Login";
 import Register from "./Register";
+import Tickets from "./Tickets";
 
-export default { Home, Movie, BookTicket, Login, Register };
+export default { Home, Movie, BookTicket, Login, Register, Tickets };

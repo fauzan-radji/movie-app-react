@@ -17,6 +17,7 @@ function App() {
             </Route>
             <Route path="login" element={<View.Login />} />
             <Route path="register" element={<View.Register />} />
+            <Route path="tickets" element={<View.Tickets />} />
           </Route>
         </Routes>
       </main>

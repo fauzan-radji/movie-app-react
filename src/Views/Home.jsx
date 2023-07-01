@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <div>
-      <Header>React Movie App</Header>
+      <Header>{import.meta.env.VITE_APP_NAME}</Header>
 
       <form className="mb-4 flex items-center gap-2 rounded-md bg-secondary px-4 py-2">
         <input

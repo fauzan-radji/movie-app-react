@@ -27,6 +27,13 @@ export default function Navbar() {
             <Icons.Login className="h-6 w-6 md:h-4 md:w-4" />
             <span className="hidden md:inline">Login</span>
           </Link>
+          <Link
+            to="/tickets"
+            className="flex flex-1 items-center justify-center gap-x-2 rounded-md px-3 py-2 font-medium text-text hover:bg-secondary hover:text-accent md:flex-none"
+          >
+            <Icons.Ticket className="h-6 w-6 md:h-4 md:w-4" />
+            <span className="hidden md:inline">My Tickets</span>
+          </Link>
         </div>
       </div>
     </nav>

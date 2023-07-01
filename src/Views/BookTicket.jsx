@@ -17,6 +17,7 @@ export default function BookTicket() {
     fetch(`${API_ENDPOINT}/movie/${movieId}`)
       .then((res) => res.json())
       .then((data) => {
+        data.title = `${data.title} (${data.releaseDate.match(/\d{4}/)[0]})`;
         setMovie(data);
         setPrice(Math.round(data.price / 1000));
         setIsLoading(false);
@@ -43,7 +44,7 @@ export default function BookTicket() {
         <div className="mb-8 h-9 w-4/5 animate-pulse self-center rounded-lg bg-accent/20 md:hidden"></div>
       ) : (
         <h1 className="mb-8 text-center text-3xl font-bold md:hidden">
-          {movie.title} ({movie.releaseDate?.match(/\d{4}/)[0]})
+          {movie.title}
         </h1>
       )}
 
@@ -92,7 +93,7 @@ export default function BookTicket() {
             <div className="hidden h-9 w-4/5 animate-pulse self-center rounded-lg bg-accent/20 md:block"></div>
           ) : (
             <h1 className="hidden text-center text-3xl font-bold md:block">
-              {movie.title} ({movie.release_date?.match(/\d{4}/)[0]})
+              {movie.title}
             </h1>
           )}
 
