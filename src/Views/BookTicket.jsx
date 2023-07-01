@@ -3,29 +3,28 @@ import Icons from "../Components/Icons";
 import { useEffect, useState } from "react";
 import Seat from "../Components/Seat";
 
-const API_KEY = import.meta.env.VITE_API_KEY;
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const IMAGE_ENDPOINT = import.meta.env.VITE_API_IMAGE_ENDPOINT;
 
 export default function BookTicket() {
   const { movieId } = useParams();
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [price, setPrice] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/movie/${movieId}?api_key=${API_KEY}`)
+    fetch(`${API_ENDPOINT}/movie/${movieId}`)
       .then((res) => res.json())
       .then((data) => {
         setMovie(data);
+        setPrice(Math.round(data.price / 1000));
         setIsLoading(false);
       });
   }, [movieId]);
 
   function onSeatSelected(isSelected) {
-    // TODO: change constant value (50) to the actual price
-    setTotalPrice((prev) => (isSelected ? prev + 50 : prev - 50));
+    setTotalPrice((prev) => (isSelected ? prev + price : prev - price));
   }
 
   return (
@@ -44,7 +43,7 @@ export default function BookTicket() {
         <div className="mb-8 h-9 w-4/5 animate-pulse self-center rounded-lg bg-accent/20 md:hidden"></div>
       ) : (
         <h1 className="mb-8 text-center text-3xl font-bold md:hidden">
-          {movie.title} ({movie.release_date?.match(/\d{4}/)[0]})
+          {movie.title} ({movie.releaseDate?.match(/\d{4}/)[0]})
         </h1>
       )}
 
@@ -87,6 +86,7 @@ export default function BookTicket() {
             </div>
           </div>
         </div>
+
         <div className="flex flex-1 flex-col gap-4">
           {isLoading ? (
             <div className="hidden h-9 w-4/5 animate-pulse self-center rounded-lg bg-accent/20 md:block"></div>
@@ -103,7 +103,7 @@ export default function BookTicket() {
           ) : (
             <img
               className="hidden aspect-[3/4] w-full rounded-3xl bg-accent/20 object-cover md:block landscape:aspect-video"
-              src={`${IMAGE_ENDPOINT}${movie.poster_path}`}
+              src={`${movie.poster}`}
               alt={movie.title}
             />
           )}

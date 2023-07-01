@@ -4,22 +4,22 @@ import MovieCard from "../Components/MovieCard";
 import Header from "../Components/Header";
 import PrimaryButton from "../Components/PrimaryButton";
 
-const API_KEY = import.meta.env.VITE_API_KEY;
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const IMAGE_ENDPOINT = import.meta.env.VITE_API_IMAGE_ENDPOINT;
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/discover/movie?api_key=${API_KEY}`)
+    fetch(`${API_ENDPOINT}/movie?page=${page}&limit=12`)
       .then((res) => res.json())
       .then((data) => {
-        setMovies(data.results);
+        const newMovies = [...movies, ...data.data];
+        setMovies(newMovies);
         setIsLoading(false);
       });
-  }, []);
+  }, [page]);
 
   return (
     <div>
@@ -67,14 +67,45 @@ export default function Home() {
               <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
               <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
             </div>
+            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
+              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
+              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
+              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
+            </div>
+            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
+              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
+              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
+              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
+            </div>
+            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
+              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
+              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
+              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
+            </div>
+            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
+              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
+              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
+              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
+            </div>
+            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
+              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
+              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
+              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
+            </div>
+            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
+              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
+              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
+              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
+            </div>
           </>
         ) : (
           movies.map((movie) => (
             <MovieCard
               id={movie.id}
+              price={movie.price}
               title={movie.title}
-              poster_url={`${IMAGE_ENDPOINT}${movie.poster_path}`}
-              release_date={movie.release_date}
+              poster={`${movie.poster}`}
+              releaseDate={movie.releaseDate}
               key={movie.id}
             />
           ))
@@ -82,7 +113,7 @@ export default function Home() {
       </div>
 
       <div className="flex justify-center pb-4">
-        <PrimaryButton>
+        <PrimaryButton onClick={() => setPage(page + 1)}>
           Load More
           <Icons.ArrowDown className="h-5 w-5" />
         </PrimaryButton>

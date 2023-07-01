@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import Icons from "../Components/Icons";
 
-const API_KEY = import.meta.env.VITE_API_KEY;
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const IMAGE_ENDPOINT = import.meta.env.VITE_API_IMAGE_ENDPOINT;
 
 export default function Movie() {
   const { movieId } = useParams();
@@ -13,7 +11,7 @@ export default function Movie() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/movie/${movieId}?api_key=${API_KEY}`)
+    fetch(`${API_ENDPOINT}/movie/${movieId}`)
       .then((res) => res.json())
       .then((data) => {
         setMovie(data);
@@ -40,7 +38,7 @@ export default function Movie() {
           </div>
         ) : (
           <img
-            src={`${IMAGE_ENDPOINT}${movie.poster_path}`}
+            src={`${movie.poster}`}
             alt={movie.title}
             className="aspect-[3/4] max-h-[calc(100dvh-12rem)] max-w-full rounded-3xl bg-accent/20 object-cover"
           />
@@ -51,13 +49,20 @@ export default function Movie() {
             <div className="mb-2 h-8 w-2/3 animate-pulse rounded-md bg-accent/20"></div>
           ) : (
             <h1 className="mb-2 text-2xl font-bold">{`${movie.title} (${
-              movie.release_date.match(/\d{4}/)[0]
+              movie.releaseDate.match(/\d{4}/)[0]
             })`}</h1>
           )}
 
-          <div className="mb-2 w-max rounded-md bg-accent/70 px-2 py-1 text-sm text-background">
+          <div
+            className={`mb-2 w-max rounded-md bg-accent/70 px-2 py-1 text-sm text-background ${
+              isLoading ? "animate-pulse" : ""
+            }`}
+          >
             <Icons.PriceTag className="mr-2 inline h-4 w-4" />
-            Rp. 50.000,-
+            {new Intl.NumberFormat("id-ID", {
+              style: "currency",
+              currency: "IDR",
+            }).format(isLoading ? 0 : movie.price)}
           </div>
 
           <hr className="border-t-2 border-t-accent" />
@@ -71,12 +76,12 @@ export default function Movie() {
             </div>
           ) : (
             <p className="my-2 text-text">
-              {movie.overview || "No overview available."}
+              {movie.description || "No description available."}
             </p>
           )}
 
           <Link
-            to={`/movie/${movie.id}/book`}
+            to={`/movie/${movieId}/book`}
             className="mx-auto mb-6 flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 text-background"
           >
             Book Ticket

@@ -6,7 +6,7 @@ export default function Seat({ reserved, onSeatSelected }) {
 
   return (
     <div
-      className={`h-8 w-8 rounded-md ${
+      className={`h-8 w-8 cursor-pointer rounded-md ${
         selected ? "bg-primary" : reserved ? "bg-text/80" : "bg-accent/30"
       }`}
       onClick={() => {
