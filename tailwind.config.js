@@ -1,4 +1,5 @@
 import defaultTheme from "tailwindcss/defaultTheme";
+import colors from "tailwindcss/colors";
 
 /** @type {import('tailwindcss').Config} */
 
@@ -12,6 +13,10 @@ export default {
         primary: "#e80f0c",
         secondary: "#e2cde4",
         accent: "#4e0942",
+
+        danger: colors.red,
+        success: colors.green,
+        infor: colors.blue,
       },
 
       fontFamily: {
