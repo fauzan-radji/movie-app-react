@@ -15,6 +15,7 @@ function App() {
               <Route index element={<View.Movie />} />
               <Route element={<View.BookTicket />} path="book" />
             </Route>
+            <Route path="profile" element={<View.Profile />} />
             <Route path="login" element={<View.Login />} />
             <Route path="register" element={<View.Register />} />
             <Route path="tickets" element={<View.Tickets />} />

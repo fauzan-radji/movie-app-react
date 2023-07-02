@@ -59,7 +59,7 @@ export default function Movie() {
             }`}
           >
             <Icons.PriceTag className="mr-2 inline h-4 w-4" />
-            {new Intl.NumberFormat("id-ID", {
+            {Intl.NumberFormat("id-ID", {
               style: "currency",
               currency: "IDR",
             }).format(isLoading ? 0 : movie.price)}
