@@ -25,7 +25,11 @@ export default function App() {
             <Route
               path="profile"
               element={
-                <View.Profile isLoggedIn={isLoggedIn} setToken={setToken} />
+                <View.Profile
+                  isLoggedIn={isLoggedIn}
+                  token={token}
+                  setToken={setToken}
+                />
               }
             />
             <Route

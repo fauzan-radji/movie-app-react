@@ -2,11 +2,22 @@ import { Navigate, useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import CreditCard from "../Components/CreditCard";
 import Header from "../Components/Header";
-import Ticket from "../Components/Ticket";
 import Icons from "../Components/Icons";
+import { useFetch } from "usehooks-ts";
+import ErrorAlert from "../Components/ErrorAlert";
+import Tickets from "../Components/Tickets";
 
-export default function Profile({ isLoggedIn, setToken }) {
+const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+
+export default function Profile({ isLoggedIn, token, setToken }) {
   const navigate = useNavigate();
+  const { data: user, error: userError } = useFetch(`${API_ENDPOINT}/user/me`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const { data: balance, error: balanceError } = useFetch(
+    `${API_ENDPOINT}/balance`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
 
   if (!isLoggedIn) {
     return <Navigate to="/login" replace={true} />;
@@ -14,6 +25,7 @@ export default function Profile({ isLoggedIn, setToken }) {
 
   return (
     <div className="flex flex-col pb-4">
+      {/* TODO: export into a separate component */}
       <div className="relative mt-4 flex h-8 items-center justify-center">
         <button
           onClick={() => navigate(-1)}
@@ -30,23 +42,44 @@ export default function Profile({ isLoggedIn, setToken }) {
         </button>
       </div>
 
-      <Header className="pb-0">John Doe</Header>
-      <p className="text-center text-text/50">@johndoe</p>
+      {userError ? (
+        // TODO: display better error feedback
+        <ErrorAlert>
+          <p>Woops, something went wrong</p>
+        </ErrorAlert>
+      ) : user ? (
+        <>
+          <Header className="pb-0">John Doe</Header>
+          <p className="text-center text-text/50">@{user.username}</p>
 
-      <CreditCard balance={50000} email="johndoe@gmail.com" />
+          {balanceError ? (
+            // TODO: display better error feedback
+            <ErrorAlert>
+              <p>Woops, something went wrong</p>
+            </ErrorAlert>
+          ) : (
+            <CreditCard
+              balance={balance ? balance.balance : "Rp 0,00"}
+              email="johndoe@gmail.com"
+            />
+          )}
 
-      <h3 className="mt-8 text-lg font-bold">My Tickets</h3>
-      <hr className="border-b border-accent/50" />
-      <div className="mt-4 flex flex-wrap items-center justify-center gap-4">
-        <Ticket movie="Thor: Ragnarok" name="John Doe" seat="25" />
-        <Ticket movie="Thor: Ragnarok" name="John Doe" seat="25" />
-        <Ticket movie="Thor: Ragnarok" name="John Doe" seat="25" />
-      </div>
+          {/* TODO: fetch all tickets */}
+          <h3 className="mt-8 text-lg font-bold">My Tickets</h3>
+          <hr className="border-b border-accent/50" />
+
+          <Tickets className="mt-4" name="John Doe" />
+        </>
+      ) : (
+        // TODO: display skeleton screen
+        <Header>Loading ...</Header>
+      )}
     </div>
   );
 }
 
 Profile.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
+  token: PropTypes.string.isRequired,
   setToken: PropTypes.func.isRequired,
 };

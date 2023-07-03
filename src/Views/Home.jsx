@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
 import Icons from "../Components/Icons";
 import MovieCard from "../Components/MovieCard";
+import MovieCardSkeleton from "../Skeleton/MovieCard";
 import Header from "../Components/Header";
 import PrimaryButton from "../Components/PrimaryButton";
+import ErrorAlert from "../Components/ErrorAlert";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState({
+    isError: false,
+    message: "",
+  });
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -18,6 +24,12 @@ export default function Home() {
         const newMovies = [...movies, ...data.data];
         setMovies(newMovies);
         setIsLoading(false);
+      })
+      .catch((e) => {
+        setError({
+          isError: true,
+          message: e.message,
+        });
       });
   }, [page]);
 
@@ -34,85 +46,30 @@ export default function Home() {
         <Icons.Search className="h-5 w-5 text-text" />
       </form>
 
-      <div className="mb-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
-        {isLoading ? (
-          <>
-            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
-              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
-              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
-            </div>
-            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
-              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
-              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
-            </div>
-            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
-              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
-              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
-            </div>
-            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
-              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
-              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
-            </div>
-            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
-              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
-              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
-            </div>
-            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
-              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
-              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
-            </div>
-            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
-              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
-              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
-            </div>
-            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
-              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
-              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
-            </div>
-            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
-              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
-              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
-            </div>
-            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
-              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
-              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
-            </div>
-            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
-              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
-              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
-            </div>
-            <div className="relative flex aspect-[2/3] w-full animate-pulse flex-col justify-end overflow-hidden rounded-xl bg-secondary p-4">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
-              <div className="h-6 w-2/3 rounded-md bg-accent/20"></div>
-              <div className="my-2 h-4 w-1/3 rounded bg-accent/20 px-2 py-1"></div>
-            </div>
-          </>
-        ) : (
-          movies.map((movie) => (
-            <MovieCard
-              id={movie.id}
-              price={movie.price}
-              title={movie.title}
-              poster={`${movie.poster}`}
-              releaseDate={movie.releaseDate}
-              key={movie.id}
-            />
-          ))
-        )}
-      </div>
+      {error.isError ? (
+        <ErrorAlert>
+          <p>{error.message}</p>
+        </ErrorAlert>
+      ) : (
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
+          {isLoading
+            ? Array(12)
+                .fill()
+                .map((_, i) => <MovieCardSkeleton key={i} />)
+            : movies.map((movie) => (
+                <MovieCard
+                  id={movie.id}
+                  price={movie.price}
+                  title={movie.title}
+                  poster={`${movie.poster}`}
+                  releaseDate={movie.releaseDate}
+                  key={movie.id}
+                />
+              ))}
+        </div>
+      )}
 
-      <div className="flex justify-center pb-4">
+      <div className="mt-4 flex justify-center pb-4">
         <PrimaryButton onClick={() => setPage(page + 1)}>
           Load More
           <Icons.ArrowDown className="h-5 w-5" />

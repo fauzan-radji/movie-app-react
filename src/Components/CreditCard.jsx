@@ -11,10 +11,7 @@ export default function CreditCard({ balance, email }) {
         </div>
       </div>
       <h6 className="flex flex-[3] items-center text-3xl font-bold">
-        {Intl.NumberFormat("id-ID", {
-          style: "currency",
-          currency: "IDR",
-        }).format(balance)}
+        {balance}
       </h6>
       <div className="flex flex-[3] flex-col justify-end">
         <span className="text-sm">Email</span>
@@ -25,6 +22,6 @@ export default function CreditCard({ balance, email }) {
 }
 
 CreditCard.propTypes = {
-  balance: PropTypes.number.isRequired,
+  balance: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
 };

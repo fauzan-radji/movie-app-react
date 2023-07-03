@@ -41,6 +41,6 @@ export default function Ticket({ movie, seat, name }) {
 
 Ticket.propTypes = {
   movie: PropTypes.string.isRequired,
-  seat: PropTypes.string.isRequired,
+  seat: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
 };
