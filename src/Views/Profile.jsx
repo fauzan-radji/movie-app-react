@@ -1,11 +1,16 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import CreditCard from "../Components/CreditCard";
 import Header from "../Components/Header";
 import Ticket from "../Components/Ticket";
 import Icons from "../Components/Icons";
 
-export default function Profile() {
+export default function Profile({ isLoggedIn, setToken }) {
   const navigate = useNavigate();
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace={true} />;
+  }
 
   return (
     <div className="flex flex-col pb-4">
@@ -17,7 +22,10 @@ export default function Profile() {
           <Icons.ChevronLeft className="h-4 w-4" />
         </button>
         <h2 className="text-center font-bold">My Profile</h2>
-        <button className="absolute right-0 top-0 flex aspect-square h-full items-center justify-center rounded-md border border-primary px-2 py-1 text-primary">
+        <button
+          className="absolute right-0 top-0 flex aspect-square h-full items-center justify-center rounded-md border border-primary px-2 py-1 text-primary"
+          onClick={() => setToken("")}
+        >
           <Icons.Login className="h-4 w-4" />
         </button>
       </div>
@@ -37,3 +45,8 @@ export default function Profile() {
     </div>
   );
 }
+
+Profile.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+  setToken: PropTypes.func.isRequired,
+};

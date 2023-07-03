@@ -1,11 +1,12 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import PropTypes from "prop-types";
 import Icons from "../Components/Icons";
 import { useEffect, useState } from "react";
 import Seat from "../Components/Seat";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
-export default function BookTicket() {
+export default function BookTicket({ isLoggedIn }) {
   const { movieId } = useParams();
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +27,10 @@ export default function BookTicket() {
 
   function onSeatSelected(isSelected) {
     setTotalPrice((prev) => (isSelected ? prev + price : prev - price));
+  }
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace={true} />;
   }
 
   return (
@@ -125,3 +130,7 @@ export default function BookTicket() {
     </div>
   );
 }
+
+BookTicket.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+};

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import Header from "../Components/Header";
 import Ticket from "../Components/Ticket";
+import { Navigate } from "react-router-dom";
 
-export default function Tickets() {
+export default function Tickets({ isLoggedIn }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -10,6 +12,10 @@ export default function Tickets() {
       setIsLoading(false);
     }, 1300);
   }, []);
+
+  if (!isLoggedIn) {
+    return <Navigate to="/profile" replace={true} />;
+  }
 
   return (
     <div className="mb-4">
@@ -70,3 +76,7 @@ export default function Tickets() {
     </div>
   );
 }
+
+Tickets.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+};

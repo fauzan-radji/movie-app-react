@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import Header from "../Components/Header";
 import Icons from "../Components/Icons";
 import InputIcon from "../Components/InputIcon";
@@ -8,7 +9,7 @@ import Alert from "../Components/Alert";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
-export default function Register() {
+export default function Register({ isLoggedIn }) {
   const nameInput = useRef();
   const emailInput = useRef();
   const usernameInput = useRef();
@@ -47,6 +48,10 @@ export default function Register() {
         setIsError(true);
         setMessage(e.message);
       });
+  }
+
+  if (isLoggedIn) {
+    return <Navigate to="/profile" replace={true} />;
   }
 
   return (
@@ -135,3 +140,7 @@ export default function Register() {
     </div>
   );
 }
+
+Register.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+};
