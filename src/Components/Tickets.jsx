@@ -44,7 +44,7 @@ export default function Tickets({ name, className }) {
       {tickets
         ? tickets.map((ticket) => (
             <Ticket
-              key={ticket.ids}
+              key={ticket.id}
               movie={ticket.Movie.title}
               name={name}
               seat={ticket.seatNumber}

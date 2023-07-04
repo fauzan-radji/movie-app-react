@@ -11,7 +11,7 @@ export default function Movie() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/movie/${movieId}`)
+    fetch(`${API_ENDPOINT}/movies/${movieId}`)
       .then((res) => res.json())
       .then((data) => {
         setMovie(data);
@@ -48,9 +48,16 @@ export default function Movie() {
           {isLoading ? (
             <div className="mb-2 h-8 w-2/3 animate-pulse rounded-md bg-accent/20"></div>
           ) : (
-            <h1 className="mb-2 text-2xl font-bold">{`${movie.title} (${
-              movie.releaseDate.match(/\d{4}/)[0]
-            })`}</h1>
+            <h1 className="mb-2 text-2xl font-bold [text-wrap:balance]">
+              {`${movie.title} (${movie.releaseDate.match(/\d{4}/)[0]})`}
+              <sup
+                className={`mb-2 inline-block rounded bg-primary px-1 py-0.5 align-super text-[0.7rem] leading-3 text-background ${
+                  isLoading ? "animate-pulse" : ""
+                }`}
+              >
+                {isLoading ? 0 : movie.ageRating}+
+              </sup>
+            </h1>
           )}
 
           <div

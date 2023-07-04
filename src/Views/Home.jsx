@@ -18,7 +18,7 @@ export default function Home() {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/movie?page=${page}&limit=12`)
+    fetch(`${API_ENDPOINT}/movies?page=${page}&limit=12`)
       .then((res) => res.json())
       .then((data) => {
         const newMovies = [...movies, ...data.data];

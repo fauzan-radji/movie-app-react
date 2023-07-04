@@ -44,22 +44,6 @@ export default function Login({ isLoggedIn, setToken }) {
       });
   }
 
-  {
-    isError ? (
-      <ErrorAlert className="w-full max-w-md">
-        <p>{message}</p>
-        <button
-          className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
-          onClick={() => setIsError(false)}
-        >
-          <Icons.XMark className="h-4 w-4" />
-        </button>
-      </ErrorAlert>
-    ) : (
-      ""
-    );
-  }
-
   if (isLoggedIn) {
     return <Navigate to="/profile" replace={true} />;
   }
@@ -67,6 +51,20 @@ export default function Login({ isLoggedIn, setToken }) {
   return (
     <div className="flex h-full flex-col items-center">
       <Header>Login</Header>
+
+      {isError ? (
+        <ErrorAlert className="w-full max-w-md">
+          <p>{message}</p>
+          <button
+            className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
+            onClick={() => setIsError(false)}
+          >
+            <Icons.XMark className="h-4 w-4" />
+          </button>
+        </ErrorAlert>
+      ) : (
+        ""
+      )}
 
       <form
         onSubmit={handleSubmit}

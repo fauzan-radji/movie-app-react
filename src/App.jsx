@@ -18,7 +18,9 @@ export default function App() {
             <Route path="movie/:movieId">
               <Route index element={<View.Movie />} />
               <Route
-                element={<View.BookTicket isLoggedIn={isLoggedIn} />}
+                element={
+                  <View.BookTicket isLoggedIn={isLoggedIn} token={token} />
+                }
                 path="book"
               />
             </Route>

@@ -49,7 +49,7 @@ export default function Profile({ isLoggedIn, token, setToken }) {
         </ErrorAlert>
       ) : user ? (
         <>
-          <Header className="pb-0">John Doe</Header>
+          <Header className="pb-0">{user.name}</Header>
           <p className="text-center text-text/50">@{user.username}</p>
 
           {balanceError ? (

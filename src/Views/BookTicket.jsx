@@ -3,30 +3,79 @@ import PropTypes from "prop-types";
 import Icons from "../Components/Icons";
 import { useEffect, useState } from "react";
 import Seat from "../Components/Seat";
+import ErrorAlert from "../Components/ErrorAlert";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
-export default function BookTicket({ isLoggedIn }) {
+export default function BookTicket({ isLoggedIn, token }) {
   const { movieId } = useParams();
   const [movie, setMovie] = useState({});
+  const [seats, setSeats] = useState({});
+  const [selectedSeats, setSelectedSeats] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
   const [price, setPrice] = useState(0);
+  const [isError, setIsError] = useState(false);
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/movie/${movieId}`)
+    fetch(`${API_ENDPOINT}/tickets/seat/${movieId}`)
       .then((res) => res.json())
       .then((data) => {
         data.title = `${data.title} (${data.releaseDate.match(/\d{4}/)[0]})`;
-        setMovie(data);
+        setMovie({
+          id: data.id,
+          title: data.title,
+          description: data.description,
+          price: data.price,
+          releaseDate: data.releaseDate,
+          ageRating: data.ageRating,
+          poster: data.poster,
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt,
+        });
+        setSeats(data.seats);
         setPrice(Math.round(data.price / 1000));
         setIsLoading(false);
       });
   }, [movieId]);
 
-  function onSeatSelected(isSelected) {
-    setTotalPrice((prev) => (isSelected ? prev + price : prev - price));
+  function onSeatSelected(isSelected, seatNumber) {
+    const newSelectedSeats = [...selectedSeats];
+    if (isSelected) {
+      setTotalPrice((prev) => prev + price);
+      if (!selectedSeats.includes(seatNumber)) {
+        newSelectedSeats.push(seatNumber);
+      }
+    } else {
+      setTotalPrice((prev) => prev - price);
+      if (selectedSeats.includes(seatNumber)) {
+        newSelectedSeats.splice(newSelectedSeats.indexOf(seatNumber), 1);
+      }
+    }
+
+    setSelectedSeats(newSelectedSeats);
+  }
+
+  function handleClick() {
+    fetch(`${API_ENDPOINT}/tickets/seat/${movieId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        seatNumber: selectedSeats,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          setIsError(true);
+          setMessage(data.message);
+        }
+      });
   }
 
   if (!isLoggedIn) {
@@ -44,6 +93,20 @@ export default function BookTicket({ isLoggedIn }) {
         </button>
         <h2 className="text-center font-bold">Select Seats</h2>
       </div>
+
+      {isError ? (
+        <ErrorAlert className="mb-4 w-full max-w-md">
+          <p>{message}</p>
+          <button
+            className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
+            onClick={() => setIsError(false)}
+          >
+            <Icons.XMark className="h-4 w-4" />
+          </button>
+        </ErrorAlert>
+      ) : (
+        ""
+      )}
 
       {isLoading ? (
         <div className="mb-8 h-9 w-4/5 animate-pulse self-center rounded-lg bg-accent/20 md:hidden"></div>
@@ -67,13 +130,22 @@ export default function BookTicket({ isLoggedIn }) {
                 <div key={i} className="flex justify-between">
                   {Array(8)
                     .fill()
-                    .map((_, j) => (
-                      <Seat
-                        key={i * 8 + j}
-                        id={`${i}-${j}`}
-                        onSeatSelected={onSeatSelected}
-                      />
-                    ))}
+                    .map((_, j) => {
+                      const seat = seats[i * 8 + j] || {
+                        id: i * 8 + j,
+                        reserved: false,
+                      };
+                      return (
+                        <Seat
+                          key={seat.id}
+                          id={`${i}-${j}`}
+                          reserved={seat.book}
+                          onSeatSelected={(isSelected) =>
+                            onSeatSelected(isSelected, seat.seatNumber)
+                          }
+                        />
+                      );
+                    })}
                 </div>
               ))}
           </div>
@@ -121,7 +193,10 @@ export default function BookTicket({ isLoggedIn }) {
                 IDR {totalPrice}K
               </span>
             </div>
-            <button className="flex items-center justify-center rounded-3xl bg-primary px-14 py-4 text-background">
+            <button
+              onClick={handleClick}
+              className="flex items-center justify-center rounded-3xl bg-primary px-14 py-4 text-background"
+            >
               Book Ticket
             </button>
           </div>
@@ -133,4 +208,5 @@ export default function BookTicket({ isLoggedIn }) {
 
 BookTicket.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
+  token: PropTypes.string.isRequired,
 };
