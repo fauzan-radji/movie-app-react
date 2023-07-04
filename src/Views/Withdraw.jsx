@@ -9,6 +9,7 @@ import SuccessAlert from "../Components/SuccessAlert";
 import ErrorAlert from "../Components/ErrorAlert";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+const HTTP_CREATED = 201;
 
 export default function Withdraw({ isLoggedIn, token }) {
   const [success, setSuccess] = useState("");
@@ -30,11 +31,13 @@ export default function Withdraw({ isLoggedIn, token }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.success) {
-          setSuccess(data.message);
-          input.current.value = "";
+        if (data.statusCode !== HTTP_CREATED) {
+          setError(data.message);
+          return;
         }
-        if (data.error) setError(data.message);
+
+        setSuccess(data.message);
+        input.current.value = "";
       })
       .catch((e) => {
         setError(e.message);

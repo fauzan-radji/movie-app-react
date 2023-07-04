@@ -7,7 +7,11 @@ export default function Seat({ reserved, onSeatSelected, number }) {
   return (
     <div
       className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-md ${
-        selected ? "bg-primary" : reserved ? "bg-text/80" : "bg-accent/30"
+        selected
+          ? "bg-primary text-background"
+          : reserved
+          ? "bg-text/80 text-background"
+          : "bg-accent/30"
       }`}
       onClick={() => {
         if (reserved) return;

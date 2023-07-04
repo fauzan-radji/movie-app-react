@@ -7,29 +7,29 @@ import PrimaryButton from "../Components/PrimaryButton";
 import ErrorAlert from "../Components/ErrorAlert";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+const HTTP_OK = 200;
 
 export default function Home() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState({
-    isError: false,
-    message: "",
-  });
+  const [error, setError] = useState("");
   const [page, setPage] = useState(1);
 
   useEffect(() => {
     fetch(`${API_ENDPOINT}/movies?page=${page}&limit=12`)
       .then((res) => res.json())
       .then((data) => {
+        if (data.statusCode !== HTTP_OK) {
+          setError(data.message);
+          return;
+        }
+
         const newMovies = [...movies, ...data.data];
         setMovies(newMovies);
         setIsLoading(false);
       })
       .catch((e) => {
-        setError({
-          isError: true,
-          message: e.message,
-        });
+        setError(e.message);
       });
   }, [page]);
 
@@ -46,9 +46,9 @@ export default function Home() {
         <Icons.Search className="h-5 w-5 text-text" />
       </form>
 
-      {error.isError ? (
+      {error ? (
         <ErrorAlert>
-          <p>{error.message}</p>
+          <p>{error}</p>
         </ErrorAlert>
       ) : (
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">

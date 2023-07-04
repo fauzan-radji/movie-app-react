@@ -8,13 +8,14 @@ import { useRef, useState } from "react";
 import ErrorAlert from "../Components/ErrorAlert";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+const HTTP_OK = 200;
 
 export default function Login({ isLoggedIn, setToken }) {
   const usernameInput = useRef();
   const passwordInput = useRef();
 
-  const [isError, setIsError] = useState(false);
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [, setSuccess] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -29,19 +30,17 @@ export default function Login({ isLoggedIn, setToken }) {
         hash: passwordInput.current.value,
       }),
     })
-      .then((res) => {
-        // TODO: set error when response.status is not 200
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
-        if (data.success) setToken(data.token);
-        if (data.error) setIsError(true);
-        setMessage(data.message);
+        if (data.statusCode !== HTTP_OK) {
+          setError(data.message);
+          return;
+        }
+
+        setToken(data.token);
+        setSuccess(data.message);
       })
-      .catch((e) => {
-        setIsError(true);
-        setMessage(e.message);
-      });
+      .catch((e) => setError(e.message));
   }
 
   if (isLoggedIn) {
@@ -52,12 +51,12 @@ export default function Login({ isLoggedIn, setToken }) {
     <div className="flex h-full flex-col items-center">
       <Header>Login</Header>
 
-      {isError ? (
+      {error ? (
         <ErrorAlert className="w-full max-w-md">
-          <p>{message}</p>
+          <p>{error}</p>
           <button
             className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
-            onClick={() => setIsError(false)}
+            onClick={() => setError("")}
           >
             <Icons.XMark className="h-4 w-4" />
           </button>

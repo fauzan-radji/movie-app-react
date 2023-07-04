@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Icons from "../Components/Icons";
 import Heading from "../Components/Heading";
+import ErrorAlert from "../Components/ErrorAlert";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
 export default function Movie() {
   const { movieId } = useParams();
   const [movie, setMovie] = useState({});
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -16,12 +18,27 @@ export default function Movie() {
       .then((data) => {
         setMovie(data);
         setIsLoading(false);
-      });
+      })
+      .catch((e) => setError(e.message));
   }, [movieId]);
 
   return (
     <div className="flex flex-col">
       <Heading className="mb-4">Movie Details</Heading>
+
+      {error ? (
+        <ErrorAlert className="mb-4 w-full max-w-md">
+          <p>{error}</p>
+          <button
+            className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
+            onClick={() => setError("")}
+          >
+            <Icons.XMark className="h-4 w-4" />
+          </button>
+        </ErrorAlert>
+      ) : (
+        ""
+      )}
 
       <div className="flex flex-col items-center gap-y-4 landscape:flex-row landscape:items-start landscape:gap-x-8">
         {isLoading ? (

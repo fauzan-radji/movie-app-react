@@ -8,6 +8,7 @@ import ErrorAlert from "./ErrorAlert";
 import Icons from "./Icons";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+const HTTP_OK = 200;
 
 export default function Tickets({ name, className, token }) {
   const [tickets, setTickets] = useState(undefined);
@@ -21,13 +22,14 @@ export default function Tickets({ name, className, token }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.statusCode && data.statusCode !== 200) {
+        if (data.statusCode !== HTTP_OK) {
           setError(data.message);
           return;
         }
 
-        if (data.success) setTickets(data.data);
-      });
+        setTickets(data.data);
+      })
+      .catch((e) => setError(e.message));
   }, [token]);
 
   return (
@@ -56,7 +58,7 @@ export default function Tickets({ name, className, token }) {
           tickets.length === 0 ? (
             <p>
               You haven&apos;t booked any tickets yet.{" "}
-              <Link className="font-bold text-accent underline" to="/">
+              <Link className="font-bold text-primary underline" to="/">
                 Go book some ticket
               </Link>
             </p>

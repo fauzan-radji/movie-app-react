@@ -11,13 +11,9 @@ import Heading from "../Components/Heading";
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
 export default function Profile({ isLoggedIn, token, setToken }) {
-  const { data: user, error: userError } = useFetch(`${API_ENDPOINT}/user/me`, {
+  const { data: user, error } = useFetch(`${API_ENDPOINT}/user/me`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  const { data: balance, error: balanceError } = useFetch(
-    `${API_ENDPOINT}/balance`,
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
 
   if (!isLoggedIn) {
     return <Navigate to="/login" replace={true} />;
@@ -25,7 +21,6 @@ export default function Profile({ isLoggedIn, token, setToken }) {
 
   return (
     <div className="flex flex-col pb-4">
-      {/* TODO: export into a separate component */}
       <Heading
         rightButton={
           <button
@@ -39,27 +34,20 @@ export default function Profile({ isLoggedIn, token, setToken }) {
         My Profile
       </Heading>
 
-      {userError ? (
+      {error ? (
         // TODO: display better error feedback
         <ErrorAlert>
-          <p>Woops, something went wrong</p>
+          <p>{error.message}</p>
         </ErrorAlert>
       ) : user ? (
         <>
           <Header className="pb-0">{user.name}</Header>
           <p className="text-center text-text/50">@{user.username}</p>
 
-          {balanceError ? (
-            // TODO: display better error feedback
-            <ErrorAlert>
-              <p>Woops, something went wrong</p>
-            </ErrorAlert>
-          ) : (
-            <CreditCard
-              balance={balance ? balance.balance : "Rp 0,00"}
-              email="johndoe@gmail.com"
-            />
-          )}
+          <CreditCard
+            balance={user.balance.balance}
+            email="johndoe@gmail.com"
+          />
 
           <div className="mt-4 flex w-full gap-4">
             <Link

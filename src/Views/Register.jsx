@@ -9,6 +9,7 @@ import ErrorAlert from "../Components/ErrorAlert";
 import SuccessAlert from "../Components/SuccessAlert";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+const HTTP_OK = 200;
 
 export default function Register({ isLoggedIn }) {
   const nameInput = useRef();
@@ -18,9 +19,8 @@ export default function Register({ isLoggedIn }) {
   const confirmPasswordInput = useRef();
   const birthDateInput = useRef();
 
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -40,18 +40,17 @@ export default function Register({ isLoggedIn }) {
       }),
     })
       .then((res) => {
-        // TODO: set error when response.status is not 200
         return res.json();
       })
       .then((data) => {
-        if (data.success) setIsSuccess(true);
-        if (data.error) setIsError(true);
-        setMessage(data.message);
+        if (data.statusCode !== HTTP_OK) {
+          setError(data.message);
+          return;
+        }
+
+        setSuccess(data.message);
       })
-      .catch((e) => {
-        setIsError(true);
-        setMessage(e.message);
-      });
+      .catch((e) => setError(e.message));
   }
 
   if (isLoggedIn) {
@@ -62,27 +61,31 @@ export default function Register({ isLoggedIn }) {
     <div className="flex h-full flex-col items-center">
       <Header>Register</Header>
 
-      {isSuccess ? (
+      {success ? (
         <SuccessAlert className="w-full max-w-md">
           <p>
-            {message}{" "}
+            {success}.{" "}
             <Link to="/login" className="underline">
               Go to login page
             </Link>
           </p>
           <button
             className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
-            onClick={() => setIsSuccess(false)}
+            onClick={() => setSuccess("")}
           >
             <Icons.XMark className="h-4 w-4" />
           </button>
         </SuccessAlert>
-      ) : isError ? (
+      ) : (
+        ""
+      )}
+
+      {error ? (
         <ErrorAlert className="w-full max-w-md">
-          <p>{message}</p>
+          <p>{error}</p>
           <button
             className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
-            onClick={() => setIsError(false)}
+            onClick={() => setError("")}
           >
             <Icons.XMark className="h-4 w-4" />
           </button>
