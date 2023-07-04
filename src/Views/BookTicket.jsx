@@ -24,6 +24,12 @@ export default function BookTicket({ isLoggedIn, token }) {
     fetch(`${API_ENDPOINT}/tickets/seat/${movieId}`)
       .then((res) => res.json())
       .then((data) => {
+        if (data.statusCode && data.statusCode !== 200) {
+          setIsError(true);
+          setMessage(data.message);
+          return;
+        }
+
         data.title = `${data.title} (${data.releaseDate.match(/\d{4}/)[0]})`;
         setMovie({
           id: data.id,
@@ -144,6 +150,7 @@ export default function BookTicket({ isLoggedIn, token }) {
                           key={seat.id}
                           id={`${i}-${j}`}
                           reserved={seat.book}
+                          number={seat.seatNumber}
                           onSeatSelected={(isSelected) =>
                             onSeatSelected(isSelected, seat.seatNumber)
                           }

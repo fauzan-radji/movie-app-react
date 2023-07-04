@@ -46,7 +46,7 @@ export default function App() {
             />
             <Route
               path="tickets"
-              element={<View.Tickets isLoggedIn={isLoggedIn} />}
+              element={<View.Tickets isLoggedIn={isLoggedIn} token={token} />}
             />
             <Route
               path="topup"

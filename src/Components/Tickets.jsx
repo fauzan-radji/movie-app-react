@@ -1,63 +1,87 @@
 import PropTypes from "prop-types";
 import TicketSkeleton from "../Skeleton/Ticket";
 import Ticket from "./Ticket";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { Link } from "react-router-dom";
+import ErrorAlert from "./ErrorAlert";
+import Icons from "./Icons";
 
-export default function Tickets({ name, className }) {
-  // TODO: fetch from real API
+const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+
+export default function Tickets({ name, className, token }) {
   const [tickets, setTickets] = useState(undefined);
+  const [error, setError] = useState("");
 
-  setTimeout(() => {
-    setTickets([
-      {
-        id: "af066-c5f",
-        seatNumber: 1,
-        Movie: {
-          title: "John Wick: Chapter 4",
-        },
+  useEffect(() => {
+    fetch(`${API_ENDPOINT}/user/tickets`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-      {
-        id: "af066-c5g",
-        seatNumber: 4,
-        Movie: {
-          title: "Transformers: Age of Extinction",
-        },
-      },
-      {
-        id: "af066-c5h",
-        seatNumber: 5,
-        Movie: {
-          title: "Avengers: Endgame",
-        },
-      },
-    ]);
-  }, 1300);
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.statusCode && data.statusCode !== 200) {
+          setError(data.message);
+          return;
+        }
+
+        if (data.success) setTickets(data.data);
+      });
+  }, [token]);
 
   return (
-    <div
-      className={twMerge(
-        `flex flex-wrap items-center justify-center gap-4`,
-        className
+    <>
+      {error ? (
+        <ErrorAlert className="mb-4 w-full max-w-md">
+          <p>{error}</p>
+          <button
+            className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
+            onClick={() => setError("")}
+          >
+            <Icons.XMark className="h-4 w-4" />
+          </button>
+        </ErrorAlert>
+      ) : (
+        ""
       )}
-    >
-      {tickets
-        ? tickets.map((ticket) => (
-            <Ticket
-              key={ticket.id}
-              movie={ticket.Movie.title}
-              name={name}
-              seat={ticket.seatNumber}
-            />
-          ))
-        : Array(3)
+
+      <div
+        className={twMerge(
+          `flex flex-wrap items-center justify-center gap-4`,
+          className
+        )}
+      >
+        {tickets ? (
+          tickets.length === 0 ? (
+            <p>
+              You haven&apos;t booked any tickets yet.{" "}
+              <Link className="font-bold text-accent underline" to="/">
+                Go book some ticket
+              </Link>
+            </p>
+          ) : (
+            tickets.map((ticket) => (
+              <Ticket
+                key={ticket.id}
+                movie={ticket.Movie.title}
+                name={name}
+                seat={ticket.seatNumber}
+              />
+            ))
+          )
+        ) : (
+          Array(3)
             .fill()
-            .map((_, i) => <TicketSkeleton key={i} />)}
-    </div>
+            .map((_, i) => <TicketSkeleton key={i} />)
+        )}
+      </div>
+    </>
   );
 }
 
 Tickets.propTypes = {
   name: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
   className: PropTypes.string,
 };

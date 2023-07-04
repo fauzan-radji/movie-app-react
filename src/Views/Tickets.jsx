@@ -3,7 +3,7 @@ import Header from "../Components/Header";
 import TicketsComponent from "../Components/Tickets";
 import { Navigate } from "react-router-dom";
 
-export default function Tickets({ isLoggedIn }) {
+export default function Tickets({ isLoggedIn, token }) {
   if (!isLoggedIn) {
     return <Navigate to="/profile" replace={true} />;
   }
@@ -12,11 +12,12 @@ export default function Tickets({ isLoggedIn }) {
     <div className="mb-4">
       <Header>My Tickets</Header>
 
-      <TicketsComponent name="John Doe" />
+      <TicketsComponent name="John Doe" token={token} />
     </div>
   );
 }
 
 Tickets.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
+  token: PropTypes.string.isRequired,
 };
