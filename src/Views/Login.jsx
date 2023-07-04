@@ -88,7 +88,7 @@ export default function Login({ isLoggedIn, setToken }) {
           </p>
 
           {/* TODO: provide feedback that data is being sent */}
-          <PrimaryButton className="w-full">
+          <PrimaryButton className="w-full gap-0">
             Login <Icons.Login className="h-5 w-5" />
           </PrimaryButton>
         </div>

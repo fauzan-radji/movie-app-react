@@ -106,16 +106,32 @@ export function Login({ className }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      fill="none"
       viewBox="0 0 24 24"
-      strokeWidth={1.5}
-      stroke="currentColor"
+      fill="currentColor"
       className={className}
     >
       <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
+        fillRule="evenodd"
+        d="M 7.5 20.25 C 6.672 20.25 6 19.578 6 18.75 L 6 5.25 C 6 4.422 6.672 3.75 7.5 3.75 L 13.5 3.75 C 14.328 3.75 15 4.422 15 5.25 L 15 9 C 15 9.577 15.625 9.938 16.125 9.65 C 16.357 9.516 16.5 9.268 16.5 9 L 16.5 5.25 C 16.5 3.593 15.157 2.25 13.5 2.25 L 7.5 2.25 C 5.843 2.25 4.5 3.593 4.5 5.25 L 4.5 18.75 C 4.5 20.407 5.843 21.75 7.5 21.75 L 13.5 21.75 C 15.157 21.75 16.5 20.407 16.5 18.75 L 16.5 15 C 16.5 14.423 15.875 14.062 15.375 14.35 C 15.143 14.484 15 14.732 15 15 L 15 18.75 C 15 19.578 14.328 20.25 13.5 20.25 L 7.5 20.25 Z M 12.53 15.53 C 12.822 15.237 12.822 14.763 12.53 14.47 L 10.81 12.75 L 21.75 12.75 C 22.327 12.75 22.688 12.125 22.4 11.625 C 22.266 11.393 22.018 11.25 21.75 11.25 L 10.81 11.25 L 12.53 9.53 C 12.952 9.136 12.79 8.433 12.238 8.264 C 11.964 8.18 11.666 8.26 11.47 8.47 L 8.47 11.47 C 8.178 11.763 8.178 12.237 8.47 12.53 L 11.47 15.53 C 11.763 15.822 12.237 15.822 12.53 15.53 Z"
+        clipRule="evenodd"
+        transform="matrix(-1, 0, 0, -1, 27.001202, 24)"
+      ></path>
+    </svg>
+  );
+}
+
+export function Logout({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+    >
+      <path
+        fillRule="evenodd"
+        d="M7.5 3.75A1.5 1.5 0 006 5.25v13.5a1.5 1.5 0 001.5 1.5h6a1.5 1.5 0 001.5-1.5V15a.75.75 0 011.5 0v3.75a3 3 0 01-3 3h-6a3 3 0 01-3-3V5.25a3 3 0 013-3h6a3 3 0 013 3V9A.75.75 0 0115 9V5.25a1.5 1.5 0 00-1.5-1.5h-6zm10.72 4.72a.75.75 0 011.06 0l3 3a.75.75 0 010 1.06l-3 3a.75.75 0 11-1.06-1.06l1.72-1.72H9a.75.75 0 010-1.5h10.94l-1.72-1.72a.75.75 0 010-1.06z"
+        clipRule="evenodd"
       />
     </svg>
   );
@@ -296,6 +312,60 @@ export function XMark({ className }) {
   );
 }
 
+export function TopUp({ className }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        d="M 7.5 3.75 C 6.672 3.75 6 4.422 6 5.25 L 6 18.75 C 6 19.578 6.672 20.25 7.5 20.25 L 13.5 20.25 C 14.328 20.25 15 19.578 15 18.75 L 15 15 C 15 14.423 15.625 14.062 16.125 14.35 C 16.357 14.484 16.5 14.732 16.5 15 L 16.5 18.75 C 16.5 20.407 15.157 21.75 13.5 21.75 L 7.5 21.75 C 5.843 21.75 4.5 20.407 4.5 18.75 L 4.5 5.25 C 4.5 3.593 5.843 2.25 7.5 2.25 L 13.5 2.25 C 15.157 2.25 16.5 3.593 16.5 5.25 L 16.5 9 C 16.5 9.577 15.875 9.938 15.375 9.65 C 15.143 9.516 15 9.268 15 9 L 15 5.25 C 15 4.422 14.328 3.75 13.5 3.75 L 7.5 3.75 Z M 12.53 8.47 C 12.822 8.763 12.822 9.237 12.53 9.53 L 10.81 11.25 L 21.75 11.25 C 22.327 11.25 22.688 11.875 22.4 12.375 C 22.266 12.607 22.018 12.75 21.75 12.75 L 10.81 12.75 L 12.53 14.47 C 12.952 14.864 12.79 15.567 12.238 15.736 C 11.964 15.82 11.666 15.74 11.47 15.53 L 8.47 12.53 C 8.178 12.237 8.178 11.763 8.47 11.47 L 11.47 8.47 C 11.763 8.178 12.237 8.178 12.53 8.47 L 12.53 8.47 Z"
+        clipRule="evenodd"
+        transform="matrix(0, 1, -1, 0, 25.500601, -1.500601)"
+      ></path>
+    </svg>
+  );
+}
+
+export function Withdraw({ className }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        d="M 7.5 3.75 C 6.672 3.75 6 4.422 6 5.25 L 6 18.75 C 6 19.578 6.672 20.25 7.5 20.25 L 13.5 20.25 C 14.328 20.25 15 19.578 15 18.75 L 15 15 C 15 14.423 15.625 14.062 16.125 14.35 C 16.357 14.484 16.5 14.732 16.5 15 L 16.5 18.75 C 16.5 20.407 15.157 21.75 13.5 21.75 L 7.5 21.75 C 5.843 21.75 4.5 20.407 4.5 18.75 L 4.5 5.25 C 4.5 3.593 5.843 2.25 7.5 2.25 L 13.5 2.25 C 15.157 2.25 16.5 3.593 16.5 5.25 L 16.5 9 C 16.5 9.577 15.875 9.938 15.375 9.65 C 15.143 9.516 15 9.268 15 9 L 15 5.25 C 15 4.422 14.328 3.75 13.5 3.75 L 7.5 3.75 Z M 18.22 8.47 C 18.513 8.178 18.987 8.178 19.28 8.47 L 22.28 11.47 C 22.572 11.763 22.572 12.237 22.28 12.53 L 19.28 15.53 C 18.886 15.952 18.183 15.79 18.014 15.238 C 17.93 14.964 18.01 14.666 18.22 14.47 L 19.94 12.75 L 9 12.75 C 8.423 12.75 8.062 12.125 8.35 11.625 C 8.484 11.393 8.732 11.25 9 11.25 L 19.94 11.25 L 18.22 9.53 C 17.928 9.237 17.928 8.763 18.22 8.47 L 18.22 8.47 Z"
+        clipRule="evenodd"
+        transform="matrix(0, 1, -1, 0, 25.499501, -1.499501)"
+      ></path>
+    </svg>
+  );
+}
+
+export function CreditCard({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+    >
+      <path d="M4.5 3.75a3 3 0 00-3 3v.75h21v-.75a3 3 0 00-3-3h-15z" />
+      <path
+        fillRule="evenodd"
+        d="M22.5 9.75h-21v7.5a3 3 0 003 3h15a3 3 0 003-3v-7.5zm-18 3.75a.75.75 0 01.75-.75h6a.75.75 0 010 1.5h-6a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h3a.75.75 0 000-1.5h-3z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
 Home.propTypes = { className: PropTypes.string };
 UserCircle.propTypes = { className: PropTypes.string };
 ArrowDown.propTypes = { className: PropTypes.string };
@@ -303,6 +373,7 @@ Search.propTypes = { className: PropTypes.string };
 ChevronLeft.propTypes = { className: PropTypes.string };
 PriceTag.propTypes = { className: PropTypes.string };
 Login.propTypes = { className: PropTypes.string };
+Logout.propTypes = { className: PropTypes.string };
 User.propTypes = { className: PropTypes.string };
 Lock.propTypes = { className: PropTypes.string };
 Image.propTypes = { className: PropTypes.string };
@@ -313,6 +384,9 @@ Info.propTypes = { className: PropTypes.string };
 Check.propTypes = { className: PropTypes.string };
 ExclamationTri.propTypes = { className: PropTypes.string };
 XMark.propTypes = { className: PropTypes.string };
+TopUp.propTypes = { className: PropTypes.string };
+Withdraw.propTypes = { className: PropTypes.string };
+CreditCard.propTypes = { className: PropTypes.string };
 
 export default {
   Home,
@@ -322,6 +396,7 @@ export default {
   ChevronLeft,
   PriceTag,
   Login,
+  Logout,
   User,
   Lock,
   Image,
@@ -332,4 +407,7 @@ export default {
   Check,
   ExclamationTri,
   XMark,
+  TopUp,
+  Withdraw,
+  CreditCard,
 };

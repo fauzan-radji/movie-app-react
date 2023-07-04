@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Icons from "../Components/Icons";
+import Heading from "../Components/Heading";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
 export default function Movie() {
   const { movieId } = useParams();
   const [movie, setMovie] = useState({});
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -21,15 +21,7 @@ export default function Movie() {
 
   return (
     <div className="flex flex-col">
-      <div className="relative my-4 flex h-8 items-center justify-center">
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute left-0 top-0 flex aspect-square h-full items-center justify-center rounded-md bg-secondary px-2 py-1 text-text"
-        >
-          <Icons.ChevronLeft className="h-4 w-4" />
-        </button>
-        <h2 className="text-center font-bold">Movie Details</h2>
-      </div>
+      <Heading className="mb-4">Movie Details</Heading>
 
       <div className="flex flex-col items-center gap-y-4 landscape:flex-row landscape:items-start landscape:gap-x-8">
         {isLoading ? (

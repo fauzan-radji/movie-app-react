@@ -1,9 +1,10 @@
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import Icons from "../Components/Icons";
 import { useEffect, useState } from "react";
 import Seat from "../Components/Seat";
 import ErrorAlert from "../Components/ErrorAlert";
+import Heading from "../Components/Heading";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
@@ -16,8 +17,8 @@ export default function BookTicket({ isLoggedIn, token }) {
   const [totalPrice, setTotalPrice] = useState(0);
   const [price, setPrice] = useState(0);
   const [isError, setIsError] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [message, setMessage] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`${API_ENDPOINT}/tickets/seat/${movieId}`)
@@ -71,10 +72,17 @@ export default function BookTicket({ isLoggedIn, token }) {
     })
       .then((res) => res.json())
       .then((data) => {
+        if (data.success) {
+          setIsSuccess(true);
+        }
         if (data.error) {
           setIsError(true);
           setMessage(data.message);
         }
+      })
+      .catch((e) => {
+        setIsError(true);
+        setMessage(e.message);
       });
   }
 
@@ -82,17 +90,13 @@ export default function BookTicket({ isLoggedIn, token }) {
     return <Navigate to="/login" replace={true} />;
   }
 
+  if (isSuccess) {
+    return <Navigate to="/tickets" replace={true} />;
+  }
+
   return (
     <div className="flex flex-col">
-      <div className="relative my-4 flex h-8 items-center justify-center">
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute left-0 top-0 flex aspect-square h-full items-center justify-center rounded-md bg-secondary px-2 py-1 text-text"
-        >
-          <Icons.ChevronLeft className="h-4 w-4" />
-        </button>
-        <h2 className="text-center font-bold">Select Seats</h2>
-      </div>
+      <Heading className="mb-4">Select Seats</Heading>
 
       {isError ? (
         <ErrorAlert className="mb-4 w-full max-w-md">
