@@ -2,7 +2,7 @@
 
 It's a simple movie app using React.js
 
-Checkout the demo [here](https://ourmovie.vercel.app/)
+Checkout the demo [here](https://seacinema.vercel.app/)
 
 ## Todo
 
