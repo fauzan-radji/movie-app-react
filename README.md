@@ -2,18 +2,25 @@
 
 It's a simple movie app using React.js
 
-Checkout the demo [here](https://seacinema.vercel.app/)
+Checkout the demo [here](https://seacinema.vercel.app/).
 
-## Todo
+## Features
 
-### Features
-
+- [x] Login
+- [x] Register
+- [x] Movie list
+- [x] Movie detail
+- [x] Ticket booking
+- [ ] Transaction detail
+- [x] Top up balance
+- [x] Withdraw balance
 - [ ] Search movie by query
-- [ ] Order history
+- [ ] Transaction history
 - [ ] Cancel order/ticket
-- [ ] Dark mode
+- [ ] Edit user profile
+- [ ] Usefull documentation
 
-### Fix
+## Fix
 
 - [ ] Form validation
 - [ ] Form submit feedback
@@ -21,10 +28,13 @@ Checkout the demo [here](https://seacinema.vercel.app/)
 - [ ] Better error feedback
 - [ ] Skeleton screen
 - [ ] Save register input value to session storage
+- [ ] Dark mode
 
-### Refactor
+## Refactor
 
 - [ ] Extract component
 - [ ] Better error handling
 - [ ] Better code structure
 - [ ] Better code readability
+- [ ] Optimize performance
+- [ ] Caching

@@ -1,16 +1,20 @@
 import { Navigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import Icons from "../Components/Icons";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import Seat from "../Components/Seat";
-import ErrorAlert from "../Components/ErrorAlert";
 import Heading from "../Components/Heading";
+import AlertContainer, {
+  ACTIONS,
+  alertReducer,
+} from "../Components/AlertContainer";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_CREATED = 201;
 const HTTP_OK = 200;
 
 export default function BookTicket({ isLoggedIn, token }) {
+  const [alerts, dispatch] = useReducer(alertReducer, []);
   const { movieId } = useParams();
   const [movie, setMovie] = useState({});
   const [seats, setSeats] = useState({});
@@ -18,20 +22,18 @@ export default function BookTicket({ isLoggedIn, token }) {
   const [isLoading, setIsLoading] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
   const [price, setPrice] = useState(0);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     fetch(`${API_ENDPOINT}/tickets/seat/${movieId}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode !== HTTP_OK) {
-          setError(data.message);
+          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
           return;
         }
 
         data = data.seats;
-
         data.title = `${data.title} (${data.releaseDate.match(/\d{4}/)[0]})`;
         setMovie({
           id: data.id,
@@ -81,47 +83,29 @@ export default function BookTicket({ isLoggedIn, token }) {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode !== HTTP_CREATED) {
-          setError(data.message);
+          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
           return;
         }
 
-        setSuccess(data.message);
+        dispatch({ type: ACTIONS.SUCCESS_PUSH, payload: data.message });
+        setIsSuccess(true);
       })
-      .catch((e) => {
-        setError(e.message);
-      });
+      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
   }
 
-  if (!isLoggedIn) {
-    return <Navigate to="/login" replace={true} />;
-  }
-
-  if (success) {
-    return <Navigate to="/tickets" replace={true} />;
-  }
+  if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
+  if (isSuccess) return <Navigate to="/tickets" replace={true} />;
 
   return (
     <div className="flex flex-col">
       <Heading className="mb-4">Select Seats</Heading>
 
-      {error ? (
-        <ErrorAlert className="mb-4 w-full max-w-md">
-          <p>{error}</p>
-          <button
-            className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
-            onClick={() => setError("")}
-          >
-            <Icons.XMark className="h-4 w-4" />
-          </button>
-        </ErrorAlert>
-      ) : (
-        ""
-      )}
+      <AlertContainer alerts={alerts} dispatch={dispatch} />
 
       {isLoading ? (
-        <div className="mb-8 h-9 w-4/5 animate-pulse self-center rounded-lg bg-accent/20 md:hidden"></div>
+        <div className="mb-8 mt-4 h-9 w-4/5 animate-pulse self-center rounded-lg bg-accent/20 md:hidden"></div>
       ) : (
-        <h1 className="mb-8 text-center text-3xl font-bold md:hidden">
+        <h1 className="mb-8 mt-4 text-center text-3xl font-bold md:hidden">
           {movie.title}
         </h1>
       )}
@@ -205,8 +189,9 @@ export default function BookTicket({ isLoggedIn, token }) {
               </span>
             </div>
             <button
+              disabled={isLoading}
               onClick={handleClick}
-              className="flex items-center justify-center rounded-3xl bg-primary px-14 py-4 text-background"
+              className="flex items-center justify-center rounded-lg bg-primary px-6 py-4 text-background disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-primary/60"
             >
               Book Ticket
             </button>

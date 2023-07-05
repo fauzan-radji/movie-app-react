@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import { twMerge } from "tailwind-merge";
+import Icons from "./Icons";
 
-export default function Alert({ children, icon, bgColor, className }) {
+export default function Alert({ children, bgColor, className, close }) {
   return (
     <div
       className={twMerge(
@@ -10,15 +11,21 @@ export default function Alert({ children, icon, bgColor, className }) {
       )}
       role="alert"
     >
-      {icon}
       {children}
+
+      <button
+        className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
+        onClick={close}
+      >
+        <Icons.XMark className="h-4 w-4" />
+      </button>
     </div>
   );
 }
 
 Alert.propTypes = {
+  close: PropTypes.func.isRequired,
   children: PropTypes.node.isRequired,
-  icon: PropTypes.node.isRequired,
   bgColor: PropTypes.string.isRequired,
   className: PropTypes.string,
 };

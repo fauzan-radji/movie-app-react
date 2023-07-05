@@ -1,44 +1,41 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Icons from "../Components/Icons";
 import Heading from "../Components/Heading";
-import ErrorAlert from "../Components/ErrorAlert";
+import AlertContainer, {
+  ACTIONS,
+  alertReducer,
+} from "../Components/AlertContainer";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+const HTTP_OK = 200;
 
 export default function Movie() {
+  const [alerts, dispatch] = useReducer(alertReducer, []);
   const { movieId } = useParams();
   const [movie, setMovie] = useState({});
-  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetch(`${API_ENDPOINT}/movies/${movieId}`)
       .then((res) => res.json())
       .then((data) => {
-        setMovie(data);
+        if (data.statusCode !== HTTP_OK) {
+          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
+          return;
+        }
+
+        setMovie(data.movie);
         setIsLoading(false);
       })
-      .catch((e) => setError(e.message));
+      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
   }, [movieId]);
 
   return (
     <div className="flex flex-col">
       <Heading className="mb-4">Movie Details</Heading>
 
-      {error ? (
-        <ErrorAlert className="mb-4 w-full max-w-md">
-          <p>{error}</p>
-          <button
-            className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
-            onClick={() => setError("")}
-          >
-            <Icons.XMark className="h-4 w-4" />
-          </button>
-        </ErrorAlert>
-      ) : (
-        ""
-      )}
+      <AlertContainer alerts={alerts} dispatch={dispatch} />
 
       <div className="flex flex-col items-center gap-y-4 landscape:flex-row landscape:items-start landscape:gap-x-8">
         {isLoading ? (
@@ -98,7 +95,11 @@ export default function Movie() {
 
           <Link
             to={`/movie/${movieId}/book`}
-            className="mx-auto mb-6 flex items-center gap-2 rounded-2xl bg-primary px-8 py-4 text-background"
+            className={`mx-auto mb-6 flex items-center gap-2 rounded-lg bg-primary px-6 py-4 text-background${
+              isLoading
+                ? " pointer-events-none cursor-not-allowed bg-primary/60"
+                : ""
+            }`}
           >
             Book Ticket
           </Link>

@@ -1,18 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import Icons from "../Components/Icons";
 import MovieCard from "../Components/MovieCard";
 import MovieCardSkeleton from "../Skeleton/MovieCard";
 import Header from "../Components/Header";
 import PrimaryButton from "../Components/PrimaryButton";
-import ErrorAlert from "../Components/ErrorAlert";
+import AlertContainer, {
+  ACTIONS,
+  alertReducer,
+} from "../Components/AlertContainer";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_OK = 200;
 
 export default function Home() {
+  const [alerts, dispatch] = useReducer(alertReducer, []);
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -20,7 +23,7 @@ export default function Home() {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode !== HTTP_OK) {
-          setError(data.message);
+          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
           return;
         }
 
@@ -28,9 +31,7 @@ export default function Home() {
         setMovies(newMovies);
         setIsLoading(false);
       })
-      .catch((e) => {
-        setError(e.message);
-      });
+      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
   }, [page]);
 
   return (
@@ -46,28 +47,24 @@ export default function Home() {
         <Icons.Search className="h-5 w-5 text-text" />
       </form>
 
-      {error ? (
-        <ErrorAlert>
-          <p>{error}</p>
-        </ErrorAlert>
-      ) : (
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
-          {isLoading
-            ? Array(12)
-                .fill()
-                .map((_, i) => <MovieCardSkeleton key={i} />)
-            : movies.map((movie) => (
-                <MovieCard
-                  id={movie.id}
-                  price={movie.price}
-                  title={movie.title}
-                  poster={`${movie.poster}`}
-                  releaseDate={movie.releaseDate}
-                  key={movie.id}
-                />
-              ))}
-        </div>
-      )}
+      <AlertContainer alerts={alerts} dispatch={dispatch} />
+
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
+        {isLoading
+          ? Array(12)
+              .fill()
+              .map((_, i) => <MovieCardSkeleton key={i} />)
+          : movies.map((movie) => (
+              <MovieCard
+                id={movie.id}
+                price={movie.price}
+                title={movie.title}
+                poster={`${movie.poster}`}
+                releaseDate={movie.releaseDate}
+                key={movie.id}
+              />
+            ))}
+      </div>
 
       <div className="mt-4 flex justify-center pb-4">
         <PrimaryButton onClick={() => setPage(page + 1)}>

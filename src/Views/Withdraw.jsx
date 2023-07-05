@@ -4,16 +4,17 @@ import Icons from "../Components/Icons";
 import InputIcon from "../Components/InputIcon";
 import PrimaryButton from "../Components/PrimaryButton";
 import { Navigate } from "react-router-dom";
-import { useRef, useState } from "react";
-import SuccessAlert from "../Components/SuccessAlert";
-import ErrorAlert from "../Components/ErrorAlert";
+import { useReducer, useRef } from "react";
+import AlertContainer, {
+  ACTIONS,
+  alertReducer,
+} from "../Components/AlertContainer";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_CREATED = 201;
 
 export default function Withdraw({ isLoggedIn, token }) {
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
+  const [alerts, dispatch] = useReducer(alertReducer, []);
   const input = useRef();
 
   function handleSubmit(e) {
@@ -32,53 +33,31 @@ export default function Withdraw({ isLoggedIn, token }) {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode !== HTTP_CREATED) {
-          setError(data.message);
+          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
           return;
         }
 
-        setSuccess(data.message);
+        // FIXME
+        if (data.messageWarning) {
+          dispatch({
+            type: ACTIONS.WARNING_PUSH,
+            payload: data.messageWarning,
+          });
+        }
+
+        dispatch({ type: ACTIONS.SUCCESS_PUSH, payload: data.message });
         input.current.value = "";
       })
-      .catch((e) => {
-        setError(e.message);
-      });
+      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
   }
 
-  if (!isLoggedIn) {
-    return <Navigate to="/login" replace={true} />;
-  }
+  if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
 
   return (
     <div className="flex h-full flex-col">
       <Heading className="mb-4">Withdraw</Heading>
 
-      {success ? (
-        <SuccessAlert className="w-full max-w-md">
-          <p>{success} </p>
-          <button
-            className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
-            onClick={() => setSuccess("")}
-          >
-            <Icons.XMark className="h-4 w-4" />
-          </button>
-        </SuccessAlert>
-      ) : (
-        ""
-      )}
-
-      {error ? (
-        <ErrorAlert className="w-full max-w-md">
-          <p>{error}</p>
-          <button
-            className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
-            onClick={() => setError("")}
-          >
-            <Icons.XMark className="h-4 w-4" />
-          </button>
-        </ErrorAlert>
-      ) : (
-        ""
-      )}
+      <AlertContainer alerts={alerts} dispatch={dispatch} />
 
       <form
         onSubmit={handleSubmit}

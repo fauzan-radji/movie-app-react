@@ -1,18 +1,17 @@
 import PropTypes from "prop-types";
 import TicketSkeleton from "../Skeleton/Ticket";
 import Ticket from "./Ticket";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { Link } from "react-router-dom";
-import ErrorAlert from "./ErrorAlert";
-import Icons from "./Icons";
+import AlertContainer, { ACTIONS, alertReducer } from "./AlertContainer";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_OK = 200;
 
 export default function Tickets({ name, className, token }) {
+  const [alerts, dispatch] = useReducer(alertReducer, []);
   const [tickets, setTickets] = useState(undefined);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     fetch(`${API_ENDPOINT}/user/tickets`, {
@@ -23,30 +22,18 @@ export default function Tickets({ name, className, token }) {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode !== HTTP_OK) {
-          setError(data.message);
+          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
           return;
         }
 
         setTickets(data.data);
       })
-      .catch((e) => setError(e.message));
+      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
   }, [token]);
 
   return (
     <>
-      {error ? (
-        <ErrorAlert className="mb-4 w-full max-w-md">
-          <p>{error}</p>
-          <button
-            className="ms-auto aspect-square rounded bg-white/20 p-0.5 hover:bg-white/30"
-            onClick={() => setError("")}
-          >
-            <Icons.XMark className="h-4 w-4" />
-          </button>
-        </ErrorAlert>
-      ) : (
-        ""
-      )}
+      <AlertContainer className="mb-4" alerts={alerts} dispatch={dispatch} />
 
       <div
         className={twMerge(
