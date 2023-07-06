@@ -16,6 +16,8 @@ const HTTP_OK = 200;
 export default function BookTicket({ isLoggedIn, token }) {
   const [alerts, dispatch] = useReducer(alertReducer, []);
   const { movieId } = useParams();
+
+  // FIXME: useReducer
   const [movie, setMovie] = useState({});
   const [seats, setSeats] = useState({});
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -23,6 +25,7 @@ export default function BookTicket({ isLoggedIn, token }) {
   const [totalPrice, setTotalPrice] = useState(0);
   const [price, setPrice] = useState(0);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [transactionId, setTransactionId] = useState("");
 
   useEffect(() => {
     fetch(`${API_ENDPOINT}/tickets/seat/${movieId}`)
@@ -89,16 +92,17 @@ export default function BookTicket({ isLoggedIn, token }) {
 
         dispatch({ type: ACTIONS.SUCCESS_PUSH, payload: data.message });
         setIsSuccess(true);
+        setTransactionId(data.ordersId.id);
       })
       .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
   }
 
   if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
-  if (isSuccess) return <Navigate to="/tickets" replace={true} />;
+  if (isSuccess) return <Navigate to={`/transactions/${transactionId}`} />;
 
   return (
     <div className="flex flex-col">
-      <Heading className="mb-4">Select Seats</Heading>
+      <Heading>Select Seats</Heading>
 
       <AlertContainer alerts={alerts} dispatch={dispatch} />
 
@@ -125,10 +129,13 @@ export default function BookTicket({ isLoggedIn, token }) {
                   {Array(8)
                     .fill()
                     .map((_, j) => {
+                      // FIXME: refactor the magic number (i * 8 + j)
                       const seat = seats[i * 8 + j] || {
                         id: i * 8 + j,
-                        reserved: false,
+                        book: false,
+                        seatNumber: i * 8 + j,
                       };
+
                       return (
                         <Seat
                           key={seat.id}

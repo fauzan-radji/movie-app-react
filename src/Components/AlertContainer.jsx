@@ -56,7 +56,12 @@ export function alertReducer(alerts, action) {
 
 export default function AlertContainer({ alerts, dispatch, className }) {
   return (
-    <div className={twMerge(`flex w-full max-w-md flex-col gap-2`, className)}>
+    <div
+      className={twMerge(
+        `mx-auto my-4 flex w-max min-w-[28rem] flex-col gap-2`,
+        className
+      )}
+    >
       {alerts.map((alert, index) => {
         if (alert.type === ALERT.ERROR) {
           return (

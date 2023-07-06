@@ -12,6 +12,7 @@ export default function Tickets({ isLoggedIn, token }) {
     <div className="mb-4">
       <Header>My Tickets</Header>
 
+      {/* FIXME: use dynamic User Name instead */}
       <TicketsComponent name="John Doe" token={token} />
     </div>
   );

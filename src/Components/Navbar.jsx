@@ -44,6 +44,17 @@ export default function Navbar({ isLoggedIn }) {
                 <Icons.Ticket className="h-6 w-6 md:h-4 md:w-4" />
                 <span className="hidden md:inline">My Tickets</span>
               </Link>
+              <Link
+                to="/transactions"
+                className={`flex flex-1 items-center justify-center gap-x-2 rounded-md px-3 py-2 font-medium hover:bg-secondary hover:text-accent md:flex-none${
+                  currentPath === "/transactions"
+                    ? " bg-secondary text-primary"
+                    : ""
+                }`}
+              >
+                <Icons.ReceiptPercent className="h-6 w-6 md:h-4 md:w-4" />
+                <span className="hidden md:inline">My Orders</span>
+              </Link>
             </>
           ) : (
             <Link

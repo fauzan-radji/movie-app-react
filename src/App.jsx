@@ -56,6 +56,23 @@ export default function App() {
               path="withdraw"
               element={<View.Withdraw isLoggedIn={isLoggedIn} token={token} />}
             />
+            <Route path="transactions">
+              <Route
+                index
+                element={
+                  <View.Transactions isLoggedIn={isLoggedIn} token={token} />
+                }
+              />
+              <Route
+                path=":transactionId"
+                element={
+                  <View.TransactionDetail
+                    isLoggedIn={isLoggedIn}
+                    token={token}
+                  />
+                }
+              />
+            </Route>
           </Route>
         </Routes>
       </main>

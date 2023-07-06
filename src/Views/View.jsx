@@ -7,6 +7,8 @@ import Tickets from "./Tickets";
 import Profile from "./Profile";
 import TopUp from "./TopUp";
 import Withdraw from "./Withdraw";
+import Transactions from "./Transactions";
+import TransactionDetail from "./TransactionDetail";
 
 export default {
   Home,
@@ -18,4 +20,6 @@ export default {
   Profile,
   TopUp,
   Withdraw,
+  Transactions,
+  TransactionDetail,
 };

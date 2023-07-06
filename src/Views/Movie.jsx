@@ -33,7 +33,7 @@ export default function Movie() {
 
   return (
     <div className="flex flex-col">
-      <Heading className="mb-4">Movie Details</Heading>
+      <Heading>Movie Details</Heading>
 
       <AlertContainer alerts={alerts} dispatch={dispatch} />
 
@@ -95,10 +95,11 @@ export default function Movie() {
 
           <Link
             to={`/movie/${movieId}/book`}
+            onClick={(e) => {
+              if (isLoading) e.preventDefault();
+            }}
             className={`mx-auto mb-6 flex items-center gap-2 rounded-lg bg-primary px-6 py-4 text-background${
-              isLoading
-                ? " pointer-events-none cursor-not-allowed bg-primary/60"
-                : ""
+              isLoading ? " cursor-not-allowed bg-primary/60" : ""
             }`}
           >
             Book Ticket

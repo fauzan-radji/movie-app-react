@@ -48,6 +48,23 @@ export function ArrowDown({ className }) {
   );
 }
 
+export function ArrowTopRight({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+    >
+      <path
+        fillRule="evenodd"
+        d="M15.75 2.25H21a.75.75 0 01.75.75v5.25a.75.75 0 01-1.5 0V4.81L8.03 17.03a.75.75 0 01-1.06-1.06L19.19 3.75h-3.44a.75.75 0 010-1.5zm-10.5 4.5a1.5 1.5 0 00-1.5 1.5v10.5a1.5 1.5 0 001.5 1.5h10.5a1.5 1.5 0 001.5-1.5V10.5a.75.75 0 011.5 0v8.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V8.25a3 3 0 013-3h8.25a.75.75 0 010 1.5H5.25z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
 export function Search({ className }) {
   return (
     <svg
@@ -88,16 +105,15 @@ export function PriceTag({ className }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 50 50"
-      strokeWidth={1.5}
+      viewBox="0 0 24 24"
       fill="currentColor"
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeMiterlimit="10"
       className={className}
     >
-      <circle cx="39" cy="11" r="3" />
-      <path d="M47,5.5  C47,4.119,45.881,3,44.5,3c-0.156,0-14.876,0.002-14.876,0.002c-1.33,0-2.603-0.07-3.341,0.668L3.554,26.398  c-0.739,0.738-0.739,1.936,0,2.674l17.374,17.374c0.738,0.738,1.936,0.738,2.674,0L46.33,23.717c0.738-0.737,0.668-1.98,0.668-3.34  C46.998,20.377,47,5.656,47,5.5z" />
+      <path
+        fillRule="evenodd"
+        d="M5.25 2.25a3 3 0 00-3 3v4.318a3 3 0 00.879 2.121l9.58 9.581c.92.92 2.39 1.186 3.548.428a18.849 18.849 0 005.441-5.44c.758-1.16.492-2.629-.428-3.548l-9.58-9.581a3 3 0 00-2.122-.879H5.25zM6.375 7.5a1.125 1.125 0 100-2.25 1.125 1.125 0 000 2.25z"
+        clipRule="evenodd"
+      />
     </svg>
   );
 }
@@ -278,6 +294,23 @@ export function Check({ className }) {
   );
 }
 
+export function CheckBadge({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+    >
+      <path
+        fillRule="evenodd"
+        d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307zm7.007 6.387a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
 export function ExclamationTri({ className }) {
   return (
     <svg
@@ -400,9 +433,27 @@ export function CreditCard({ className }) {
   );
 }
 
+export function ReceiptPercent({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+    >
+      <path
+        fillRule="evenodd"
+        d="M12 1.5c-1.921 0-3.816.111-5.68.327-1.497.174-2.57 1.46-2.57 2.93V21.75a.75.75 0 001.029.696l3.471-1.388 3.472 1.388a.75.75 0 00.556 0l3.472-1.388 3.471 1.388a.75.75 0 001.029-.696V4.757c0-1.47-1.073-2.756-2.57-2.93A49.255 49.255 0 0012 1.5zm3.53 7.28a.75.75 0 00-1.06-1.06l-6 6a.75.75 0 101.06 1.06l6-6zM8.625 9a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm5.625 3.375a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+}
+
 Home.propTypes = { className: PropTypes.string };
 UserCircle.propTypes = { className: PropTypes.string };
 ArrowDown.propTypes = { className: PropTypes.string };
+ArrowTopRight.propTypes = { className: PropTypes.string };
 Search.propTypes = { className: PropTypes.string };
 ChevronLeft.propTypes = { className: PropTypes.string };
 PriceTag.propTypes = { className: PropTypes.string };
@@ -416,6 +467,7 @@ Calendar.propTypes = { className: PropTypes.string };
 Envelope.propTypes = { className: PropTypes.string };
 Info.propTypes = { className: PropTypes.string };
 Check.propTypes = { className: PropTypes.string };
+CheckBadge.propTypes = { className: PropTypes.string };
 ExclamationTri.propTypes = { className: PropTypes.string };
 ExclamationCircle.propTypes = { className: PropTypes.string };
 XCircle.propTypes = { className: PropTypes.string };
@@ -423,11 +475,13 @@ XMark.propTypes = { className: PropTypes.string };
 TopUp.propTypes = { className: PropTypes.string };
 Withdraw.propTypes = { className: PropTypes.string };
 CreditCard.propTypes = { className: PropTypes.string };
+ReceiptPercent.propTypes = { className: PropTypes.string };
 
 export default {
   Home,
   UserCircle,
   ArrowDown,
+  ArrowTopRight,
   Search,
   ChevronLeft,
   PriceTag,
@@ -441,6 +495,7 @@ export default {
   Envelope,
   Info,
   Check,
+  CheckBadge,
   ExclamationTri,
   ExclamationCircle,
   XCircle,
@@ -448,4 +503,5 @@ export default {
   TopUp,
   Withdraw,
   CreditCard,
+  ReceiptPercent,
 };
