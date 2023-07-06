@@ -28,7 +28,14 @@ export default function Transactions({ isLoggedIn, token }) {
         if (data.statusCode !== HTTP_OK)
           dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
 
-        setOrders(data.orderHistory);
+        const newOrders = data.orderHistory.map((order) => ({
+          ...order,
+          seats: order.seats.map((seat) => seat.seatNumber),
+          // FIXME: fix this isCanceled state
+          isCanceled:
+            order.seats.length === 0 || order.seats.every((seat) => !seat.book),
+        }));
+        setOrders(newOrders);
         setIsLoading(false);
       })
       .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
@@ -64,14 +71,19 @@ export default function Transactions({ isLoggedIn, token }) {
           : orders.map((order, index) => (
               <div
                 key={index}
-                className="flex items-start justify-between rounded-md bg-secondary px-4 py-2"
+                className={`flex items-start justify-between rounded-md bg-secondary px-4 py-2`}
               >
                 <div className="flex flex-col">
-                  <h4 className="font-bold">{order.Movie.title}</h4>
-                  <span className="text-xs font-bold text-accent">
-                    Seats:{" "}
-                    {order.seats.map((seat) => seat.seatNumber).join(", ")}
-                  </span>
+                  <h4 className={`font-bold`}>{order.Movie.title}</h4>
+                  {order.isCanceled ? (
+                    <span className="text-xs font-bold text-danger-700">
+                      Canceled
+                    </span>
+                  ) : (
+                    <span className="text-xs font-bold text-accent">
+                      Seats: {order.seats.join(", ")}
+                    </span>
+                  )}
                   <span className="text-xs text-text/70">
                     {dateFormat(order.date)}
                   </span>

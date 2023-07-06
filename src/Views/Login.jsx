@@ -23,9 +23,7 @@ export default function Login({ isLoggedIn, setToken }) {
 
     fetch(`${API_ENDPOINT}/auth/signin`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username: usernameInput.current.value,
         hash: passwordInput.current.value,
@@ -44,9 +42,7 @@ export default function Login({ isLoggedIn, setToken }) {
       .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
   }
 
-  if (isLoggedIn) {
-    return <Navigate to="/profile" replace={true} />;
-  }
+  if (isLoggedIn) return <Navigate to="/profile" replace={true} />;
 
   return (
     <div className="flex h-full flex-col items-center">

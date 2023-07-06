@@ -16,7 +16,8 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 - [x] Withdraw balance
 - [x] Search movie by title
 - [x] Transaction history
-- [ ] Cancel order/ticket
+- [x] Cancel order/transaction
+- [ ] Cancel ticket
 - [ ] Edit user profile
 - [ ] Usefull documentation
 

@@ -12,12 +12,16 @@ import Header from "../Components/Header";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_OK = 200;
+const HTTP_CREATED = 201;
 
 export default function TransactionDetail({ isLoggedIn, token }) {
   const [alerts, dispatch] = useReducer(alertReducer, []);
   const { transactionId } = useParams();
   const [transaction, setTransaction] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [isCancelled, setIsCancelled] = useState(false);
+
+  // TODO: add canceled state for canceled order
 
   useEffect(() => {
     fetch(`${API_ENDPOINT}/orders/${transactionId}`, {
@@ -30,13 +34,44 @@ export default function TransactionDetail({ isLoggedIn, token }) {
           return;
         }
 
+        data.order.seats = data.order.seats.map((seat) => seat.seatNumber);
         setTransaction(data.order);
         setIsLoading(false);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
   }, [transactionId, token]);
 
+  function handleClick() {
+    console.log(JSON.stringify({ ticketsSeatNumber: transaction.seats }));
+    fetch(`${API_ENDPOINT}/orders/cancel/${transaction.Movie.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ ticketsSeatNumber: transaction.seats }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.statusCode !== HTTP_CREATED) {
+          if (Array.isArray(data.message)) {
+            data.message.forEach((message) => {
+              dispatch({ type: ACTIONS.ERROR_PUSH, payload: message });
+            });
+            return;
+          }
+
+          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
+          return;
+        }
+
+        setIsCancelled(true);
+      })
+      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
+  }
+
   if (!isLoggedIn) return <Navigate to="/login" replace />;
+  if (isCancelled) return <Navigate to="/transactions" replace />;
 
   return (
     <div className="flex flex-col">
@@ -49,7 +84,7 @@ export default function TransactionDetail({ isLoggedIn, token }) {
         <Header>Loading...</Header>
       ) : (
         <>
-          <Icons.CheckBadge className="mx-auto mt-8 aspect-square w-20 text-success-700" />
+          <Icons.CheckBadge className="mx-auto aspect-square w-20 text-success-700" />
           <p className="text-center">@{transaction.User.username}</p>
           <h1 className="text-center text-lg font-bold">
             {transaction.Movie.title} (
@@ -68,9 +103,7 @@ export default function TransactionDetail({ isLoggedIn, token }) {
             </div>
             <div>
               <p className="text-sm text-text/60">Seats</p>
-              <p>
-                {transaction.seats.map((seat) => seat.seatNumber).join(", ")}
-              </p>
+              <p>{transaction.seats.join(", ")}</p>
             </div>
             <div>
               <p className="text-sm text-text/60">Transaction date</p>
@@ -83,7 +116,12 @@ export default function TransactionDetail({ isLoggedIn, token }) {
           </div>
         </>
       )}
-      <SecondaryButton>Cancel Order</SecondaryButton>
+
+      {isLoading ? (
+        ""
+      ) : (
+        <SecondaryButton onClick={handleClick}>Cancel Order</SecondaryButton>
+      )}
     </div>
   );
 }
