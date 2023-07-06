@@ -11,11 +11,11 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 - [x] Movie list
 - [x] Movie detail
 - [x] Ticket booking
-- [ ] Transaction detail
+- [x] Transaction detail
 - [x] Top up balance
 - [x] Withdraw balance
-- [ ] Search movie by query
-- [ ] Transaction history
+- [x] Search movie by title
+- [x] Transaction history
 - [ ] Cancel order/ticket
 - [ ] Edit user profile
 - [ ] Usefull documentation

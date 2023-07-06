@@ -133,7 +133,7 @@ export default function BookTicket({ isLoggedIn, token }) {
                       const seat = seats[i * 8 + j] || {
                         id: i * 8 + j,
                         book: false,
-                        seatNumber: i * 8 + j,
+                        seatNumber: i * 8 + j + 1,
                       };
 
                       return (
