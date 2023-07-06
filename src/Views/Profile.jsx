@@ -62,7 +62,7 @@ export default function Profile({ isLoggedIn, token, setToken }) {
         <Header>Loading ...</Header>
       ) : (
         <>
-          <Header className="pb-0">{user.name}</Header>
+          <Header className="py-0">{user.name}</Header>
           <p className="text-center text-text/50">@{user.username}</p>
 
           <CreditCard
@@ -86,9 +86,9 @@ export default function Profile({ isLoggedIn, token, setToken }) {
           </div>
 
           <h3 className="mt-8 text-center text-lg font-bold">My Tickets</h3>
-          <hr className="mb-4 border-b border-accent/50" />
+          <hr className="border-b border-accent/50" />
 
-          <Tickets className="mt-4" name="John Doe" token={token} />
+          <Tickets name={user.name} token={token} />
         </>
       )}
     </div>

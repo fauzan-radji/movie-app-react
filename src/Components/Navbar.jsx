@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 
 export default function Navbar({ isLoggedIn }) {
   const location = useLocation();
+  // FIXME: use NavLink instead of Link
   const [currentPath, setCurrentPath] = useState("/");
 
   useEffect(() => {
@@ -34,15 +35,6 @@ export default function Navbar({ isLoggedIn }) {
               >
                 <Icons.UserCircle className="h-6 w-6 md:h-4 md:w-4" />
                 <span className="hidden md:inline">Profile</span>
-              </Link>
-              <Link
-                to="/tickets"
-                className={`flex flex-1 items-center justify-center gap-x-2 rounded-md px-3 py-2 font-medium hover:bg-secondary hover:text-accent md:flex-none${
-                  currentPath === "/tickets" ? " bg-secondary text-primary" : ""
-                }`}
-              >
-                <Icons.Ticket className="h-6 w-6 md:h-4 md:w-4" />
-                <span className="hidden md:inline">My Tickets</span>
               </Link>
               <Link
                 to="/transactions"

@@ -42,7 +42,6 @@ export default function TransactionDetail({ isLoggedIn, token }) {
   }, [transactionId, token]);
 
   function handleClick() {
-    console.log(JSON.stringify({ ticketsSeatNumber: transaction.seats }));
     fetch(`${API_ENDPOINT}/orders/cancel/${transaction.Movie.id}`, {
       method: "DELETE",
       headers: {

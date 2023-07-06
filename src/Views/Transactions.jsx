@@ -88,8 +88,9 @@ export default function Transactions({ isLoggedIn, token }) {
                     {dateFormat(order.date)}
                   </span>
                 </div>
+
                 <Link to={`/transactions/${order.id}`}>
-                  <Icons.ArrowTopRight className="h-5 w-5" />
+                  <Icons.ArrowTopRight className="h-5 w-5 text-accent" />
                 </Link>
               </div>
             ))}

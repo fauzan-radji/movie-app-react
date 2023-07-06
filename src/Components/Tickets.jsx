@@ -15,9 +15,7 @@ export default function Tickets({ name, className, token }) {
 
   useEffect(() => {
     fetch(`${API_ENDPOINT}/user/tickets`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
       .then((data) => {
@@ -53,7 +51,8 @@ export default function Tickets({ name, className, token }) {
             tickets.map((ticket) => (
               <Ticket
                 key={ticket.id}
-                movie={ticket.Movie.title}
+                id={ticket.id}
+                movieTitle={ticket.Movie.title}
                 name={name}
                 seat={ticket.seatNumber}
               />

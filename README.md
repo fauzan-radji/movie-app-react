@@ -28,6 +28,7 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 - [ ] Responsive design
 - [ ] Better error feedback
 - [ ] Skeleton screen
+- [ ] Hover state for clickable element
 - [ ] Save register input value to session storage
 - [ ] Dark mode
 
@@ -39,3 +40,7 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 - [ ] Better code readability
 - [ ] Optimize performance
 - [ ] Caching
+
+## Known issues
+
+- [ ] Input type date not working on Safari

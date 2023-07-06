@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./Components/Navbar";
-import View from "./Views/View";
+import View from "./Views/Views";
 import { useSessionStorage } from "usehooks-ts";
 
 export default function App() {
@@ -15,6 +15,7 @@ export default function App() {
         <Routes>
           <Route path="/">
             <Route index element={<View.Home />} />
+            {/* FIXME: use /movies instead of /movie */}
             <Route path="movie/:movieId">
               <Route index element={<View.Movie />} />
               <Route
@@ -45,16 +46,16 @@ export default function App() {
               element={<View.Register isLoggedIn={isLoggedIn} />}
             />
             <Route
-              path="tickets"
-              element={<View.Tickets isLoggedIn={isLoggedIn} token={token} />}
-            />
-            <Route
               path="topup"
               element={<View.TopUp isLoggedIn={isLoggedIn} token={token} />}
             />
             <Route
               path="withdraw"
               element={<View.Withdraw isLoggedIn={isLoggedIn} token={token} />}
+            />
+            <Route
+              path="tickets/:ticketId"
+              element={<View.Ticket isLoggedIn={isLoggedIn} token={token} />}
             />
             <Route path="transactions">
               <Route
@@ -66,10 +67,7 @@ export default function App() {
               <Route
                 path=":transactionId"
                 element={
-                  <View.TransactionDetail
-                    isLoggedIn={isLoggedIn}
-                    token={token}
-                  />
+                  <View.Transaction isLoggedIn={isLoggedIn} token={token} />
                 }
               />
             </Route>
