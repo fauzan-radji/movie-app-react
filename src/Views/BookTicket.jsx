@@ -8,6 +8,7 @@ import AlertContainer, {
   ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
+import PrimaryButton from "../Components/PrimaryButton";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_CREATED = 201;
@@ -26,6 +27,7 @@ export default function BookTicket({ isLoggedIn, token }) {
   const [price, setPrice] = useState(0);
   const [isSuccess, setIsSuccess] = useState(false);
   const [transactionId, setTransactionId] = useState("");
+  const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
     fetch(`${API_ENDPOINT}/tickets/seat/${movieId}`)
@@ -73,6 +75,9 @@ export default function BookTicket({ isLoggedIn, token }) {
   }
 
   function handleClick() {
+    if (isSending) return;
+
+    setIsSending(true);
     fetch(`${API_ENDPOINT}/tickets/seat/${movieId}`, {
       method: "POST",
       headers: {
@@ -94,7 +99,8 @@ export default function BookTicket({ isLoggedIn, token }) {
         setIsSuccess(true);
         setTransactionId(data.ordersId.id);
       })
-      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
+      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }))
+      .finally(() => setIsSending(false));
   }
 
   if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
@@ -195,13 +201,18 @@ export default function BookTicket({ isLoggedIn, token }) {
                 IDR {totalPrice}K
               </span>
             </div>
-            <button
-              disabled={isLoading}
+            <PrimaryButton
+              disabled={isLoading || isSending || selectedSeats.length === 0}
               onClick={handleClick}
-              className="flex items-center justify-center rounded-lg bg-primary px-6 py-4 text-background disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-primary/60"
+              className="px-6 py-4"
             >
+              {isSending ? (
+                <Icons.Spinner className="h-5 w-5" />
+              ) : (
+                <Icons.Ticket className="h-5 w-5" />
+              )}{" "}
               Book Ticket
-            </button>
+            </PrimaryButton>
           </div>
         </div>
       </div>

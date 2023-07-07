@@ -3,6 +3,8 @@ import { twMerge } from "tailwind-merge";
 import Icons from "./Icons";
 
 export default function Alert({ children, bgColor, className, close }) {
+  setTimeout(close, 3000);
+
   return (
     <div
       className={twMerge(

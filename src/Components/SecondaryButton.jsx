@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { twMerge } from "tailwind-merge";
+import Button from "./Button";
 
 export default function SecondaryButton({
   children,
@@ -8,16 +9,16 @@ export default function SecondaryButton({
   disabled = false,
 }) {
   return (
-    <button
+    <Button
       onClick={onClick}
       disabled={disabled}
       className={twMerge(
-        "flex justify-center gap-2 rounded-md border border-primary bg-secondary px-4 py-2 text-center text-primary disabled:cursor-not-allowed",
+        "border border-primary bg-secondary text-primary",
         className
       )}
     >
       {children}
-    </button>
+    </Button>
   );
 }
 

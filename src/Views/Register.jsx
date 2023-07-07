@@ -4,7 +4,7 @@ import Header from "../Components/Header";
 import Icons from "../Components/Icons";
 import InputIcon from "../Components/InputIcon";
 import PrimaryButton from "../Components/PrimaryButton";
-import { useReducer, useRef } from "react";
+import { useReducer, useRef, useState } from "react";
 import AlertContainer, {
   ACTIONS,
   alertReducer,
@@ -21,10 +21,14 @@ export default function Register({ isLoggedIn }) {
   const passwordInput = useRef();
   const confirmPasswordInput = useRef();
   const birthDateInput = useRef();
+  const [isSending, setIsSending] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
 
+    if (isSending) return;
+
+    setIsSending(true);
     fetch(`${API_ENDPOINT}/auth/signup`, {
       method: "POST",
       headers: {
@@ -39,9 +43,7 @@ export default function Register({ isLoggedIn }) {
         confirmPassword: confirmPasswordInput.current.value,
       }),
     })
-      .then((res) => {
-        return res.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
         if (data.statusCode !== HTTP_CREATED) {
           if (Array.isArray(data.message)) {
@@ -56,12 +58,11 @@ export default function Register({ isLoggedIn }) {
 
         dispatch({ type: ACTIONS.SUCCESS_PUSH, payload: data.message });
       })
-      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
+      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }))
+      .finally(() => setIsSending(false));
   }
 
-  if (isLoggedIn) {
-    return <Navigate to="/profile" replace={true} />;
-  }
+  if (isLoggedIn) return <Navigate to="/profile" replace={true} />;
 
   return (
     <div className="flex h-full flex-col items-center">
@@ -124,9 +125,17 @@ export default function Register({ isLoggedIn }) {
             </Link>
           </p>
 
-          {/* TODO: provide feedback that data is being sent */}
-          <PrimaryButton className="w-full">
-            Register <Icons.Login className="h-5 w-5" />
+          <PrimaryButton
+            className={`w-full${
+              isSending ? " cursor-not-allowed opacity-50" : ""
+            }`}
+          >
+            Register{" "}
+            {isSending ? (
+              <Icons.Spinner className="h-5 w-5" />
+            ) : (
+              <Icons.Login className="-ms-1 h-5 w-5" />
+            )}
           </PrimaryButton>
         </div>
       </form>

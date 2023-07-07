@@ -1,25 +1,27 @@
 import PropTypes from "prop-types";
 import { twMerge } from "tailwind-merge";
-import Button from "./Button";
 
-export default function PrimaryButton({
+export default function Button({
   children,
   className,
   onClick,
   disabled = false,
 }) {
   return (
-    <Button
+    <button
       onClick={onClick}
       disabled={disabled}
-      className={twMerge("bg-primary text-background", className)}
+      className={twMerge(
+        "flex items-center justify-center gap-2 rounded-md px-4 py-2 text-center disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      )}
     >
       {children}
-    </Button>
+    </button>
   );
 }
 
-PrimaryButton.propTypes = {
+Button.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   onClick: PropTypes.func,

@@ -4,7 +4,7 @@ import Icons from "../Components/Icons";
 import InputIcon from "../Components/InputIcon";
 import PrimaryButton from "../Components/PrimaryButton";
 import { Navigate } from "react-router-dom";
-import { useReducer, useRef } from "react";
+import { useReducer, useRef, useState } from "react";
 import AlertContainer, {
   ACTIONS,
   alertReducer,
@@ -16,10 +16,14 @@ const HTTP_CREATED = 201;
 export default function TopUp({ isLoggedIn, token }) {
   const [alerts, dispatch] = useReducer(alertReducer, []);
   const input = useRef();
+  const [isSending, setIsSending] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
 
+    if (isSending) return;
+
+    setIsSending(true);
     fetch(`${API_ENDPOINT}/balance`, {
       method: "POST",
       headers: {
@@ -40,27 +44,37 @@ export default function TopUp({ isLoggedIn, token }) {
         dispatch({ type: ACTIONS.SUCCESS_PUSH, payload: data.message });
         input.current.value = "";
       })
-      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
+      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }))
+      .finally(() => setIsSending(false));
   }
 
   if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
 
   return (
     <div className="flex h-full flex-col">
-      <Heading className="mb-4">Top Up</Heading>
+      <Heading>Top Up</Heading>
 
       <AlertContainer alerts={alerts} dispatch={dispatch} />
 
       <form
         onSubmit={handleSubmit}
-        className="my-4 flex flex-auto flex-col justify-between"
+        className="flex flex-auto flex-col justify-between pb-4"
       >
-        <InputIcon ref={input} type="number" placeholder="Amount in IDR">
+        <InputIcon
+          ref={input}
+          type="number"
+          placeholder="Amount in IDR"
+          required
+        >
           <Icons.CreditCard className="h-4 w-4" />
         </InputIcon>
 
-        <PrimaryButton className="w-full">
-          <Icons.TopUp className="mt-0.5 h-5 w-5" />
+        <PrimaryButton disabled={isSending} className="mt-4 w-full">
+          {isSending ? (
+            <Icons.Spinner className="h-5 w-5" />
+          ) : (
+            <Icons.TopUp className="mt-1 h-5 w-5" />
+          )}{" "}
           Top Up
         </PrimaryButton>
       </form>

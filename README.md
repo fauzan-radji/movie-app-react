@@ -23,8 +23,8 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 
 ## Fix
 
+- [x] Form submit feedback
 - [ ] Form validation
-- [ ] Form submit feedback
 - [ ] Responsive design
 - [ ] Better error feedback
 - [ ] Skeleton screen

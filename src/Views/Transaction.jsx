@@ -20,6 +20,7 @@ export default function TransactionDetail({ isLoggedIn, token }) {
   const [transaction, setTransaction] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isCancelled, setIsCancelled] = useState(false);
+  const [isCanceling, setIsCanceling] = useState(false);
 
   // TODO: add canceled state for canceled order
 
@@ -42,6 +43,9 @@ export default function TransactionDetail({ isLoggedIn, token }) {
   }, [transactionId, token]);
 
   function handleClick() {
+    if (isCanceling) return;
+
+    setIsCanceling(true);
     fetch(`${API_ENDPOINT}/orders/cancel/${transaction.Movie.id}`, {
       method: "DELETE",
       headers: {
@@ -66,7 +70,8 @@ export default function TransactionDetail({ isLoggedIn, token }) {
 
         setIsCancelled(true);
       })
-      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
+      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }))
+      .finally(() => setIsCanceling(false));
   }
 
   if (!isLoggedIn) return <Navigate to="/login" replace />;
@@ -116,10 +121,18 @@ export default function TransactionDetail({ isLoggedIn, token }) {
         </>
       )}
 
-      {isLoading ? (
+      {isLoading || isCancelled ? (
         ""
       ) : (
-        <SecondaryButton onClick={handleClick}>Cancel Order</SecondaryButton>
+        <SecondaryButton disabled={isCanceling} onClick={handleClick}>
+          {isCanceling ? (
+            <>
+              <Icons.Spinner className="h-5 w-5" /> Canceling...
+            </>
+          ) : (
+            "Cancel Order"
+          )}
+        </SecondaryButton>
       )}
     </div>
   );
