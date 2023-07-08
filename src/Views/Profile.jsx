@@ -72,13 +72,13 @@ export default function Profile({ isLoggedIn, token, setToken }) {
 
           <div className="mt-4 flex w-full gap-4">
             <Link
-              to="/topup"
+              to="/profile/topup"
               className="flex flex-1 items-center justify-center gap-2 rounded-md bg-primary px-2 py-3 text-background"
             >
               <Icons.TopUp className="h-6 w-6" /> Top Up
             </Link>
             <Link
-              to="/withdraw"
+              to="/profile/withdraw"
               className="flex flex-1 items-center justify-center gap-2 rounded-md border border-primary bg-secondary px-2 py-3 text-primary"
             >
               <Icons.Withdraw className="h-6 w-6" /> Withdraw

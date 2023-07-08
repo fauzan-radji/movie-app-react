@@ -66,15 +66,16 @@ export default function Login({ isLoggedIn, setToken }) {
             type="text"
             placeholder="Username"
           >
-            <Icons.User className="h-5 w-5 text-text" />
+            <Icons.User className="h-4 w-4" />
           </InputIcon>
+          {/* TODO: add show/hide password feature */}
           <InputIcon
             required
             ref={passwordInput}
             type="password"
             placeholder="Password"
           >
-            <Icons.Lock className="h-5 w-5 text-text" />
+            <Icons.Lock className="h-4 w-4" />
           </InputIcon>
         </div>
 

@@ -31,6 +31,7 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 - [ ] Hover state for clickable element
 - [ ] Save register input value to session storage
 - [ ] Dark mode
+- [ ] Use pagination instead of infinite scroll
 
 ## Refactor
 

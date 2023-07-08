@@ -25,16 +25,28 @@ export default function App() {
                 path="book"
               />
             </Route>
-            <Route
-              path="profile"
-              element={
-                <View.Profile
-                  isLoggedIn={isLoggedIn}
-                  token={token}
-                  setToken={setToken}
-                />
-              }
-            />
+            <Route path="profile">
+              <Route
+                index
+                element={
+                  <View.Profile
+                    isLoggedIn={isLoggedIn}
+                    token={token}
+                    setToken={setToken}
+                  />
+                }
+              />
+              <Route
+                path="topup"
+                element={<View.TopUp isLoggedIn={isLoggedIn} token={token} />}
+              />
+              <Route
+                path="withdraw"
+                element={
+                  <View.Withdraw isLoggedIn={isLoggedIn} token={token} />
+                }
+              />
+            </Route>
             <Route
               path="login"
               element={
@@ -44,14 +56,6 @@ export default function App() {
             <Route
               path="register"
               element={<View.Register isLoggedIn={isLoggedIn} />}
-            />
-            <Route
-              path="topup"
-              element={<View.TopUp isLoggedIn={isLoggedIn} token={token} />}
-            />
-            <Route
-              path="withdraw"
-              element={<View.Withdraw isLoggedIn={isLoggedIn} token={token} />}
             />
             <Route
               path="tickets/:ticketId"

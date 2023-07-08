@@ -78,10 +78,10 @@ export default function Register({ isLoggedIn }) {
       >
         <div className="flex flex-col items-center justify-center gap-y-4">
           <InputIcon required ref={nameInput} type="text" placeholder="Name">
-            <Icons.User className="h-5 w-5 text-text" />
+            <Icons.User className="h-4 w-4" />
           </InputIcon>
           <InputIcon required ref={emailInput} type="email" placeholder="Email">
-            <Icons.Envelope className="h-5 w-5 text-text" />
+            <Icons.Envelope className="h-4 w-4" />
           </InputIcon>
           <InputIcon
             required
@@ -89,31 +89,34 @@ export default function Register({ isLoggedIn }) {
             type="text"
             placeholder="Username"
           >
-            <Icons.User className="h-5 w-5 text-text" />
+            <Icons.AtSymbol className="h-4 w-4" />
           </InputIcon>
+          {/* TODO: add show/hide password feature */}
           <InputIcon
             required
             ref={passwordInput}
             type="password"
             placeholder="Password"
           >
-            <Icons.Lock className="h-5 w-5 text-text" />
+            <Icons.Lock className="h-4 w-4" />
           </InputIcon>
+          {/* TODO: add show/hide password feature */}
           <InputIcon
             required
             ref={confirmPasswordInput}
             type="password"
             placeholder="Confirm password"
           >
-            <Icons.Lock className="h-5 w-5 text-text" />
+            <Icons.Lock className="h-4 w-4" />
           </InputIcon>
           <InputIcon
             required
             ref={birthDateInput}
             type="date"
             placeholder="Birth Date"
+            max={new Date().toISOString().split("T")[0]}
           >
-            <Icons.Calendar className="h-5 w-5 text-text" />
+            <Icons.Calendar className="h-4 w-4" />
           </InputIcon>
         </div>
 

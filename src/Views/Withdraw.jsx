@@ -71,6 +71,8 @@ export default function Withdraw({ isLoggedIn, token }) {
         <InputIcon
           ref={input}
           type="number"
+          min="1"
+          max="500000"
           placeholder="Amount in IDR"
           required
         >

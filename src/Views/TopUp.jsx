@@ -63,6 +63,7 @@ export default function TopUp({ isLoggedIn, token }) {
         <InputIcon
           ref={input}
           type="number"
+          min="1"
           placeholder="Amount in IDR"
           required
         >
