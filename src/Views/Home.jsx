@@ -14,6 +14,7 @@ const HTTP_OK = 200;
 
 export default function Home() {
   const [alerts, dispatch] = useReducer(alertReducer, []);
+  // FIXME: use useReducer
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -60,20 +61,21 @@ export default function Home() {
 
   return (
     <div>
-      <Header>{import.meta.env.VITE_APP_NAME}</Header>
-
-      <form
-        onSubmit={handleSubmit}
-        className="flex items-center gap-2 rounded-md bg-secondary px-4 py-2"
-      >
-        <input
-          ref={inputSearch}
-          type="text"
-          placeholder="Search movies..."
-          className="w-full bg-transparent text-text outline-none placeholder:text-text/50"
-        />
-        <Icons.Search className="h-5 w-5 text-text" />
-      </form>
+      <div className="flex w-full flex-col justify-between md:flex-row md:items-center">
+        <Header>{import.meta.env.VITE_APP_NAME}</Header>
+        <form
+          onSubmit={handleSubmit}
+          className="flex items-center gap-2 rounded-md bg-secondary px-4 py-2"
+        >
+          <input
+            ref={inputSearch}
+            type="text"
+            placeholder="Search movies..."
+            className="w-full bg-transparent text-text outline-none placeholder:text-text/50"
+          />
+          <Icons.Search className="h-5 w-5 text-text" />
+        </form>
+      </div>
 
       <AlertContainer alerts={alerts} dispatch={dispatch} />
 

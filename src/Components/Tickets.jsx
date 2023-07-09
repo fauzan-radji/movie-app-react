@@ -2,7 +2,6 @@ import PropTypes from "prop-types";
 import TicketSkeleton from "../Skeleton/Ticket";
 import Ticket from "./Ticket";
 import { useEffect, useReducer, useState } from "react";
-import { twMerge } from "tailwind-merge";
 import { Link } from "react-router-dom";
 import AlertContainer, { ACTIONS, alertReducer } from "./AlertContainer";
 
@@ -30,15 +29,10 @@ export default function Tickets({ name, className, token }) {
   }, [token]);
 
   return (
-    <>
-      <AlertContainer className="mb-4" alerts={alerts} dispatch={dispatch} />
+    <div className={className}>
+      <AlertContainer alerts={alerts} dispatch={dispatch} />
 
-      <div
-        className={twMerge(
-          `flex flex-wrap items-center justify-center gap-4`,
-          className
-        )}
-      >
+      <div className="flex flex-wrap items-center justify-center gap-4">
         {tickets ? (
           tickets.length === 0 ? (
             <p>
@@ -64,7 +58,7 @@ export default function Tickets({ name, className, token }) {
             .map((_, i) => <TicketSkeleton key={i} />)
         )}
       </div>
-    </>
+    </div>
   );
 }
 

@@ -257,14 +257,20 @@ export default function BookTicket({ isLoggedIn, token }) {
 
           {isLoading ? (
             <div className="relative hidden aspect-[3/4] w-full animate-pulse rounded-3xl bg-accent/20 md:block landscape:aspect-video">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20"></Icons.Image>
+              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20" />
             </div>
           ) : (
-            <img
-              className="hidden aspect-[3/4] w-full rounded-3xl bg-accent/20 object-cover md:block landscape:aspect-video"
-              src={`${movie.poster}`}
-              alt={movie.title}
-            />
+            <div className="relative isolate hidden aspect-[3/4] w-full overflow-hidden rounded-3xl bg-accent/20 md:block landscape:aspect-video">
+              <div
+                className="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat portrait:hidden"
+                style={{ backgroundImage: `url('${movie.poster}')` }}
+              ></div>
+              <img
+                className="w-full bg-black/50 object-cover backdrop-blur-md md:block landscape:aspect-video landscape:object-contain"
+                src={`${movie.poster}`}
+                alt={movie.title}
+              />
+            </div>
           )}
 
           <div className="mb-8 flex items-center justify-between">

@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
 import { Link, Navigate } from "react-router-dom";
 import Heading from "../Components/Heading";
-import Icons from "../Components/Icons";
 import { useEffect, useReducer, useState } from "react";
 import AlertContainer, {
   ACTIONS,
@@ -48,7 +47,7 @@ export default function Transactions({ isLoggedIn, token }) {
 
       <AlertContainer className="mt-4" alerts={alerts} dispatch={dispatch} />
 
-      <div className="my-4 flex flex-col gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {isLoading
           ? Array(4)
               .fill()
@@ -69,7 +68,8 @@ export default function Transactions({ isLoggedIn, token }) {
                 </div>
               ))
           : orders.map((order, index) => (
-              <div
+              <Link
+                to={`/transactions/${order.id}`}
                 key={index}
                 className={`flex items-start justify-between rounded-md bg-secondary px-4 py-2`}
               >
@@ -88,11 +88,7 @@ export default function Transactions({ isLoggedIn, token }) {
                     {dateFormat(order.date)}
                   </span>
                 </div>
-
-                <Link to={`/transactions/${order.id}`}>
-                  <Icons.ArrowTopRight className="h-5 w-5 text-accent" />
-                </Link>
-              </div>
+              </Link>
             ))}
       </div>
     </div>

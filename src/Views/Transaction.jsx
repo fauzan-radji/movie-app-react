@@ -87,7 +87,7 @@ export default function TransactionDetail({ isLoggedIn, token }) {
         // FIXME: Skeleton screen
         <Header>Loading...</Header>
       ) : (
-        <>
+        <div className="mx-auto flex w-full max-w-md flex-col">
           <Icons.CheckBadge className="mx-auto aspect-square w-20 text-success-700" />
           <p className="text-center">@{transaction.User.username}</p>
           <h1 className="text-center text-lg font-bold">
@@ -118,21 +118,17 @@ export default function TransactionDetail({ isLoggedIn, token }) {
               </p>
             </div>
           </div>
-        </>
-      )}
 
-      {isLoading || isCancelled ? (
-        ""
-      ) : (
-        <SecondaryButton disabled={isCanceling} onClick={handleClick}>
-          {isCanceling ? (
-            <>
-              <Icons.Spinner className="h-5 w-5" /> Canceling...
-            </>
-          ) : (
-            "Cancel Order"
-          )}
-        </SecondaryButton>
+          <SecondaryButton disabled={isCanceling} onClick={handleClick}>
+            {isCanceling ? (
+              <>
+                <Icons.Spinner className="h-5 w-5" /> Canceling...
+              </>
+            ) : (
+              "Cancel Order"
+            )}
+          </SecondaryButton>
+        </div>
       )}
     </div>
   );

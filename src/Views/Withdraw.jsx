@@ -4,13 +4,15 @@ import Icons from "../Components/Icons";
 import InputIcon from "../Components/InputIcon";
 import PrimaryButton from "../Components/PrimaryButton";
 import { Navigate } from "react-router-dom";
-import { useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import AlertContainer, {
   ACTIONS as ALERT_ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
+import CreditCard from "../Components/CreditCard";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+const HTTP_OK = 200;
 const HTTP_CREATED = 201;
 
 const ERROR_ACTIONS = {
@@ -34,6 +36,30 @@ export default function Withdraw({ isLoggedIn, token }) {
   const [errors, errorsDispatch] = useReducer(errorReducer, []);
   const input = useRef();
   const [isSending, setIsSending] = useState(false);
+  const [balance, setBalance] = useState(0);
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    fetch(`${API_ENDPOINT}/balance`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.statusCode !== HTTP_OK) {
+          alertsDispatch({
+            type: ALERT_ACTIONS.ERROR_PUSH,
+            payload: data.message,
+          });
+          return;
+        }
+
+        setBalance(data.data.balance);
+        setUsername(data.data.user.username);
+      })
+      .catch((e) =>
+        alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: e.message })
+      );
+  }, [token]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -99,30 +125,34 @@ export default function Withdraw({ isLoggedIn, token }) {
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-auto flex-col justify-between pb-4"
+        className="mx-auto flex w-full max-w-md flex-auto flex-col justify-between pb-4 md:pb-16"
       >
-        <InputIcon
-          ref={input}
-          type="number"
-          min="1"
-          max="500000"
-          placeholder="Amount in IDR"
-          required
-          validate={(value) => ({
-            isError: +value <= 0,
-            message: "Amount must be greater than 0",
-          })}
-          onErrorChange={({ id, error }) => {
-            if (error)
-              errorsDispatch({
-                type: ERROR_ACTIONS.PUSH,
-                payload: { id, error },
-              });
-            else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
-          }}
-        >
-          <Icons.CreditCard className="h-4 w-4" />
-        </InputIcon>
+        <div className="flex flex-col gap-4">
+          <InputIcon
+            ref={input}
+            type="number"
+            min="1"
+            max="500000"
+            placeholder="Amount in IDR"
+            required
+            validate={(value) => ({
+              isError: +value <= 0,
+              message: "Amount must be greater than 0",
+            })}
+            onErrorChange={({ id, error }) => {
+              if (error)
+                errorsDispatch({
+                  type: ERROR_ACTIONS.PUSH,
+                  payload: { id, error },
+                });
+              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
+            }}
+          >
+            <Icons.CreditCard className="h-4 w-4" />
+          </InputIcon>
+
+          <CreditCard balance={balance} username={username} />
+        </div>
 
         <PrimaryButton disabled={isSending} className="mt-4 w-full">
           {isSending ? (
