@@ -6,15 +6,32 @@ import PrimaryButton from "../Components/PrimaryButton";
 import { Navigate } from "react-router-dom";
 import { useReducer, useRef, useState } from "react";
 import AlertContainer, {
-  ACTIONS,
+  ACTIONS as ALERT_ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_CREATED = 201;
 
+const ERROR_ACTIONS = {
+  PUSH: "push",
+  CLEAR: "clear",
+};
+
+function errorReducer(state, action) {
+  switch (action.type) {
+    case ERROR_ACTIONS.PUSH:
+      return [...state, action.payload];
+    case ERROR_ACTIONS.CLEAR:
+      return state.filter((error) => error.id !== action.payload);
+    default:
+      state;
+  }
+}
+
 export default function Withdraw({ isLoggedIn, token }) {
-  const [alerts, dispatch] = useReducer(alertReducer, []);
+  const [alerts, alertsDispatch] = useReducer(alertReducer, []);
+  const [errors, errorsDispatch] = useReducer(errorReducer, []);
   const input = useRef();
   const [isSending, setIsSending] = useState(false);
 
@@ -22,6 +39,14 @@ export default function Withdraw({ isLoggedIn, token }) {
     e.preventDefault();
 
     if (isSending) return;
+    if (errors.length > 0) {
+      errors
+        .reverse()
+        .forEach(({ error }) =>
+          alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: error })
+        );
+      return;
+    }
 
     setIsSending(true);
     fetch(`${API_ENDPOINT}/balance/withdraw`, {
@@ -37,22 +62,30 @@ export default function Withdraw({ isLoggedIn, token }) {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode !== HTTP_CREATED) {
-          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
+          alertsDispatch({
+            type: ALERT_ACTIONS.ERROR_PUSH,
+            payload: data.message,
+          });
           return;
         }
 
         // FIXME: data.messageWarning
         if (data.messageWarning) {
-          dispatch({
-            type: ACTIONS.WARNING_PUSH,
+          alertsDispatch({
+            type: ALERT_ACTIONS.WARNING_PUSH,
             payload: data.messageWarning,
           });
         }
 
-        dispatch({ type: ACTIONS.SUCCESS_PUSH, payload: data.message });
+        alertsDispatch({
+          type: ALERT_ACTIONS.SUCCESS_PUSH,
+          payload: data.message,
+        });
         input.current.value = "";
       })
-      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }))
+      .catch((e) =>
+        alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: e.message })
+      )
       .finally(() => setIsSending(false));
   }
 
@@ -62,7 +95,7 @@ export default function Withdraw({ isLoggedIn, token }) {
     <div className="flex h-full flex-col">
       <Heading>Withdraw</Heading>
 
-      <AlertContainer alerts={alerts} dispatch={dispatch} />
+      <AlertContainer alerts={alerts} dispatch={alertsDispatch} />
 
       <form
         onSubmit={handleSubmit}
@@ -75,6 +108,18 @@ export default function Withdraw({ isLoggedIn, token }) {
           max="500000"
           placeholder="Amount in IDR"
           required
+          validate={(value) => ({
+            isError: +value <= 0,
+            message: "Amount must be greater than 0",
+          })}
+          onErrorChange={({ id, error }) => {
+            if (error)
+              errorsDispatch({
+                type: ERROR_ACTIONS.PUSH,
+                payload: { id, error },
+              });
+            else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
+          }}
         >
           <Icons.CreditCard className="h-4 w-4" />
         </InputIcon>

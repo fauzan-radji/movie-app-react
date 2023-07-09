@@ -6,15 +6,32 @@ import InputIcon from "../Components/InputIcon";
 import PrimaryButton from "../Components/PrimaryButton";
 import { useReducer, useRef, useState } from "react";
 import AlertContainer, {
-  ACTIONS,
+  ACTIONS as ALERT_ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_CREATED = 201;
 
+const ERROR_ACTIONS = {
+  PUSH: "push",
+  CLEAR: "clear",
+};
+
+function errorReducer(state, action) {
+  switch (action.type) {
+    case ERROR_ACTIONS.PUSH:
+      return [...state, action.payload];
+    case ERROR_ACTIONS.CLEAR:
+      return state.filter((error) => error.id !== action.payload);
+    default:
+      state;
+  }
+}
+
 export default function Register({ isLoggedIn }) {
-  const [alerts, dispatch] = useReducer(alertReducer, []);
+  const [alerts, alertsDispatch] = useReducer(alertReducer, []);
+  const [errors, errorsDispatch] = useReducer(errorReducer, []);
   const nameInput = useRef();
   const emailInput = useRef();
   const usernameInput = useRef();
@@ -27,6 +44,14 @@ export default function Register({ isLoggedIn }) {
     e.preventDefault();
 
     if (isSending) return;
+    if (errors.length > 0) {
+      errors
+        .reverse()
+        .forEach(({ error }) =>
+          alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: error })
+        );
+      return;
+    }
 
     setIsSending(true);
     fetch(`${API_ENDPOINT}/auth/signup`, {
@@ -48,17 +73,28 @@ export default function Register({ isLoggedIn }) {
         if (data.statusCode !== HTTP_CREATED) {
           if (Array.isArray(data.message)) {
             for (const message of data.message)
-              dispatch({ type: ACTIONS.ERROR_PUSH, payload: message });
+              alertsDispatch({
+                type: ALERT_ACTIONS.ERROR_PUSH,
+                payload: message,
+              });
             return;
           }
 
-          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
+          alertsDispatch({
+            type: ALERT_ACTIONS.ERROR_PUSH,
+            payload: data.message,
+          });
           return;
         }
 
-        dispatch({ type: ACTIONS.SUCCESS_PUSH, payload: data.message });
+        alertsDispatch({
+          type: ALERT_ACTIONS.SUCCESS_PUSH,
+          payload: data.message,
+        });
       })
-      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }))
+      .catch((e) =>
+        alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: e.message })
+      )
       .finally(() => setIsSending(false));
   }
 
@@ -68,19 +104,52 @@ export default function Register({ isLoggedIn }) {
     <div className="flex h-full flex-col items-center">
       <Header>Register</Header>
 
-      <AlertContainer alerts={alerts} dispatch={dispatch} />
+      <AlertContainer alerts={alerts} dispatch={alertsDispatch} />
 
-      {/* TODO: validate input on input change (onChange) */}
       {/* TODO: save input value to session storage */}
       <form
         onSubmit={handleSubmit}
-        className="mt-4 flex w-full max-w-md flex-auto flex-col justify-between gap-4 pb-4 md:justify-start"
+        className="flex w-full max-w-md flex-auto flex-col justify-between gap-4 pb-4 md:justify-start"
       >
         <div className="flex flex-col items-center justify-center gap-y-4">
-          <InputIcon required ref={nameInput} type="text" placeholder="Name">
+          <InputIcon
+            required
+            ref={nameInput}
+            type="text"
+            placeholder="Name"
+            validate={(value) => ({
+              isError: value.length < 3,
+              message: "Name must be at least 3 characters long",
+            })}
+            onErrorChange={({ id, error }) => {
+              if (error)
+                errorsDispatch({
+                  type: ERROR_ACTIONS.PUSH,
+                  payload: { id, error },
+                });
+              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
+            }}
+          >
             <Icons.User className="h-4 w-4" />
           </InputIcon>
-          <InputIcon required ref={emailInput} type="email" placeholder="Email">
+          <InputIcon
+            required
+            ref={emailInput}
+            type="email"
+            placeholder="Email"
+            validate={(value) => ({
+              isError: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+              message: "Email must be valid",
+            })}
+            onErrorChange={({ id, error }) => {
+              if (error)
+                errorsDispatch({
+                  type: ERROR_ACTIONS.PUSH,
+                  payload: { id, error },
+                });
+              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
+            }}
+          >
             <Icons.Envelope className="h-4 w-4" />
           </InputIcon>
           <InputIcon
@@ -88,6 +157,18 @@ export default function Register({ isLoggedIn }) {
             ref={usernameInput}
             type="text"
             placeholder="Username"
+            validate={(value) => ({
+              isError: value.length < 3,
+              message: "Username must be at least 3 characters long",
+            })}
+            onErrorChange={({ id, error }) => {
+              if (error)
+                errorsDispatch({
+                  type: ERROR_ACTIONS.PUSH,
+                  payload: { id, error },
+                });
+              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
+            }}
           >
             <Icons.AtSymbol className="h-4 w-4" />
           </InputIcon>
@@ -97,6 +178,18 @@ export default function Register({ isLoggedIn }) {
             ref={passwordInput}
             type="password"
             placeholder="Password"
+            validate={(value) => ({
+              isError: value.length < 8,
+              message: "Password must be at least 8 characters long",
+            })}
+            onErrorChange={({ id, error }) => {
+              if (error)
+                errorsDispatch({
+                  type: ERROR_ACTIONS.PUSH,
+                  payload: { id, error },
+                });
+              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
+            }}
           >
             <Icons.Lock className="h-4 w-4" />
           </InputIcon>
@@ -106,6 +199,18 @@ export default function Register({ isLoggedIn }) {
             ref={confirmPasswordInput}
             type="password"
             placeholder="Confirm password"
+            validate={(value) => ({
+              isError: passwordInput.current.value !== value,
+              message: "Passwords do not match",
+            })}
+            onErrorChange={({ id, error }) => {
+              if (error)
+                errorsDispatch({
+                  type: ERROR_ACTIONS.PUSH,
+                  payload: { id, error },
+                });
+              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
+            }}
           >
             <Icons.Lock className="h-4 w-4" />
           </InputIcon>
@@ -115,6 +220,18 @@ export default function Register({ isLoggedIn }) {
             type="date"
             placeholder="Birth Date"
             max={new Date().toISOString().split("T")[0]}
+            validate={(value) => ({
+              isError: new Date(value) > new Date(),
+              message: "Birth date must be in the past",
+            })}
+            onErrorChange={({ id, error }) => {
+              if (error)
+                errorsDispatch({
+                  type: ERROR_ACTIONS.PUSH,
+                  payload: { id, error },
+                });
+              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
+            }}
           >
             <Icons.Calendar className="h-4 w-4" />
           </InputIcon>

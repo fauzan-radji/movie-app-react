@@ -6,15 +6,32 @@ import InputIcon from "../Components/InputIcon";
 import PrimaryButton from "../Components/PrimaryButton";
 import { useReducer, useRef, useState } from "react";
 import AlertContainer, {
-  ACTIONS,
+  ACTIONS as ALERT_ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_OK = 200;
 
+const ERROR_ACTIONS = {
+  PUSH: "push",
+  CLEAR: "clear",
+};
+
+function errorReducer(state, action) {
+  switch (action.type) {
+    case ERROR_ACTIONS.PUSH:
+      return [...state, action.payload];
+    case ERROR_ACTIONS.CLEAR:
+      return state.filter((error) => error.id !== action.payload);
+    default:
+      state;
+  }
+}
+
 export default function Login({ isLoggedIn, setToken }) {
-  const [alerts, dispatch] = useReducer(alertReducer, []);
+  const [alerts, alertsDispatch] = useReducer(alertReducer, []);
+  const [errors, errorsDispatch] = useReducer(errorReducer, []);
   const usernameInput = useRef();
   const passwordInput = useRef();
   const [isSending, setIsSending] = useState(false);
@@ -23,6 +40,14 @@ export default function Login({ isLoggedIn, setToken }) {
     e.preventDefault();
 
     if (isSending) return;
+    if (errors.length > 0) {
+      errors
+        .reverse()
+        .forEach(({ error }) =>
+          alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: error })
+        );
+      return;
+    }
 
     setIsSending(true);
     fetch(`${API_ENDPOINT}/auth/signin`, {
@@ -36,14 +61,22 @@ export default function Login({ isLoggedIn, setToken }) {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode !== HTTP_OK) {
-          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
+          alertsDispatch({
+            type: ALERT_ACTIONS.ERROR_PUSH,
+            payload: data.message,
+          });
           return;
         }
 
         setToken(data.token);
-        dispatch({ type: ACTIONS.SUCCESS_PUSH, payload: data.message });
+        alertsDispatch({
+          type: ALERT_ACTIONS.SUCCESS_PUSH,
+          payload: data.message,
+        });
       })
-      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }))
+      .catch((e) =>
+        alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: e.message })
+      )
       .finally(() => setIsSending(false));
   }
 
@@ -53,7 +86,7 @@ export default function Login({ isLoggedIn, setToken }) {
     <div className="flex h-full flex-col items-center">
       <Header>Login</Header>
 
-      <AlertContainer alerts={alerts} dispatch={dispatch} />
+      <AlertContainer alerts={alerts} dispatch={alertsDispatch} />
 
       <form
         onSubmit={handleSubmit}
@@ -65,6 +98,18 @@ export default function Login({ isLoggedIn, setToken }) {
             ref={usernameInput}
             type="text"
             placeholder="Username"
+            validate={(value) => ({
+              isError: value.length < 3,
+              message: "Username must be at least 3 characters long",
+            })}
+            onErrorChange={({ id, error }) => {
+              if (error)
+                errorsDispatch({
+                  type: ERROR_ACTIONS.PUSH,
+                  payload: { id, error },
+                });
+              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
+            }}
           >
             <Icons.User className="h-4 w-4" />
           </InputIcon>
@@ -74,6 +119,18 @@ export default function Login({ isLoggedIn, setToken }) {
             ref={passwordInput}
             type="password"
             placeholder="Password"
+            validate={(value) => ({
+              isError: value.length < 8,
+              message: "Password must be at least 8 characters long",
+            })}
+            onErrorChange={({ id, error }) => {
+              if (error)
+                errorsDispatch({
+                  type: ERROR_ACTIONS.PUSH,
+                  payload: { id, error },
+                });
+              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
+            }}
           >
             <Icons.Lock className="h-4 w-4" />
           </InputIcon>
