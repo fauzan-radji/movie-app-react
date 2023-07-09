@@ -25,9 +25,8 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 
 - [x] Form submit feedback
 - [x] Client side form validation
-- [ ] Responsive design
-- [ ] Better error feedback
-- [ ] Skeleton screen
+- [x] Responsive layout
+- [x] Skeleton screen
 - [ ] Hover state for clickable element
 - [ ] Save register input value to session storage
 - [ ] Dark mode

@@ -52,42 +52,34 @@ export default function Transactions({ isLoggedIn, token }) {
           ? Array(4)
               .fill()
               .map((_, i) => (
-                // FIXME: skeleton screen
                 <div
                   key={i}
-                  className="flex animate-pulse items-start justify-between rounded-md bg-accent/20 px-4 py-2"
+                  className="flex animate-pulse flex-col gap-1 rounded-md bg-secondary px-4 py-2"
                 >
-                  <div className="flex flex-col items-start gap-1">
-                    <h4 className="rounded bg-accent/20 font-bold">
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </h4>
-                    <span className="rounded bg-accent/20 text-xs">
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </span>
-                  </div>
+                  <span className="h-5 w-2/3 rounded bg-accent/20"></span>
+                  <span className="h-4 w-1/4 rounded bg-accent/20"></span>
+                  <span className="h-3 w-28 rounded bg-accent/20"></span>
                 </div>
               ))
           : orders.map((order, index) => (
               <Link
                 to={`/transactions/${order.id}`}
                 key={index}
-                className={`flex items-start justify-between rounded-md bg-secondary px-4 py-2`}
+                className="flex flex-col rounded-md bg-secondary px-4 py-2"
               >
-                <div className="flex flex-col">
-                  <h4 className={`font-bold`}>{order.Movie.title}</h4>
-                  {order.isCanceled ? (
-                    <span className="text-xs font-bold text-danger-700">
-                      Canceled
-                    </span>
-                  ) : (
-                    <span className="text-xs font-bold text-accent">
-                      Seats: {order.seats.join(", ")}
-                    </span>
-                  )}
-                  <span className="text-xs text-text/70">
-                    {dateFormat(order.date)}
+                <h4 className="font-bold">{order.Movie.title}</h4>
+                {order.isCanceled ? (
+                  <span className="text-xs font-bold text-danger-700">
+                    Canceled
                   </span>
-                </div>
+                ) : (
+                  <span className="text-xs font-bold text-accent">
+                    Seats: {order.seats.join(", ")}
+                  </span>
+                )}
+                <span className="text-xs text-text/70">
+                  {dateFormat(order.date)}
+                </span>
               </Link>
             ))}
       </div>

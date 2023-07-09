@@ -8,7 +8,6 @@ import AlertContainer, {
   ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
-import Header from "../Components/Header";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_OK = 200;
@@ -83,53 +82,82 @@ export default function TransactionDetail({ isLoggedIn, token }) {
 
       <AlertContainer alerts={alerts} dispatch={dispatch} />
 
-      {isLoading ? (
-        // FIXME: Skeleton screen
-        <Header>Loading...</Header>
-      ) : (
-        <div className="mx-auto flex w-full max-w-md flex-col">
-          <Icons.CheckBadge className="mx-auto aspect-square w-20 text-success-700" />
-          <p className="text-center">@{transaction.User.username}</p>
-          <h1 className="text-center text-lg font-bold">
-            {transaction.Movie.title} (
-            {transaction.Movie.releaseDate.match(/\d{4}/g)})
-          </h1>
-          <div className="my-4 flex flex-col gap-4 rounded-md bg-secondary/50 px-4 py-4 shadow-lg shadow-accent/30">
-            <h3 className="text-2xl text-accent">
-              {new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-              }).format(transaction.total)}
-            </h3>
-            <div>
-              <p className="text-sm text-text/60">Name</p>
-              <p>{transaction.User.name}</p>
-            </div>
-            <div>
-              <p className="text-sm text-text/60">Seats</p>
-              <p>{transaction.seats.join(", ")}</p>
-            </div>
-            <div>
-              <p className="text-sm text-text/60">Transaction date</p>
-              <p>
-                {new Date(transaction.createdAt).toLocaleDateString("id-ID", {
-                  dateStyle: "long",
-                })}
-              </p>
-            </div>
-          </div>
+      <div className="mx-auto mb-4 flex w-full max-w-md flex-col">
+        {isLoading ? (
+          <>
+            <Icons.CheckBadge className="mx-auto aspect-square w-20 animate-pulse text-accent/20" />
+            <span className="mx-auto h-6 w-32 animate-pulse rounded bg-accent/20"></span>
+            <span className="mx-auto mt-1 h-6 w-72 animate-pulse rounded bg-accent/20"></span>
+          </>
+        ) : (
+          <>
+            <Icons.CheckBadge className="mx-auto aspect-square w-20 text-success-700" />
+            <p className="text-center">@{transaction.User.username}</p>
+            <h1 className="text-center text-lg font-bold">
+              {transaction.Movie.title} (
+              {transaction.Movie.releaseDate.match(/\d{4}/g)})
+            </h1>
+          </>
+        )}
 
-          <SecondaryButton disabled={isCanceling} onClick={handleClick}>
-            {isCanceling ? (
-              <>
-                <Icons.Spinner className="h-5 w-5" /> Canceling...
-              </>
-            ) : (
-              "Cancel Order"
-            )}
-          </SecondaryButton>
+        <div className="my-4 flex flex-col gap-4 rounded-md bg-secondary/50 px-4 py-4 shadow-lg shadow-accent/30">
+          {isLoading ? (
+            <>
+              <span className="h-7 w-44 animate-pulse rounded bg-accent/20"></span>
+              <div className="flex flex-col gap-1">
+                <span className="h-4 w-11 animate-pulse rounded bg-accent/20"></span>
+                <span className="h-5 w-2/5 animate-pulse rounded bg-accent/20"></span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="h-4 w-11 animate-pulse rounded bg-accent/20"></span>
+                <span className="h-5 w-1/5 animate-pulse rounded bg-accent/20"></span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="h-4 w-32 animate-pulse rounded bg-accent/20"></span>
+                <span className="h-5 w-24 animate-pulse rounded bg-accent/20"></span>
+              </div>
+            </>
+          ) : (
+            <>
+              <h3 className="text-2xl text-accent">
+                {new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                }).format(transaction.total)}
+              </h3>
+              <div>
+                <p className="text-sm text-text/60">Name</p>
+                <p>{transaction.User.name}</p>
+              </div>
+              <div>
+                <p className="text-sm text-text/60">Seats</p>
+                <p>{transaction.seats.join(", ")}</p>
+              </div>
+              <div>
+                <p className="text-sm text-text/60">Transaction date</p>
+                <p>
+                  {new Date(transaction.createdAt).toLocaleDateString("id-ID", {
+                    dateStyle: "long",
+                  })}
+                </p>
+              </div>
+            </>
+          )}
         </div>
-      )}
+
+        <SecondaryButton
+          disabled={isCanceling || isLoading}
+          onClick={handleClick}
+        >
+          {isCanceling ? (
+            <>
+              <Icons.Spinner className="h-5 w-5" /> Canceling...
+            </>
+          ) : (
+            "Cancel Order"
+          )}
+        </SecondaryButton>
+      </div>
     </div>
   );
 }
