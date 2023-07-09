@@ -1,11 +1,11 @@
 import { Navigate, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import Icons from "../Components/Icons";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import Seat from "../Components/Seat";
 import Heading from "../Components/Heading";
 import AlertContainer, {
-  ACTIONS,
+  ACTIONS as ALERT_ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
 import PrimaryButton from "../Components/PrimaryButton";
@@ -14,70 +14,130 @@ const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_CREATED = 201;
 const HTTP_OK = 200;
 
+const ACTIONS = {
+  SET_MOVIE: "set-movie",
+  SET_SEATS: "set-seats",
+  SET_SELECTED_SEATS: "set-selected-seats",
+  SET_IS_LOADING: "set-is-loading",
+  SET_TOTAL_PRICE: "set-total-price",
+  SET_PRICE: "set-price",
+  SET_IS_SUCCESS: "set-is-success",
+  SET_TRANSACTION_ID: "set-transaction-id",
+  SET_IS_SENDING: "set-is-sending",
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case ACTIONS.SET_MOVIE:
+      return { ...state, movie: action.payload };
+    case ACTIONS.SET_SEATS:
+      return { ...state, seats: action.payload };
+    case ACTIONS.SET_SELECTED_SEATS:
+      return { ...state, selectedSeats: action.payload };
+    case ACTIONS.SET_IS_LOADING:
+      return { ...state, isLoading: action.payload };
+    case ACTIONS.SET_TOTAL_PRICE:
+      return { ...state, totalPrice: action.payload };
+    case ACTIONS.SET_PRICE:
+      return { ...state, price: action.payload };
+    case ACTIONS.SET_IS_SUCCESS:
+      return { ...state, isSuccess: action.payload };
+    case ACTIONS.SET_TRANSACTION_ID:
+      return { ...state, transactionId: action.payload };
+    case ACTIONS.SET_IS_SENDING:
+      return { ...state, isSending: action.payload };
+    default:
+      return state;
+  }
+}
+
 export default function BookTicket({ isLoggedIn, token }) {
-  const [alerts, dispatch] = useReducer(alertReducer, []);
+  const [alerts, alertsDispatch] = useReducer(alertReducer, []);
   const { movieId } = useParams();
 
-  // FIXME: useReducer
-  const [movie, setMovie] = useState({});
-  const [seats, setSeats] = useState({});
-  const [selectedSeats, setSelectedSeats] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [transactionId, setTransactionId] = useState("");
-  const [isSending, setIsSending] = useState(false);
+  const [
+    {
+      movie,
+      seats,
+      selectedSeats,
+      isLoading,
+      totalPrice,
+      price,
+      isSuccess,
+      transactionId,
+      isSending,
+    },
+    dispatch,
+  ] = useReducer(reducer, {
+    movie: {},
+    seats: {},
+    selectedSeats: [],
+    isLoading: true,
+    totalPrice: 0,
+    price: 0,
+    isSuccess: false,
+    transactionId: "",
+    isSending: false,
+  });
 
   useEffect(() => {
     fetch(`${API_ENDPOINT}/tickets/seat/${movieId}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode !== HTTP_OK) {
-          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
+          alertsDispatch({
+            type: ALERT_ACTIONS.ERROR_PUSH,
+            payload: data.message,
+          });
           return;
         }
 
         data = data.seats;
         data.title = `${data.title} (${data.releaseDate.match(/\d{4}/)[0]})`;
-        setMovie({
-          id: data.id,
-          title: data.title,
-          description: data.description,
-          price: data.price,
-          releaseDate: data.releaseDate,
-          ageRating: data.ageRating,
-          poster: data.poster,
-          createdAt: data.createdAt,
-          updatedAt: data.updatedAt,
+        dispatch({
+          type: ACTIONS.SET_MOVIE,
+          payload: {
+            id: data.id,
+            title: data.title,
+            description: data.description,
+            price: data.price,
+            releaseDate: data.releaseDate,
+            ageRating: data.ageRating,
+            poster: data.poster,
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt,
+          },
         });
-        setSeats(data.seats);
-        setPrice(Math.round(data.price / 1000));
-        setIsLoading(false);
+        dispatch({ type: ACTIONS.SET_SEATS, payload: data.seats });
+        dispatch({
+          type: ACTIONS.SET_PRICE,
+          payload: Math.round(data.price / 1000),
+        });
+        dispatch({ type: ACTIONS.SET_IS_LOADING, payload: false });
       });
   }, [movieId]);
 
   function onSeatSelected(isSelected, seatNumber) {
     const newSelectedSeats = [...selectedSeats];
     if (isSelected) {
-      setTotalPrice((prev) => prev + price);
+      dispatch({ type: ACTIONS.SET_TOTAL_PRICE, payload: totalPrice + price });
       if (!selectedSeats.includes(seatNumber)) {
         newSelectedSeats.push(seatNumber);
       }
     } else {
-      setTotalPrice((prev) => prev - price);
+      dispatch({ type: ACTIONS.SET_TOTAL_PRICE, payload: totalPrice - price });
       if (selectedSeats.includes(seatNumber)) {
         newSelectedSeats.splice(newSelectedSeats.indexOf(seatNumber), 1);
       }
     }
 
-    setSelectedSeats(newSelectedSeats);
+    dispatch({ type: ACTIONS.SET_SELECTED_SEATS, payload: newSelectedSeats });
   }
 
   function handleClick() {
     if (isSending) return;
 
-    setIsSending(true);
+    dispatch({ type: ACTIONS.SET_IS_SENDING, payload: true });
     fetch(`${API_ENDPOINT}/tickets/seat/${movieId}`, {
       method: "POST",
       headers: {
@@ -91,16 +151,29 @@ export default function BookTicket({ isLoggedIn, token }) {
       .then((res) => res.json())
       .then((data) => {
         if (data.statusCode !== HTTP_CREATED) {
-          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
+          alertsDispatch({
+            type: ALERT_ACTIONS.ERROR_PUSH,
+            payload: data.message,
+          });
           return;
         }
 
-        dispatch({ type: ACTIONS.SUCCESS_PUSH, payload: data.message });
-        setIsSuccess(true);
-        setTransactionId(data.ordersId.id);
+        alertsDispatch({
+          type: ALERT_ACTIONS.SUCCESS_PUSH,
+          payload: data.message,
+        });
+        dispatch({ type: ACTIONS.SET_IS_SUCCESS, payload: true });
+        dispatch({
+          type: ACTIONS.SET_TRANSACTION_ID,
+          payload: data.ordersId.id,
+        });
       })
-      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }))
-      .finally(() => setIsSending(false));
+      .catch((e) =>
+        alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: e.message })
+      )
+      .finally(() =>
+        dispatch({ type: ACTIONS.SET_IS_SENDING, payload: false })
+      );
   }
 
   if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
@@ -110,7 +183,7 @@ export default function BookTicket({ isLoggedIn, token }) {
     <div className="flex flex-col">
       <Heading>Select Seats</Heading>
 
-      <AlertContainer alerts={alerts} dispatch={dispatch} />
+      <AlertContainer alerts={alerts} dispatch={alertsDispatch} />
 
       {isLoading ? (
         <div className="mb-8 mt-4 h-9 w-4/5 animate-pulse self-center rounded-lg bg-accent/20 md:hidden"></div>
@@ -135,11 +208,11 @@ export default function BookTicket({ isLoggedIn, token }) {
                   {Array(8)
                     .fill()
                     .map((_, j) => {
-                      // FIXME: refactor the magic number (i * 8 + j)
-                      const seat = seats[i * 8 + j] || {
-                        id: i * 8 + j,
+                      const currentSeatIndex = i * 8 + j;
+                      const seat = seats[currentSeatIndex] || {
+                        id: currentSeatIndex,
                         book: false,
-                        seatNumber: i * 8 + j + 1,
+                        seatNumber: currentSeatIndex + 1,
                       };
 
                       return (

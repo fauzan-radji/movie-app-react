@@ -32,6 +32,7 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 - [ ] Save register input value to session storage
 - [ ] Dark mode
 - [ ] Use pagination instead of infinite scroll
+- [ ] Use `gap` instead of `margin` for flex layout
 
 ## Refactor
 
