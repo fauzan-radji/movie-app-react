@@ -92,26 +92,29 @@ export default function BookTicket({ isLoggedIn, token }) {
           return;
         }
 
-        data = data.seats;
-        data.title = `${data.title} (${data.releaseDate.match(/\d{4}/)[0]})`;
+        const movie = data.data;
+        movie.title = `${movie.title} (${movie.releaseDate.match(/\d{4}/)[0]})`;
         dispatch({
           type: ACTIONS.SET_MOVIE,
-          payload: {
-            id: data.id,
-            title: data.title,
-            description: data.description,
-            price: data.price,
-            releaseDate: data.releaseDate,
-            ageRating: data.ageRating,
-            poster: data.poster,
-            createdAt: data.createdAt,
-            updatedAt: data.updatedAt,
-          },
+          payload: movie,
         });
-        dispatch({ type: ACTIONS.SET_SEATS, payload: data.seats });
+        const seats = Array(64)
+          .fill()
+          .map((_, i) => {
+            const seat = movie.seats.find((seat) => seat.seatNumber === i + 1);
+            return seat
+              ? seat
+              : {
+                  id: i,
+                  seatNumber: i + 1,
+                  isBook: false,
+                };
+          });
+
+        dispatch({ type: ACTIONS.SET_SEATS, payload: seats });
         dispatch({
           type: ACTIONS.SET_PRICE,
-          payload: Math.round(data.price / 1000),
+          payload: Math.round(movie.price / 1000),
         });
         dispatch({ type: ACTIONS.SET_IS_LOADING, payload: false });
       });
@@ -176,7 +179,7 @@ export default function BookTicket({ isLoggedIn, token }) {
       );
   }
 
-  if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
+  if (!isLoggedIn) return <Navigate to="/login" />;
   if (isSuccess) return <Navigate to={`/transactions/${transactionId}`} />;
 
   return (
@@ -200,35 +203,28 @@ export default function BookTicket({ isLoggedIn, token }) {
               Screen
             </div>
           </div>
-          <div className="flex w-full max-w-sm flex-col gap-4 self-center px-4">
-            {Array(8)
+          <div className="grid w-full max-w-sm grid-cols-8 gap-4 self-center px-4">
+            {Array(64)
               .fill()
-              .map((_, i) => (
-                <div key={i} className="flex justify-between">
-                  {Array(8)
-                    .fill()
-                    .map((_, j) => {
-                      const currentSeatIndex = i * 8 + j;
-                      const seat = seats[currentSeatIndex] || {
-                        id: currentSeatIndex,
-                        book: false,
-                        seatNumber: currentSeatIndex + 1,
-                      };
+              .map((_, i) => {
+                const seat = seats[i] || {
+                  id: i,
+                  book: false,
+                  seatNumber: i + 1,
+                };
 
-                      return (
-                        <Seat
-                          key={seat.id}
-                          id={`${i}-${j}`}
-                          reserved={seat.book}
-                          number={seat.seatNumber}
-                          onSeatSelected={(isSelected) =>
-                            onSeatSelected(isSelected, seat.seatNumber)
-                          }
-                        />
-                      );
-                    })}
-                </div>
-              ))}
+                return (
+                  <Seat
+                    key={i}
+                    id={i}
+                    reserved={seat.isBook}
+                    number={seat.seatNumber}
+                    onSeatSelected={(isSelected) =>
+                      onSeatSelected(isSelected, seat.seatNumber)
+                    }
+                  />
+                );
+              })}
           </div>
           <div className="my-8 flex w-full max-w-sm justify-between self-center">
             <div className="flex items-center gap-2">

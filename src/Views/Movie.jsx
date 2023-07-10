@@ -25,7 +25,7 @@ export default function Movie() {
           return;
         }
 
-        setMovie(data.movie);
+        setMovie(data.data);
         setIsLoading(false);
       })
       .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));

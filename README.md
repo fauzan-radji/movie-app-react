@@ -17,6 +17,7 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 - [x] Search movie by title
 - [x] Transaction history
 - [x] Cancel order/transaction
+- [ ] Meta tag for SEO
 - [ ] Cancel ticket
 - [ ] Edit user profile
 - [ ] Usefull documentation
@@ -27,14 +28,17 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 - [x] Client side form validation
 - [x] Responsive layout
 - [x] Skeleton screen
+- [ ] Use datePicker instead of input type date
+- [ ] Use pagination instead of infinite scroll
 - [ ] Hover state for clickable element
 - [ ] Save register input value to session storage
+- [ ] Redirect to login page after register
 - [ ] Dark mode
-- [ ] Use pagination instead of infinite scroll
 - [ ] Use `gap` instead of `margin` for flex layout
 
 ## Refactor
 
+- [ ] Custom useFetch hook
 - [ ] Extract component
 - [ ] Better error handling
 - [ ] Better code structure

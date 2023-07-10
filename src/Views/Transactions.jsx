@@ -27,12 +27,10 @@ export default function Transactions({ isLoggedIn, token }) {
         if (data.statusCode !== HTTP_OK)
           dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
 
-        const newOrders = data.orderHistory.map((order) => ({
+        const newOrders = data.data.map((order) => ({
           ...order,
-          seats: order.seats.map((seat) => seat.seatNumber),
-          // FIXME: fix this isCanceled state
-          isCanceled:
-            order.seats.length === 0 || order.seats.every((seat) => !seat.book),
+          seats: order.ticket.map((ticket) => ticket.Seats.seatNumber),
+          isCanceled: order.ticket.every((ticket) => ticket.isCancel),
         }));
         setOrders(newOrders);
         setIsLoading(false);

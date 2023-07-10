@@ -34,8 +34,9 @@ export default function TransactionDetail({ isLoggedIn, token }) {
           return;
         }
 
-        data.order.seats = data.order.seats.map((seat) => seat.seatNumber);
-        setTransaction(data.order);
+        const order = data.data;
+        order.seats = order.ticket.map((ticket) => ticket.Seats);
+        setTransaction(order);
         setIsLoading(false);
       })
       .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
@@ -45,13 +46,15 @@ export default function TransactionDetail({ isLoggedIn, token }) {
     if (isCanceling) return;
 
     setIsCanceling(true);
-    fetch(`${API_ENDPOINT}/orders/cancel/${transaction.Movie.id}`, {
+    fetch(`${API_ENDPOINT}/orders/cancel`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ ticketsSeatNumber: transaction.seats }),
+      body: JSON.stringify({
+        ticketsId: transaction.ticket.map((ticket) => ticket.id),
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -131,7 +134,9 @@ export default function TransactionDetail({ isLoggedIn, token }) {
               </div>
               <div>
                 <p className="text-sm text-text/60">Seats</p>
-                <p>{transaction.seats.join(", ")}</p>
+                <p>
+                  {transaction.seats.map((seat) => seat.seatNumber).join(", ")}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-text/60">Transaction date</p>
