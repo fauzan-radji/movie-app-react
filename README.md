@@ -12,14 +12,15 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 - [x] Movie detail
 - [x] Ticket booking
 - [x] Transaction detail
+- [ ] Show tickets in transaction detail
 - [x] Top up balance
 - [x] Withdraw balance
 - [x] Search movie by title
 - [x] Transaction history
 - [x] Cancel order/transaction
-- [ ] Meta tag for SEO
 - [ ] Cancel ticket
 - [ ] Edit user profile
+- [ ] Meta tag for SEO
 - [ ] Usefull documentation
 
 ## Fix

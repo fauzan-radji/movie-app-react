@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import CreditCard from "../Components/CreditCard";
 import CreditCardSkeleton from "../Skeleton/CreditCard";
 import Header from "../Components/Header";
+import HeaderSkeleton from "../Skeleton/Header";
 import Icons from "../Components/Icons";
 import Tickets from "../Components/Tickets";
 import Heading from "../Components/Heading";
@@ -63,7 +64,7 @@ export default function Profile({ isLoggedIn, token, setToken }) {
           <div className="flex flex-col gap-1">
             {isLoading ? (
               <>
-                <span className="mx-auto h-7 w-2/3 animate-pulse rounded bg-accent/20"></span>
+                <HeaderSkeleton />
                 <span className="mx-auto h-5 w-32 animate-pulse rounded bg-accent/20"></span>
               </>
             ) : (

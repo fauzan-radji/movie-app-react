@@ -1,107 +1,115 @@
 import PropTypes from "prop-types";
 import Heading from "../Components/Heading";
 import Header from "../Components/Header";
+import HeaderSkeleton from "../Skeleton/Header";
 import { Navigate, useParams } from "react-router-dom";
 import TicketComponent from "../Components/Ticket";
-import { useEffect, useReducer, useState } from "react";
+import TicketSkeleton from "../Skeleton/Ticket";
+import { useEffect, useReducer } from "react";
 import AlertContainer, {
   ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
 import SecondaryButton from "../Components/SecondaryButton";
+import useFetch from "../hooks/useFetch";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const HTTP_OK = 200;
-const HTTP_CREATED = 201;
 
-export default function Ticket({ isLoggedIn }) {
+export default function Ticket({ isLoggedIn, token }) {
   const { ticketId } = useParams();
   const [alerts, dispatch] = useReducer(alertReducer, []);
-  // const [ticket, setTicket] = useState({});
-  // const [isCancelled, setIsCancelled] = useState(false);
-  // const [isLoading, setIsLoading] = useState(true);
+  const { data, isLoading, error } = useFetch(
+    `${API_ENDPOINT}/user/tickets/${ticketId}`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
 
   useEffect(() => {
-    // fetch(`${API_ENDPOINT}`, {
-    //   headers: { Authorization: `Bearer ${token}` },
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     if (data.statusCode !== HTTP_OK) {
-    //       dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
-    //       return;
-    //     }
-    //     setTicket();
-    //     setIsLoading(false);
-    //   })
-    //   .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
-  }, [ticketId]);
+    if (!error) return;
 
-  function handleClick() {
-    // fetch(`${API_ENDPOINT}/orders/cancel/${transaction.Movie.id}`, {
-    // method: "DELETE",
-    // headers: {
-    //   "Content-Type": "application/json",
-    //   Authorization: `Bearer ${token}`,
-    // },
-    // body: JSON.stringify({ ticketsSeatNumber: transaction.seats }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     if (data.statusCode !== HTTP_CREATED) {
-    //       if (Array.isArray(data.message)) {
-    //         data.message.forEach((message) => {
-    //           dispatch({ type: ACTIONS.ERROR_PUSH, payload: message });
-    //         });
-    //         return;
-    //       }
-    //       dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
-    //       return;
-    //     }
-    //     setIsCancelled(true);
-    //   })
-    //   .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
-  }
+    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error.message });
+  }, [error]);
+
+  // TODO: cancel ticket
+  function handleClick() {}
 
   if (!isLoggedIn) return <Navigate to="/login" replace />;
 
   return (
-    <div className="mb-4 flex flex-col gap-4">
+    <div className="mx-auto mb-4 flex w-full max-w-md flex-col gap-4">
       <Heading>Ticket details</Heading>
 
       <AlertContainer className="my-0" alerts={alerts} dispatch={dispatch} />
 
-      <Header className="py-0">Avatar: The Way of Water (2023)</Header>
-
-      <TicketComponent
-        className="self-center"
-        movieTitle="Avatar: The Way of Water"
-        id={ticketId}
-        name="John Doe"
-        seat="14"
-      />
+      {isLoading ? (
+        <>
+          <HeaderSkeleton className="w-80 max-w-full" />
+          <TicketSkeleton className="self-center" />
+        </>
+      ) : (
+        <>
+          <Header className="py-0">
+            {data?.Seats.Movie.title} (
+            {data?.Seats.Movie.releaseDate.match(/\d{4}/)})
+          </Header>
+          <TicketComponent
+            className="self-center"
+            movieTitle={data?.Seats.Movie.title}
+            id={ticketId}
+            name={data?.User.name}
+            seat={data?.Seats.seatNumber}
+          />
+        </>
+      )}
 
       <div className="flex flex-col gap-4 rounded-md bg-secondary/50 px-4 py-4 shadow-lg shadow-accent/30">
-        <div>
-          <p className="text-sm text-text/60">Name</p>
-          <p>John Doe</p>
-        </div>
-        <div>
-          <p className="text-sm text-text/60">Seat</p>
-          <p>14</p>
-        </div>
-        <div>
-          <p className="text-sm text-text/60">Transaction date</p>
-          <p>Rabu 21 Juli 2021</p>
-        </div>
-        <p className="font-bold text-danger-700">Canceled</p>
+        {isLoading ? (
+          <>
+            <div className="flex flex-col gap-1">
+              <span className="h-4 w-11 animate-pulse rounded bg-accent/20"></span>
+              <span className="h-5 w-2/5 animate-pulse rounded bg-accent/20"></span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="h-4 w-11 animate-pulse rounded bg-accent/20"></span>
+              <span className="h-5 w-6 animate-pulse rounded bg-accent/20"></span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="h-4 w-32 animate-pulse rounded bg-accent/20"></span>
+              <span className="h-5 w-24 animate-pulse rounded bg-accent/20"></span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div>
+              <p className="text-sm text-text/60">Name</p>
+              <p>{data?.User.name}</p>
+            </div>
+            <div>
+              <p className="text-sm text-text/60">Seat</p>
+              <p>{data?.Seats.seatNumber}</p>
+            </div>
+            <div>
+              <p className="text-sm text-text/60">Transaction date</p>
+              {/* FIXME: use the createdAt property */}
+              <p>Rabu 21 Juli 2021</p>
+            </div>
+          </>
+        )}
+        {data?.isCancel && (
+          <p className="font-bold text-danger-700">Canceled</p>
+        )}
       </div>
 
-      <SecondaryButton onClick={handleClick}>Cancel Ticket</SecondaryButton>
+      <SecondaryButton
+        disabled={isLoading || data?.isCancel}
+        onClick={handleClick}
+      >
+        Cancel Ticket
+      </SecondaryButton>
     </div>
   );
 }
 
 Ticket.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
+  token: PropTypes.string.isRequired,
 };

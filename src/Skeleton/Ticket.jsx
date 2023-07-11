@@ -1,6 +1,14 @@
-export default function Ticket() {
+import PropTypes from "prop-types";
+import { twMerge } from "tailwind-merge";
+
+export default function Ticket({ className }) {
   return (
-    <div className="relative flex aspect-[2/1] w-72 animate-pulse overflow-hidden rounded-2xl bg-accent/20">
+    <div
+      className={twMerge(
+        `relative flex aspect-[2/1] w-72 animate-pulse overflow-hidden rounded-2xl bg-accent/20`,
+        className
+      )}
+    >
       <div className="flex basis-2/3 flex-col gap-1">
         <div className="flex h-1/3 w-full items-center justify-start border-r-2 border-dashed border-background bg-accent/20"></div>
         <div className="flex h-2/3 w-full flex-col gap-2 border-r-2 border-dashed border-background px-4 pt-1">
@@ -26,3 +34,7 @@ export default function Ticket() {
     </div>
   );
 }
+
+Ticket.propTypes = {
+  className: PropTypes.string,
+};

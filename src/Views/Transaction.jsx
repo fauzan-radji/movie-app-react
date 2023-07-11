@@ -141,6 +141,7 @@ export default function TransactionDetail({ isLoggedIn, token }) {
               <div>
                 <p className="text-sm text-text/60">Transaction date</p>
                 <p>
+                  {/* FIXME: use useDateFormatter custom hook instead */}
                   {new Date(transaction.createdAt).toLocaleDateString("id-ID", {
                     dateStyle: "long",
                   })}

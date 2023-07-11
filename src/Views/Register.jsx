@@ -152,6 +152,7 @@ export default function Register({ isLoggedIn }) {
           >
             <Icons.Envelope className="h-4 w-4" />
           </InputIcon>
+          {/* TODO: fix username validation: username only can contains alphanumeric, underscore and dot */}
           <InputIcon
             required
             ref={usernameInput}
