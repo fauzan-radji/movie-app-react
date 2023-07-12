@@ -16,7 +16,7 @@ export default function TransactionCard({ transaction }) {
           <span>Seats:</span>
           {transaction.ticket.map((ticket) => (
             <span
-              key={ticket.id}
+              key={ticket.Seats.id}
               className={`${
                 ticket.isCancel
                   ? "bg-danger-300 text-danger-800"
