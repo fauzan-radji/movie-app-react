@@ -25,7 +25,7 @@ export default function CreditCard({ balance, email = "", username = "" }) {
 }
 
 CreditCard.propTypes = {
-  balance: PropTypes.number.isRequired,
+  balance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   email: PropTypes.string,
   username: PropTypes.string,
 };

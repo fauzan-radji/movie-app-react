@@ -102,6 +102,25 @@ export function ChevronLeft({ className }) {
   );
 }
 
+export function ChevronRight({ className }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className={className}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M8.25 4.5l7.5 7.5-7.5 7.5"
+      />
+    </svg>
+  );
+}
+
 export function PriceTag({ className }) {
   return (
     <svg
@@ -490,6 +509,7 @@ ArrowDown.propTypes = { className: PropTypes.string };
 ArrowTopRight.propTypes = { className: PropTypes.string };
 Search.propTypes = { className: PropTypes.string };
 ChevronLeft.propTypes = { className: PropTypes.string };
+ChevronRight.propTypes = { className: PropTypes.string };
 PriceTag.propTypes = { className: PropTypes.string };
 Login.propTypes = { className: PropTypes.string };
 Logout.propTypes = { className: PropTypes.string };
@@ -520,6 +540,7 @@ export default {
   ArrowTopRight,
   Search,
   ChevronLeft,
+  ChevronRight,
   PriceTag,
   Login,
   Logout,

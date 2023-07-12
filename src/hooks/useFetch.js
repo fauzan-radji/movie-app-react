@@ -8,6 +8,7 @@ const HTTP_STATUS = {
 
 export default function useFetch(url, options) {
   const [data, setData] = useState(null);
+  const [totalPages, setTotalPages] = useState(1);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -27,6 +28,7 @@ export default function useFetch(url, options) {
           return;
         }
 
+        if (data.totalPage) setTotalPages(data.totalPage);
         setData(data.data);
         setError(null);
         setIsLoading(false);
@@ -45,5 +47,5 @@ export default function useFetch(url, options) {
     // FIXME: it's causing infinite re-render if options is passed in dependency array
   }, [url]);
 
-  return { data, error, isLoading };
+  return { data, error, isLoading, totalPages };
 }

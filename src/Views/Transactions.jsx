@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Navigate } from "react-router-dom";
 import Heading from "../Components/Heading";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import AlertContainer, {
   ACTIONS,
   alertReducer,
