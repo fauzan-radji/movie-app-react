@@ -8,6 +8,8 @@ import AlertContainer, {
   ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
+import Ticket from "../Components/Ticket";
+import TicketSkeleton from "../Skeleton/Ticket";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_OK = 200;
@@ -18,10 +20,8 @@ export default function TransactionDetail({ isLoggedIn, token }) {
   const { transactionId } = useParams();
   const [transaction, setTransaction] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [isCancelled, setIsCancelled] = useState(false);
+  const [isCanceled, setIsCanceled] = useState(false);
   const [isCanceling, setIsCanceling] = useState(false);
-
-  // TODO: add canceled state for canceled order
 
   useEffect(() => {
     fetch(`${API_ENDPOINT}/orders/${transactionId}`, {
@@ -35,8 +35,8 @@ export default function TransactionDetail({ isLoggedIn, token }) {
         }
 
         const order = data.data;
-        order.seats = order.ticket.map((ticket) => ticket.Seats);
         setTransaction(order);
+        setIsCanceled(order.ticket.every((ticket) => ticket.isCancel));
         setIsLoading(false);
       })
       .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
@@ -70,22 +70,21 @@ export default function TransactionDetail({ isLoggedIn, token }) {
           return;
         }
 
-        setIsCancelled(true);
+        setIsCanceled(true);
       })
       .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }))
       .finally(() => setIsCanceling(false));
   }
 
   if (!isLoggedIn) return <Navigate to="/login" replace />;
-  if (isCancelled) return <Navigate to="/transactions" replace />;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-4 pb-4">
       <Heading>Transaction Details</Heading>
 
-      <AlertContainer alerts={alerts} dispatch={dispatch} />
+      <AlertContainer className="my-0" alerts={alerts} dispatch={dispatch} />
 
-      <div className="mx-auto mb-4 flex w-full max-w-md flex-col">
+      <div className="mx-auto flex w-full max-w-md flex-col">
         {isLoading ? (
           <>
             <Icons.CheckBadge className="mx-auto aspect-square w-20 animate-pulse text-accent/20" />
@@ -94,7 +93,21 @@ export default function TransactionDetail({ isLoggedIn, token }) {
           </>
         ) : (
           <>
-            <Icons.CheckBadge className="mx-auto aspect-square w-20 text-success-700" />
+            {isCanceled ? (
+              <>
+                <Icons.XCircle className="mx-auto aspect-square w-20 text-danger-700" />
+                <span className="mx-auto mb-2 w-max rounded bg-danger-300 px-1 text-center text-sm font-semibold text-danger-800">
+                  Canceled
+                </span>
+              </>
+            ) : (
+              <>
+                <Icons.CheckBadge className="mx-auto aspect-square w-20 text-success-700" />
+                <span className="mx-auto mb-2 w-max rounded bg-success-300 px-1 text-center text-sm font-semibold text-success-800">
+                  Success
+                </span>
+              </>
+            )}
             <p className="text-center">@{transaction.User.username}</p>
             <h1 className="text-center text-lg font-bold">
               {transaction.Movie.title} (
@@ -134,8 +147,19 @@ export default function TransactionDetail({ isLoggedIn, token }) {
               </div>
               <div>
                 <p className="text-sm text-text/60">Seats</p>
-                <p>
-                  {transaction.seats.map((seat) => seat.seatNumber).join(", ")}
+                <p className="flex gap-1">
+                  {transaction.ticket.map((ticket) => (
+                    <span
+                      key={ticket.id}
+                      className={`${
+                        ticket.isCancel
+                          ? "bg-danger-300 text-danger-700"
+                          : "bg-success-300 text-success-900"
+                      } rounded px-1 text-sm font-semibold`}
+                    >
+                      {ticket.Seats.seatNumber}
+                    </span>
+                  ))}
                 </p>
               </div>
               <div>
@@ -151,7 +175,7 @@ export default function TransactionDetail({ isLoggedIn, token }) {
           )}
         </div>
 
-        {!isCancelled && (
+        {!isCanceled && (
           <SecondaryButton
             disabled={isCanceling || isLoading}
             onClick={handleClick}
@@ -164,6 +188,27 @@ export default function TransactionDetail({ isLoggedIn, token }) {
               "Cancel Order"
             )}
           </SecondaryButton>
+        )}
+      </div>
+
+      {/* FIXME: use Ticket Component instead */}
+      <div>
+        {!isLoading && (
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            {transaction.ticket
+              ? transaction.ticket.map((ticket) => (
+                  <Ticket
+                    key={ticket.id}
+                    id={ticket.id}
+                    movieTitle={transaction.Movie.title}
+                    name={transaction.User.name}
+                    seat={ticket.Seats.seatNumber}
+                  />
+                ))
+              : Array(3)
+                  .fill()
+                  .map((_, i) => <TicketSkeleton key={i} />)}
+          </div>
         )}
       </div>
     </div>

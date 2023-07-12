@@ -36,11 +36,9 @@ export default function Profile({ isLoggedIn, token, setToken }) {
         setIsLoading(false);
       })
       .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
-  });
+  }, [token]);
 
-  if (!isLoggedIn) {
-    return <Navigate to="/login" replace={true} />;
-  }
+  if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
 
   return (
     <div className="flex flex-col pb-4">
@@ -100,7 +98,7 @@ export default function Profile({ isLoggedIn, token, setToken }) {
         </div>
 
         <div className="md:max-h-full">
-          {!isLoading && <Tickets name={user.name} token={token} />}
+          <Tickets tickets={user.Tickets} name={user.name} token={token} />
         </div>
       </div>
     </div>

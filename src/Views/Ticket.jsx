@@ -21,11 +21,13 @@ export default function Ticket({ isLoggedIn, token }) {
   const { ticketId } = useParams();
   const [alerts, dispatch] = useReducer(alertReducer, []);
   const [isCanceling, setIsCanceling] = useState(false);
-  const [isCancelled, setIsCancelled] = useState(false);
+  const [isCanceled, setIsCanceled] = useState(false);
   const { data, isLoading, error } = useFetch(
     `${API_ENDPOINT}/user/tickets/${ticketId}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
+
+  console.log(data);
 
   useEffect(() => {
     if (!error) return;
@@ -33,7 +35,6 @@ export default function Ticket({ isLoggedIn, token }) {
     dispatch({ type: ACTIONS.ERROR_PUSH, payload: error.message });
   }, [error]);
 
-  // TODO: cancel ticket
   function handleClick() {
     if (isCanceling) return;
 
@@ -60,7 +61,7 @@ export default function Ticket({ isLoggedIn, token }) {
           return;
         }
 
-        setIsCancelled(true);
+        setIsCanceled(true);
       })
       .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }))
       .finally(() => setIsCanceling(false));
@@ -69,12 +70,12 @@ export default function Ticket({ isLoggedIn, token }) {
   if (!isLoggedIn) return <Navigate to="/login" replace />;
 
   return (
-    <div className="mx-auto mb-4 flex w-full max-w-md flex-col gap-4">
+    <div className="mb-4 flex flex-col gap-4">
       <Heading>Ticket details</Heading>
 
       <AlertContainer className="my-0" alerts={alerts} dispatch={dispatch} />
 
-      {isLoading ? (
+      {isLoading || !data ? (
         <>
           <HeaderSkeleton className="w-80 max-w-full" />
           <TicketSkeleton className="self-center" />
@@ -95,8 +96,8 @@ export default function Ticket({ isLoggedIn, token }) {
         </>
       )}
 
-      <div className="flex flex-col gap-4 rounded-md bg-secondary/50 px-4 py-4 shadow-lg shadow-accent/30">
-        {isLoading ? (
+      <div className="mx-auto flex w-full max-w-md flex-col gap-4 rounded-md bg-secondary/50 px-4 py-4 shadow-lg shadow-accent/30">
+        {isLoading || !data ? (
           <>
             <div className="flex flex-col gap-1">
               <span className="h-4 w-11 animate-pulse rounded bg-accent/20"></span>
@@ -123,30 +124,33 @@ export default function Ticket({ isLoggedIn, token }) {
             </div>
             <div>
               <p className="text-sm text-text/60">Transaction date</p>
-              {/* FIXME: use the createdAt property */}
-              <p>Rabu 21 Juli 2021</p>
+              {/* FIXME: use date Formatter */}
+              <p>
+                {new Date(data.bookAt).toLocaleDateString("id-ID", {
+                  dateStyle: "long",
+                })}
+              </p>
             </div>
           </>
         )}
-        {(data?.isCancel || isCancelled) && (
+        {(data?.isCancel || isCanceled) && (
           <p className="font-bold text-danger-700">Canceled</p>
         )}
+        {!(data?.isCancel || isCanceled) && (
+          <SecondaryButton
+            disabled={isLoading || isCanceling}
+            onClick={handleClick}
+          >
+            {isCanceling ? (
+              <>
+                <Icons.Spinner className="h-5 w-5" /> Canceling...
+              </>
+            ) : (
+              "Cancel Ticket"
+            )}
+          </SecondaryButton>
+        )}
       </div>
-
-      {!(data?.isCancel || isCancelled) && (
-        <SecondaryButton
-          disabled={isLoading || isCanceling}
-          onClick={handleClick}
-        >
-          {isCanceling ? (
-            <>
-              <Icons.Spinner className="h-5 w-5" /> Canceling...
-            </>
-          ) : (
-            "Cancel Ticket"
-          )}
-        </SecondaryButton>
-      )}
     </div>
   );
 }
