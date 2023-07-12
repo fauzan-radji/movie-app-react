@@ -31,7 +31,7 @@ export default function TransactionCard({ transaction }) {
           {dateFormat(transaction.date)}
         </span>
       </div>
-      {transaction.isCanceled && (
+      {transaction.ticket.every((ticket) => ticket.isCancel) && (
         <span className="rounded bg-danger-300 px-1 text-xs font-semibold text-danger-700">
           Canceled
         </span>

@@ -8,6 +8,7 @@ import AlertContainer, {
   ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
+import useFetch from "../hooks/useFetch";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_OK = 200;
@@ -16,32 +17,28 @@ export default function Home() {
   const [alerts, dispatch] = useReducer(alertReducer, []);
   // FIXME: use useReducer
   const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const inputSearch = useRef();
+  const { data, isLoading, error } = useFetch(
+    `${API_ENDPOINT}/movies?page=${page}&limit=12`
+  );
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/movies?page=${page}&limit=12`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode !== HTTP_OK) {
-          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
-          return;
-        }
+    if (!data) return;
+    setMovies((prev) => [...prev, ...data]);
+  }, [data]);
 
-        const newMovies = [...movies, ...data.data];
-        setMovies(newMovies);
-        setIsLoading(false);
-      })
-      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
-  }, [page]);
+  useEffect(() => {
+    if (!error) return;
+    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error.message });
+  }, [error]);
 
+  // FIXME: use search param for query
   function handleSubmit(e) {
     e.preventDefault();
 
     const query = inputSearch.current.value;
     if (!query) return;
-    setIsLoading(true);
 
     fetch(`${API_ENDPOINT}/movies/search?title=${query}`)
       .then((res) => res.json())
@@ -51,8 +48,7 @@ export default function Home() {
           return;
         }
 
-        setMovies(data.movies);
-        setIsLoading(false);
+        setMovies(data.data);
       })
       .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
 

@@ -27,8 +27,6 @@ export default function Ticket({ isLoggedIn, token }) {
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
-  console.log(data);
-
   useEffect(() => {
     if (!error) return;
 

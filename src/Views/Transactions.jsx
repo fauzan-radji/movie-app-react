@@ -8,34 +8,24 @@ import AlertContainer, {
 } from "../Components/AlertContainer";
 import TransactionCard from "../Components/TransactionCard";
 import TransactionCardSkeleton from "../Skeleton/TransactionCard";
+import useFetch from "../hooks/useFetch";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const HTTP_OK = 200;
 
 export default function Transactions({ isLoggedIn, token }) {
   const [alerts, dispatch] = useReducer(alertReducer, []);
-  const [orders, setOrders] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    data: transactions,
+    error,
+    isLoading,
+  } = useFetch(`${API_ENDPOINT}/orders`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/orders`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode !== HTTP_OK)
-          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
-
-        const newOrders = data.data.map((order) => ({
-          ...order,
-          seats: order.ticket.map((ticket) => ticket.Seats.seatNumber),
-          isCanceled: order.ticket.every((ticket) => ticket.isCancel),
-        }));
-        setOrders(newOrders);
-        setIsLoading(false);
-      })
-      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
-  }, [token]);
+    if (!error) return;
+    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error.message });
+  }, [error]);
 
   if (!isLoggedIn) return <Navigate to="/login" replace />;
 
@@ -50,8 +40,8 @@ export default function Transactions({ isLoggedIn, token }) {
           ? Array(4)
               .fill()
               .map((_, index) => <TransactionCardSkeleton key={index + 1} />)
-          : orders.map((order) => (
-              <TransactionCard transaction={order} key={order.id} />
+          : transactions.map((transaction) => (
+              <TransactionCard key={transaction.id} transaction={transaction} />
             ))}
       </div>
     </div>

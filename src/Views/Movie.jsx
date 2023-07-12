@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { useParams, Link } from "react-router-dom";
 import Icons from "../Components/Icons";
 import Heading from "../Components/Heading";
@@ -6,30 +6,23 @@ import AlertContainer, {
   ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
+import useFetch from "../hooks/useFetch";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const HTTP_OK = 200;
 
 export default function Movie() {
   const [alerts, dispatch] = useReducer(alertReducer, []);
   const { movieId } = useParams();
-  const [movie, setMovie] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    data: movie,
+    error,
+    isLoading,
+  } = useFetch(`${API_ENDPOINT}/movies/${movieId}`);
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/movies/${movieId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode !== HTTP_OK) {
-          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
-          return;
-        }
-
-        setMovie(data.data);
-        setIsLoading(false);
-      })
-      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
-  }, [movieId]);
+    if (!error) return;
+    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error.message });
+  }, [error]);
 
   return (
     <div className="flex flex-col">

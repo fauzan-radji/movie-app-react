@@ -10,9 +10,10 @@ import AlertContainer, {
   alertReducer,
 } from "../Components/AlertContainer";
 import CreditCard from "../Components/CreditCard";
+import CreditCardSkeleton from "../Skeleton/CreditCard";
+import useFetch from "../hooks/useFetch";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const HTTP_OK = 200;
 const HTTP_CREATED = 201;
 
 const ERROR_ACTIONS = {
@@ -36,30 +37,14 @@ export default function TopUp({ isLoggedIn, token }) {
   const [errors, errorsDispatch] = useReducer(errorReducer, []);
   const input = useRef();
   const [isSending, setIsSending] = useState(false);
-  const [balance, setBalance] = useState(0);
-  const [username, setUsername] = useState("");
+  const { data, error, isLoading } = useFetch(`${API_ENDPOINT}/balance`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/balance`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode !== HTTP_OK) {
-          alertsDispatch({
-            type: ALERT_ACTIONS.ERROR_PUSH,
-            payload: data.message,
-          });
-          return;
-        }
-
-        setBalance(data.data.balance);
-        setUsername(data.data.user.username);
-      })
-      .catch((e) =>
-        alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: e.message })
-      );
-  }, [token]);
+    if (!error) return;
+    alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: error.message });
+  }, [error]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -95,6 +80,7 @@ export default function TopUp({ isLoggedIn, token }) {
           return;
         }
 
+        // TODO: update balance to new balance after top up
         alertsDispatch({
           type: ALERT_ACTIONS.SUCCESS_PUSH,
           payload: data.message,
@@ -142,10 +128,17 @@ export default function TopUp({ isLoggedIn, token }) {
             <Icons.CreditCard className="h-4 w-4" />
           </InputIcon>
 
-          <CreditCard balance={balance} username={username} />
+          {isLoading ? (
+            <CreditCardSkeleton />
+          ) : (
+            <CreditCard balance={data.balance} username={data.user.username} />
+          )}
         </div>
 
-        <PrimaryButton disabled={isSending} className="mt-4 w-full">
+        <PrimaryButton
+          disabled={isSending || isLoading}
+          className="mt-4 w-full"
+        >
           {isSending ? (
             <Icons.Spinner className="h-5 w-5" />
           ) : (

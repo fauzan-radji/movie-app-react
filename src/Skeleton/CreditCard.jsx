@@ -1,6 +1,6 @@
 export default function CreditCard() {
   return (
-    <div className="mx-auto flex aspect-[3/2] w-72 animate-pulse flex-col justify-between rounded-3xl bg-accent/20 px-6 py-4">
+    <div className="mx-auto flex aspect-[5/3] w-72 animate-pulse flex-col justify-between rounded-xl bg-accent/20 px-6 py-4">
       <div className="flex h-10 items-center justify-between">
         <span className="h-6 w-7/12 rounded bg-accent/20"></span>
         <div className="relative flex h-full flex-auto">

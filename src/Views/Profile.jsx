@@ -7,36 +7,29 @@ import HeaderSkeleton from "../Skeleton/Header";
 import Icons from "../Components/Icons";
 import Tickets from "../Components/Tickets";
 import Heading from "../Components/Heading";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import AlertContainer, {
   ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
+import useFetch from "../hooks/useFetch";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const HTTP_OK = 200;
 
 export default function Profile({ isLoggedIn, token, setToken }) {
   const [alerts, dispatch] = useReducer(alertReducer, []);
-  const [user, setUser] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    data: user,
+    error,
+    isLoading,
+  } = useFetch(`${API_ENDPOINT}/user/me`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
   useEffect(() => {
-    fetch(`${API_ENDPOINT}/user/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode !== HTTP_OK) {
-          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
-          return;
-        }
-
-        setUser(data.data);
-        setIsLoading(false);
-      })
-      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
-  }, [token]);
+    if (!error) return;
+    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error.message });
+  }, [error]);
 
   if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
 
@@ -75,7 +68,7 @@ export default function Profile({ isLoggedIn, token, setToken }) {
           {isLoading ? (
             <CreditCardSkeleton />
           ) : (
-            <CreditCard balance={user.balance.balance} email={user.email} />
+            <CreditCard balance={user.balance} email={user.email} />
           )}
           <div className="mx-auto flex w-full max-w-lg gap-4">
             <Link
@@ -98,7 +91,11 @@ export default function Profile({ isLoggedIn, token, setToken }) {
         </div>
 
         <div className="md:max-h-full">
-          <Tickets tickets={user.Tickets} name={user.name} token={token} />
+          <Tickets
+            tickets={user?.Tickets}
+            name={user?.name || ""}
+            token={token}
+          />
         </div>
       </div>
     </div>

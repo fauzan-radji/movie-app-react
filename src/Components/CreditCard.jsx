@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 export default function CreditCard({ balance, email = "", username = "" }) {
   return (
-    <div className="mx-auto flex aspect-[3/2] w-72 flex-col justify-between rounded-3xl bg-accent bg-gradient-to-br from-primary/80 to-accent px-6 py-4 text-white">
+    <div className="mx-auto flex aspect-[5/3] w-72 flex-col justify-between rounded-xl bg-accent bg-gradient-to-br from-primary/80 to-accent px-6 py-4 text-white">
       <div className="flex flex-[2] items-center justify-between">
         <span className="uppercase">Your Balance</span>
         <div className="relative flex h-full flex-auto">

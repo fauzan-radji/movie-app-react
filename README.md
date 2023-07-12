@@ -12,7 +12,7 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 - [x] Movie detail
 - [x] Ticket booking
 - [x] Transaction detail
-- [ ] Show tickets in transaction detail
+- [x] Show tickets in transaction detail
 - [x] Top up balance
 - [x] Withdraw balance
 - [x] Search movie by title
@@ -39,7 +39,7 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 
 ## Refactor
 
-- [ ] Custom useFetch hook
+- [x] Custom useFetch hook
 - [ ] Extract component
 - [ ] Better error handling
 - [ ] Better code structure

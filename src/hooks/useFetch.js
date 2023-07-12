@@ -29,17 +29,18 @@ export default function useFetch(url, options) {
 
         setData(data.data);
         setError(null);
+        setIsLoading(false);
       })
       .catch((err) => {
         if (controller.signal.aborted) return;
         setError({ statusCode: 0, message: err.message });
-      })
-      // FIXME: the setIsLoading() executed before setData() causing the data to be null for a few moments
-      .finally(() => setIsLoading(false));
+        setIsLoading(false);
+      });
 
     return () => {
       setIsLoading(false);
       controller.abort();
+      setIsLoading(false);
     };
     // FIXME: it's causing infinite re-render if options is passed in dependency array
   }, [url]);

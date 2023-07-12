@@ -10,37 +10,34 @@ import AlertContainer, {
 } from "../Components/AlertContainer";
 import Ticket from "../Components/Ticket";
 import TicketSkeleton from "../Skeleton/Ticket";
+import useFetch from "../hooks/useFetch";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const HTTP_OK = 200;
 const HTTP_CREATED = 201;
 
 export default function TransactionDetail({ isLoggedIn, token }) {
   const [alerts, dispatch] = useReducer(alertReducer, []);
   const { transactionId } = useParams();
-  const [transaction, setTransaction] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
   const [isCanceled, setIsCanceled] = useState(false);
   const [isCanceling, setIsCanceling] = useState(false);
 
-  useEffect(() => {
-    fetch(`${API_ENDPOINT}/orders/${transactionId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode !== HTTP_OK) {
-          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
-          return;
-        }
+  const {
+    data: transaction,
+    error,
+    isLoading,
+  } = useFetch(`${API_ENDPOINT}/orders/${transactionId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
-        const order = data.data;
-        setTransaction(order);
-        setIsCanceled(order.ticket.every((ticket) => ticket.isCancel));
-        setIsLoading(false);
-      })
-      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
-  }, [transactionId, token]);
+  useEffect(() => {
+    if (!transaction) return;
+    setIsCanceled(transaction.ticket.every((ticket) => ticket.isCancel));
+  }, [transaction]);
+
+  useEffect(() => {
+    if (!error) return;
+    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error.message });
+  }, [error]);
 
   function handleClick() {
     if (isCanceling) return;
