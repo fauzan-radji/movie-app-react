@@ -5,19 +5,23 @@ import HeaderSkeleton from "../Skeleton/Header";
 import { Navigate, useParams } from "react-router-dom";
 import TicketComponent from "../Components/Ticket";
 import TicketSkeleton from "../Skeleton/Ticket";
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import AlertContainer, {
   ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
 import SecondaryButton from "../Components/SecondaryButton";
 import useFetch from "../hooks/useFetch";
+import Icons from "../Components/Icons";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
+const HTTP_CREATED = 201;
 
 export default function Ticket({ isLoggedIn, token }) {
   const { ticketId } = useParams();
   const [alerts, dispatch] = useReducer(alertReducer, []);
+  const [isCanceling, setIsCanceling] = useState(false);
+  const [isCancelled, setIsCancelled] = useState(false);
   const { data, isLoading, error } = useFetch(
     `${API_ENDPOINT}/user/tickets/${ticketId}`,
     { headers: { Authorization: `Bearer ${token}` } }
@@ -30,7 +34,37 @@ export default function Ticket({ isLoggedIn, token }) {
   }, [error]);
 
   // TODO: cancel ticket
-  function handleClick() {}
+  function handleClick() {
+    if (isCanceling) return;
+
+    setIsCanceling(true);
+    fetch(`${API_ENDPOINT}/orders/cancel`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ ticketsId: [ticketId] }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.statusCode !== HTTP_CREATED) {
+          if (Array.isArray(data.message)) {
+            data.message.forEach((message) => {
+              dispatch({ type: ACTIONS.ERROR_PUSH, payload: message });
+            });
+            return;
+          }
+
+          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
+          return;
+        }
+
+        setIsCancelled(true);
+      })
+      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }))
+      .finally(() => setIsCanceling(false));
+  }
 
   if (!isLoggedIn) return <Navigate to="/login" replace />;
 
@@ -94,17 +128,25 @@ export default function Ticket({ isLoggedIn, token }) {
             </div>
           </>
         )}
-        {data?.isCancel && (
+        {(data?.isCancel || isCancelled) && (
           <p className="font-bold text-danger-700">Canceled</p>
         )}
       </div>
 
-      <SecondaryButton
-        disabled={isLoading || data?.isCancel}
-        onClick={handleClick}
-      >
-        Cancel Ticket
-      </SecondaryButton>
+      {!(data?.isCancel || isCancelled) && (
+        <SecondaryButton
+          disabled={isLoading || isCanceling}
+          onClick={handleClick}
+        >
+          {isCanceling ? (
+            <>
+              <Icons.Spinner className="h-5 w-5" /> Canceling...
+            </>
+          ) : (
+            "Cancel Ticket"
+          )}
+        </SecondaryButton>
+      )}
     </div>
   );
 }

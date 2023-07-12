@@ -18,7 +18,7 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 - [x] Search movie by title
 - [x] Transaction history
 - [x] Cancel order/transaction
-- [ ] Cancel ticket
+- [x] Cancel ticket
 - [ ] Edit user profile
 - [ ] Meta tag for SEO
 - [ ] Usefull documentation

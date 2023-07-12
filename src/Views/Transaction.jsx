@@ -151,18 +151,20 @@ export default function TransactionDetail({ isLoggedIn, token }) {
           )}
         </div>
 
-        <SecondaryButton
-          disabled={isCanceling || isLoading}
-          onClick={handleClick}
-        >
-          {isCanceling ? (
-            <>
-              <Icons.Spinner className="h-5 w-5" /> Canceling...
-            </>
-          ) : (
-            "Cancel Order"
-          )}
-        </SecondaryButton>
+        {!isCancelled && (
+          <SecondaryButton
+            disabled={isCanceling || isLoading}
+            onClick={handleClick}
+          >
+            {isCanceling ? (
+              <>
+                <Icons.Spinner className="h-5 w-5" /> Canceling...
+              </>
+            ) : (
+              "Cancel Order"
+            )}
+          </SecondaryButton>
+        )}
       </div>
     </div>
   );
