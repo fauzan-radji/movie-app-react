@@ -9,6 +9,7 @@ import AlertContainer, {
 } from "../Components/AlertContainer";
 import useFetch from "../hooks/useFetch";
 import { useSearchParams } from "react-router-dom";
+import Pagination from "../Components/Pagination";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_OK = 200;
@@ -55,8 +56,10 @@ export default function Home() {
         setMovies(data.data);
       })
       .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
+  }
 
-    inputSearch.current.value = "";
+  function handleChange() {
+    if (!inputSearch.current.value) setMovies(data);
   }
 
   return (
@@ -69,8 +72,9 @@ export default function Home() {
         >
           <input
             ref={inputSearch}
-            type="text"
+            type="search"
             placeholder="Search movies..."
+            onChange={handleChange}
             className="w-full bg-transparent text-text outline-none placeholder:text-text/50"
           />
           <Icons.Search className="h-5 w-5 text-text" />
@@ -96,33 +100,12 @@ export default function Home() {
             ))}
       </div>
 
-      <div className="mb-4 flex justify-center self-center overflow-hidden rounded shadow-md">
-        <button
-          className="flex h-8 w-8 items-center justify-center bg-primary text-background"
-          onClick={() => setSearchParams({ page: page - 1 })}
-        >
-          <Icons.ChevronLeft className="h-4 w-4" />
-        </button>
-        {Array(totalPages)
-          .fill()
-          .map((_, i) => (
-            <button
-              className={`flex h-8 w-8 items-center justify-center bg-secondary ${
-                page === i + 1 ? "font-semibold text-text" : "text-text/50"
-              }`}
-              key={i + 1}
-              onClick={() => setSearchParams({ page: i + 1 })}
-            >
-              {i + 1}
-            </button>
-          ))}
-        <button
-          className="flex h-8 w-8 items-center justify-center bg-primary text-background"
-          onClick={() => setSearchParams({ page: page + 1 })}
-        >
-          <Icons.ChevronRight className="h-4 w-4" />
-        </button>
-      </div>
+      <Pagination
+        currentPage={page}
+        pagesToShow={2}
+        totalPages={totalPages}
+        onPageChange={(page) => setSearchParams({ page })}
+      />
     </div>
   );
 }
