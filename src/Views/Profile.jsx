@@ -61,7 +61,9 @@ export default function Profile({ isLoggedIn, token, setToken }) {
             ) : (
               <>
                 <Header className="py-0">{user.name}</Header>
-                <p className="text-center text-text/50">@{user.username}</p>
+                <p className="text-center text-text/50">
+                  @{user.username} | {user.age} y.o
+                </p>
               </>
             )}
           </div>

@@ -30,7 +30,7 @@ export default function Transactions({ isLoggedIn, token }) {
   if (!isLoggedIn) return <Navigate to="/login" replace />;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col pb-4">
       <Heading>My Orders</Heading>
 
       <AlertContainer className="mt-4" alerts={alerts} dispatch={dispatch} />

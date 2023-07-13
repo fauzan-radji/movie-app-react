@@ -29,8 +29,8 @@ Checkout the demo [here](https://seacinema.vercel.app/).
 - [x] Client side form validation
 - [x] Responsive layout
 - [x] Skeleton screen
+- [x] Use pagination instead of infinite scroll
 - [ ] Use datePicker instead of input type date
-- [ ] Use pagination instead of infinite scroll
 - [ ] Hover state for clickable element
 - [ ] Save register input value to session storage
 - [ ] Redirect to login page after register

@@ -103,6 +103,10 @@ export default function BookTicket({ isLoggedIn, token }) {
 
   useEffect(() => {
     if (!error) return;
+    alertsDispatch({
+      type: ALERT_ACTIONS.ERROR_PUSH,
+      payload: error.message,
+    });
   }, [error]);
 
   function onSeatSelected(isSelected, seatNumber) {
