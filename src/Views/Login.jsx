@@ -137,7 +137,7 @@ export default function Login({ isLoggedIn, setToken }) {
         </div>
 
         <div className="flex flex-col items-center justify-center gap-y-4 md:flex-col-reverse">
-          <p className="text-text/80">
+          <p className="text-neutralContrast/80">
             Don&apos;t have an account?{" "}
             <Link to="/register" className="text-accent">
               Register

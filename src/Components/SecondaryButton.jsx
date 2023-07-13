@@ -13,7 +13,7 @@ export default function SecondaryButton({
       onClick={onClick}
       disabled={disabled}
       className={twMerge(
-        "border border-primary bg-secondary text-primary",
+        "bg-complimentary text-complimentaryContrast",
         className
       )}
     >

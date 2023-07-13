@@ -84,9 +84,9 @@ export default function TransactionDetail({ isLoggedIn, token }) {
       <div className="mx-auto flex w-full max-w-md flex-col">
         {isLoading ? (
           <>
-            <Icons.CheckBadge className="mx-auto aspect-square w-20 animate-pulse text-accent/20" />
-            <span className="mx-auto h-6 w-32 animate-pulse rounded bg-accent/20"></span>
-            <span className="mx-auto mt-1 h-6 w-72 animate-pulse rounded bg-accent/20"></span>
+            <Icons.CheckBadge className="mx-auto aspect-square w-20 animate-pulse text-complimentaryDark/30" />
+            <span className="mx-auto h-6 w-32 animate-pulse rounded bg-complimentaryDark/30"></span>
+            <span className="mx-auto mt-1 h-6 w-72 animate-pulse rounded bg-complimentaryDark/30"></span>
           </>
         ) : (
           <>
@@ -113,37 +113,37 @@ export default function TransactionDetail({ isLoggedIn, token }) {
           </>
         )}
 
-        <div className="my-4 flex flex-col gap-4 rounded-md bg-secondary/50 px-4 py-4 shadow-lg shadow-accent/30">
+        <div className="my-4 flex flex-col gap-4 rounded-md bg-complimentary/40 px-4 py-4 shadow-lg shadow-complimentaryDark/20">
           {isLoading ? (
             <>
-              <span className="h-7 w-44 animate-pulse rounded bg-accent/20"></span>
+              <span className="h-7 w-44 animate-pulse rounded bg-complimentaryDark/30"></span>
               <div className="flex flex-col gap-1">
-                <span className="h-4 w-11 animate-pulse rounded bg-accent/20"></span>
-                <span className="h-5 w-2/5 animate-pulse rounded bg-accent/20"></span>
+                <span className="h-4 w-11 animate-pulse rounded bg-complimentaryDark/30"></span>
+                <span className="h-5 w-2/5 animate-pulse rounded bg-complimentaryDark/30"></span>
               </div>
               <div className="flex flex-col gap-1">
-                <span className="h-4 w-11 animate-pulse rounded bg-accent/20"></span>
-                <span className="h-5 w-1/5 animate-pulse rounded bg-accent/20"></span>
+                <span className="h-4 w-11 animate-pulse rounded bg-complimentaryDark/30"></span>
+                <span className="h-5 w-1/5 animate-pulse rounded bg-complimentaryDark/30"></span>
               </div>
               <div className="flex flex-col gap-1">
-                <span className="h-4 w-32 animate-pulse rounded bg-accent/20"></span>
-                <span className="h-5 w-24 animate-pulse rounded bg-accent/20"></span>
+                <span className="h-4 w-32 animate-pulse rounded bg-complimentaryDark/30"></span>
+                <span className="h-5 w-24 animate-pulse rounded bg-complimentaryDark/30"></span>
               </div>
             </>
           ) : (
             <>
-              <h3 className="text-2xl text-accent">
+              <h3 className="text-2xl font-semibold text-neutralContrast">
                 {new Intl.NumberFormat("id-ID", {
                   style: "currency",
                   currency: "IDR",
                 }).format(transaction.total)}
               </h3>
               <div>
-                <p className="text-sm text-text/60">Name</p>
+                <p className="text-sm text-neutralContrast/60">Name</p>
                 <p>{transaction.User.name}</p>
               </div>
               <div>
-                <p className="text-sm text-text/60">Seats</p>
+                <p className="text-sm text-neutralContrast/60">Seats</p>
                 <p className="flex gap-1">
                   {transaction.ticket.map((ticket) => (
                     <span
@@ -160,7 +160,9 @@ export default function TransactionDetail({ isLoggedIn, token }) {
                 </p>
               </div>
               <div>
-                <p className="text-sm text-text/60">Transaction date</p>
+                <p className="text-sm text-neutralContrast/60">
+                  Transaction date
+                </p>
                 <p>
                   {/* FIXME: use useDateFormatter custom hook instead */}
                   {new Date(transaction.createdAt).toLocaleDateString("id-ID", {

@@ -8,15 +8,29 @@ export default {
   theme: {
     extend: {
       colors: {
-        text: "#0c0114",
-        background: "#f3e1fe",
-        primary: "#e80f0c",
-        secondary: "#e2cde4",
-        accent: "#4e0942",
+        neutral: "#ffffff",
+        complimentary: "#fcd7a5",
+        complimentaryDark: "#8A6432",
+        accent: "#eb4f47",
+        neutralContrast: "#111133",
+        complimentaryContrast: "#111133",
+        accentContrast: "#ffffff",
 
+        // dark
+        // neutral: "#111133",
+        // complimentary: "#fcd7a5",
+        // complimentaryDark: "#8A6432",
+        // accent: "#eb4f47",
+        // neutralContrast: "#ffffff",
+        // complimentaryContrast: "#111133",
+        // accentContrast: "#ffffff",
+
+        white: "#ffffff",
+        black: "#111133",
         danger: colors.red,
+        warning: colors.orange,
         success: colors.green,
-        infor: colors.blue,
+        info: colors.blue,
       },
 
       fontFamily: {

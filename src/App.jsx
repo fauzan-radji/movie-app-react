@@ -8,7 +8,7 @@ export default function App() {
   const isLoggedIn = !!token;
 
   return (
-    <div className="flex h-[100dvh] flex-col-reverse bg-background text-text md:flex-col">
+    <div className="flex h-[100dvh] flex-col-reverse bg-neutral text-neutralContrast md:flex-col">
       <Navbar isLoggedIn={isLoggedIn} />
 
       <main className="no-scrollbar container mx-auto flex-auto overflow-auto px-6 pt-4">

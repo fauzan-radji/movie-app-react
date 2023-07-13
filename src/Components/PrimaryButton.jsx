@@ -12,7 +12,7 @@ export default function PrimaryButton({
     <Button
       onClick={onClick}
       disabled={disabled}
-      className={twMerge("bg-primary text-background", className)}
+      className={twMerge("text-accentContrast bg-accent", className)}
     >
       {children}
     </Button>

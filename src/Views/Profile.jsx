@@ -38,7 +38,7 @@ export default function Profile({ isLoggedIn, token, setToken }) {
       <Heading
         rightButton={
           <button
-            className="absolute right-0 top-0 flex aspect-square h-full items-center justify-center rounded-md border border-primary px-2 py-1 text-primary"
+            className="absolute right-0 top-0 flex aspect-square h-full items-center justify-center rounded-md border border-danger-600 px-2 py-1 text-danger-600"
             onClick={() => setToken("")}
           >
             <Icons.Logout className="h-4 w-4" />
@@ -56,12 +56,12 @@ export default function Profile({ isLoggedIn, token, setToken }) {
             {isLoading ? (
               <>
                 <HeaderSkeleton />
-                <span className="mx-auto h-5 w-32 animate-pulse rounded bg-accent/20"></span>
+                <span className="mx-auto h-5 w-32 animate-pulse rounded bg-complimentaryDark/30"></span>
               </>
             ) : (
               <>
                 <Header className="py-0">{user.name}</Header>
-                <p className="text-center text-text/50">
+                <p className="text-center text-neutralContrast/50">
                   @{user.username} | {user.age} y.o
                 </p>
               </>
@@ -75,7 +75,7 @@ export default function Profile({ isLoggedIn, token, setToken }) {
           <div className="mx-auto flex w-full max-w-lg gap-4">
             <Link
               to="/profile/topup"
-              className={`flex flex-1 items-center justify-center gap-2 rounded-md bg-primary px-2 py-3 text-background ${
+              className={`flex flex-1 items-center justify-center gap-2 rounded-md bg-accent px-2 py-3 text-accentContrast ${
                 isLoading && "pointer-events-none opacity-50"
               }`}
             >
@@ -83,7 +83,7 @@ export default function Profile({ isLoggedIn, token, setToken }) {
             </Link>
             <Link
               to="/profile/withdraw"
-              className={`flex flex-1 items-center justify-center gap-2 rounded-md border border-primary bg-secondary px-2 py-3 text-primary ${
+              className={`flex flex-1 items-center justify-center gap-2 rounded-md bg-complimentary px-2 py-3 text-complimentaryContrast ${
                 isLoading && "pointer-events-none opacity-50"
               }`}
             >

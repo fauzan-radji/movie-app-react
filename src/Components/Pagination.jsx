@@ -11,7 +11,7 @@ export default function Pagination({
     <div className="mb-4 flex justify-center self-center overflow-hidden rounded shadow-md">
       <button
         disabled={currentPage === 1}
-        className="flex h-8 w-8 items-center justify-center bg-primary text-background disabled:bg-primary/60"
+        className="flex h-8 w-8 items-center justify-center bg-accent text-accentContrast disabled:bg-accent/60"
         onClick={() => onPageChange(currentPage - 1)}
       >
         <Icons.ChevronLeft className="h-4 w-4" />
@@ -22,7 +22,7 @@ export default function Pagination({
         .fill()
         .map((_, i) => (
           <button
-            className="flex h-8 w-8 items-center justify-center bg-secondary text-text/50"
+            className="flex h-8 w-8 items-center justify-center bg-complimentary/80 text-complimentaryContrast/50"
             key={i + 1}
             onClick={() => onPageChange(i + 1)}
           >
@@ -33,7 +33,7 @@ export default function Pagination({
       {currentPage > pagesToShow + 1 && (
         <button
           disabled
-          className="flex h-8 w-8 items-center justify-center bg-secondary text-text"
+          className="flex h-8 w-8 items-center justify-center bg-complimentary/80 text-complimentaryContrast"
         >
           ...
         </button>
@@ -42,7 +42,7 @@ export default function Pagination({
       {/* Current page */}
       <button
         disabled
-        className="flex h-8 w-8 items-center justify-center bg-secondary font-semibold text-text"
+        className="flex h-8 w-8 items-center justify-center bg-complimentary/80 font-semibold text-complimentaryContrast"
       >
         {currentPage}
       </button>
@@ -50,7 +50,7 @@ export default function Pagination({
       {currentPage < totalPages - pagesToShow && (
         <button
           disabled
-          className="flex h-8 w-8 items-center justify-center bg-secondary text-text"
+          className="flex h-8 w-8 items-center justify-center bg-complimentary/80 text-complimentaryContrast"
         >
           ...
         </button>
@@ -61,7 +61,7 @@ export default function Pagination({
         .fill()
         .map((_, i) => (
           <button
-            className="flex h-8 w-8 items-center justify-center bg-secondary text-text/50"
+            className="flex h-8 w-8 items-center justify-center bg-complimentary/80 text-complimentaryContrast/50"
             key={i + 1}
             onClick={() => onPageChange(totalPages - i)}
           >
@@ -72,7 +72,7 @@ export default function Pagination({
 
       <button
         disabled={currentPage === totalPages}
-        className="flex h-8 w-8 items-center justify-center bg-primary text-background disabled:bg-primary/60"
+        className="flex h-8 w-8 items-center justify-center bg-accent text-accentContrast disabled:bg-accent/60"
         onClick={() => onPageChange(currentPage + 1)}
       >
         <Icons.ChevronRight className="h-4 w-4" />

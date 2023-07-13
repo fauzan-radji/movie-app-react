@@ -8,7 +8,7 @@ export default function TransactionCard({ transaction }) {
   return (
     <Link
       to={`/transactions/${transaction.id}`}
-      className="flex items-start justify-between rounded-md bg-secondary px-4 py-2"
+      className="flex items-start justify-between rounded-md bg-complimentary/50 px-4 py-2 text-complimentaryContrast"
     >
       <div className="flex flex-col ">
         <h4 className="font-bold">{transaction.Movie.title}</h4>
@@ -27,7 +27,7 @@ export default function TransactionCard({ transaction }) {
             </span>
           ))}
         </span>
-        <span className="text-xs text-text/70">
+        <span className="text-xs text-complimentaryContrast/70">
           {dateFormat(transaction.date)}
         </span>
       </div>

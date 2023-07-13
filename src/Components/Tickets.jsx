@@ -16,7 +16,7 @@ export default function Tickets({ name, className, tickets }) {
         tickets.length === 0 ? (
           <p>
             You haven&apos;t booked any tickets yet.{" "}
-            <Link className="font-bold text-primary underline" to="/">
+            <Link className="font-bold text-accent underline" to="/">
               Go book some ticket
             </Link>
           </p>

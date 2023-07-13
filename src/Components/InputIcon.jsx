@@ -32,9 +32,9 @@ const InputIcon = forwardRef(
             max={max}
             placeholder={placeholder}
             className={`peer h-full w-full rounded-md border-2 ${
-              isValid ? "border-text/40" : "border-danger-600"
+              isValid ? "border-complimentary" : "border-danger-600"
             } bg-transparent px-3 py-2 outline-none transition duration-300 placeholder:text-transparent ${
-              isValid ? "focus:border-accent" : "focus:border-danger-600"
+              isValid ? "focus:border-complimentary" : "focus:border-danger-600"
             }`}
             onChange={(e) => {
               onErrorChange({ id: e.target.id, error: "" });
@@ -60,10 +60,12 @@ const InputIcon = forwardRef(
           />
           <label
             htmlFor={id}
-            className={`absolute left-2 z-20 m-auto flex h-2 -translate-y-5 items-center gap-1 bg-background px-1 ${
-              isValid ? "text-text/70" : "text-danger-600"
+            className={`absolute left-2 z-20 m-auto flex h-2 -translate-y-5 items-center gap-1 bg-neutral px-1 ${
+              isValid ? "text-neutralContrast" : "text-danger-600"
             } transition duration-300 peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5 ${
-              isValid ? "peer-focus:text-accent" : "peer-focus:text-danger-600"
+              isValid
+                ? "peer-focus:text-complimentary"
+                : "peer-focus:text-danger-600"
             }`}
           >
             {icon}

@@ -178,7 +178,7 @@ export default function BookTicket({ isLoggedIn, token }) {
       <AlertContainer alerts={alerts} dispatch={alertsDispatch} />
 
       {isLoading ? (
-        <div className="mb-8 mt-4 h-9 w-4/5 animate-pulse self-center rounded-lg bg-accent/20 md:hidden"></div>
+        <div className="mb-8 mt-4 h-9 w-4/5 animate-pulse self-center rounded-lg bg-complimentaryDark/30 md:hidden"></div>
       ) : (
         <h1 className="mb-8 mt-4 text-center text-3xl font-bold md:hidden">
           {movie.title}
@@ -188,7 +188,7 @@ export default function BookTicket({ isLoggedIn, token }) {
       <div className="flex flex-col gap-x-8 md:flex-row">
         <div className="flex flex-1 flex-col">
           <div className="w-full max-w-sm self-center overflow-hidden">
-            <div className="-mx-16 -mb-20 flex h-40 w-[calc(100%+8rem)] justify-center rounded-[100%] border-t-4 border-t-accent  pt-6 text-accent/50">
+            <div className="-mx-16 -mb-20 flex h-40 w-[calc(100%+8rem)] justify-center rounded-[100%] border-t-4 border-t-neutralContrast  pt-6 text-neutralContrast/50">
               Screen
             </div>
           </div>
@@ -217,15 +217,15 @@ export default function BookTicket({ isLoggedIn, token }) {
           </div>
           <div className="my-8 flex w-full max-w-sm justify-between self-center">
             <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full bg-accent/30"></span>
+              <span className="h-3 w-3 rounded-full bg-neutralContrast/20"></span>
               Available
             </div>
             <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full bg-text/80"></span>
+              <span className="h-3 w-3 rounded-full bg-neutralContrast/80"></span>
               Reserved
             </div>
             <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full bg-primary"></span>
+              <span className="h-3 w-3 rounded-full bg-accent"></span>
               Selected
             </div>
           </div>
@@ -233,7 +233,7 @@ export default function BookTicket({ isLoggedIn, token }) {
 
         <div className="flex flex-1 flex-col gap-4">
           {isLoading ? (
-            <div className="hidden h-9 w-4/5 animate-pulse self-center rounded-lg bg-accent/20 md:block"></div>
+            <div className="hidden h-9 w-4/5 animate-pulse self-center rounded-lg bg-complimentaryDark/30 md:block"></div>
           ) : (
             <h1 className="hidden text-center text-3xl font-bold md:block">
               {movie.title}
@@ -241,11 +241,11 @@ export default function BookTicket({ isLoggedIn, token }) {
           )}
 
           {isLoading ? (
-            <div className="relative hidden aspect-[3/4] w-full animate-pulse rounded-3xl bg-accent/20 md:block landscape:aspect-video">
-              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-accent/20" />
+            <div className="relative hidden aspect-[3/4] w-full animate-pulse rounded-3xl bg-complimentaryDark/30 md:block landscape:aspect-video">
+              <Icons.Image className="absolute inset-0 m-auto h-12 w-12 text-complimentaryDark/30" />
             </div>
           ) : (
-            <div className="relative isolate hidden aspect-[3/4] w-full overflow-hidden rounded-3xl bg-accent/20 md:block landscape:aspect-video">
+            <div className="relative isolate hidden aspect-[3/4] w-full overflow-hidden rounded-3xl bg-complimentaryDark/30 md:block landscape:aspect-video">
               <div
                 className="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat portrait:hidden"
                 style={{ backgroundImage: `url('${movie.poster}')` }}
@@ -261,7 +261,7 @@ export default function BookTicket({ isLoggedIn, token }) {
           <div className="mb-8 flex items-center justify-between">
             <div className="flex flex-col ">
               <span className="text-sm text-accent">Total price</span>
-              <span className="text-xl font-bold text-primary">
+              <span className="text-primary text-xl font-bold">
                 IDR {totalPrice}K
               </span>
             </div>

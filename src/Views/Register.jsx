@@ -239,7 +239,7 @@ export default function Register({ isLoggedIn }) {
         </div>
 
         <div className="flex flex-col items-center justify-center gap-y-4 md:flex-col-reverse">
-          <p className="text-text/80">
+          <p className="text-neutralContrast/80">
             Already have an account?{" "}
             <Link to="/login" className="text-accent">
               Login

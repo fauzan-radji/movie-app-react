@@ -73,67 +73,70 @@ export default function Ticket({ isLoggedIn, token }) {
 
       <AlertContainer className="my-0" alerts={alerts} dispatch={dispatch} />
 
-      {isLoading || !data ? (
-        <>
-          <HeaderSkeleton className="w-80 max-w-full" />
-          <TicketSkeleton className="self-center" />
-        </>
-      ) : (
-        <>
-          <Header className="py-0">
-            {data?.Seats.Movie.title} (
-            {data?.Seats.Movie.releaseDate.match(/\d{4}/)})
-          </Header>
-          <TicketComponent
-            className="self-center"
-            movieTitle={data?.Seats.Movie.title}
-            id={ticketId}
-            name={data?.User.name}
-            seat={data?.Seats.seatNumber}
-          />
-        </>
-      )}
-
-      <div className="mx-auto flex w-full max-w-md flex-col gap-4 rounded-md bg-secondary/50 px-4 py-4 shadow-lg shadow-accent/30">
+      <div className="mx-auto flex w-full max-w-md flex-col gap-4">
         {isLoading || !data ? (
           <>
-            <div className="flex flex-col gap-1">
-              <span className="h-4 w-11 animate-pulse rounded bg-accent/20"></span>
-              <span className="h-5 w-2/5 animate-pulse rounded bg-accent/20"></span>
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="h-4 w-11 animate-pulse rounded bg-accent/20"></span>
-              <span className="h-5 w-6 animate-pulse rounded bg-accent/20"></span>
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="h-4 w-32 animate-pulse rounded bg-accent/20"></span>
-              <span className="h-5 w-24 animate-pulse rounded bg-accent/20"></span>
-            </div>
+            <HeaderSkeleton className="w-80 max-w-full" />
+            <TicketSkeleton className="self-center" />
           </>
         ) : (
           <>
-            <div>
-              <p className="text-sm text-text/60">Name</p>
-              <p>{data?.User.name}</p>
-            </div>
-            <div>
-              <p className="text-sm text-text/60">Seat</p>
-              <p>{data?.Seats.seatNumber}</p>
-            </div>
-            <div>
-              <p className="text-sm text-text/60">Transaction date</p>
-              {/* FIXME: use date Formatter */}
-              <p>
-                {new Date(data.bookAt).toLocaleDateString("id-ID", {
-                  dateStyle: "long",
-                })}
-              </p>
-            </div>
+            <Header className="py-0">
+              {data?.Seats.Movie.title} (
+              {data?.Seats.Movie.releaseDate.match(/\d{4}/)})
+            </Header>
+            <TicketComponent
+              className="self-center"
+              movieTitle={data?.Seats.Movie.title}
+              id={ticketId}
+              name={data?.User.name}
+              seat={data?.Seats.seatNumber}
+            />
           </>
         )}
-        {(data?.isCancel || isCanceled) && (
-          <p className="font-bold text-danger-700">Canceled</p>
-        )}
+        <div className="flex w-full flex-col gap-4 rounded-md bg-complimentary/50 px-4 py-4 shadow-lg shadow-complimentaryDark/20">
+          {isLoading || !data ? (
+            <>
+              <div className="flex flex-col gap-1">
+                <span className="h-4 w-11 animate-pulse rounded bg-complimentaryDark/30"></span>
+                <span className="h-5 w-2/5 animate-pulse rounded bg-complimentaryDark/30"></span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="h-4 w-11 animate-pulse rounded bg-complimentaryDark/30"></span>
+                <span className="h-5 w-6 animate-pulse rounded bg-complimentaryDark/30"></span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="h-4 w-32 animate-pulse rounded bg-complimentaryDark/30"></span>
+                <span className="h-5 w-24 animate-pulse rounded bg-complimentaryDark/30"></span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <p className="text-sm text-neutralContrast/60">Name</p>
+                <p>{data?.User.name}</p>
+              </div>
+              <div>
+                <p className="text-sm text-neutralContrast/60">Seat</p>
+                <p>{data?.Seats.seatNumber}</p>
+              </div>
+              <div>
+                <p className="text-sm text-neutralContrast/60">
+                  Transaction date
+                </p>
+                {/* FIXME: use date Formatter */}
+                <p>
+                  {new Date(data.bookAt).toLocaleDateString("id-ID", {
+                    dateStyle: "long",
+                  })}
+                </p>
+              </div>
+            </>
+          )}
+          {(data?.isCancel || isCanceled) && (
+            <p className="font-bold text-danger-700">Canceled</p>
+          )}
+        </div>
         {!(data?.isCancel || isCanceled) && (
           <SecondaryButton
             disabled={isLoading || isCanceling}

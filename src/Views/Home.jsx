@@ -68,16 +68,16 @@ export default function Home() {
         <Header>{import.meta.env.VITE_APP_NAME}</Header>
         <form
           onSubmit={handleSubmit}
-          className="flex items-center gap-2 rounded-md bg-secondary px-4 py-2"
+          className="flex items-center gap-2 rounded-md bg-complimentary px-4 py-2 text-complimentaryContrast"
         >
           <input
             ref={inputSearch}
             type="search"
             placeholder="Search movies..."
             onChange={handleChange}
-            className="w-full bg-transparent text-text outline-none placeholder:text-text/50"
+            className="w-full bg-transparent outline-none placeholder:text-black/50"
           />
-          <Icons.Search className="h-5 w-5 text-text" />
+          <Icons.Search className="text-text h-5 w-5" />
         </form>
       </div>
 
