@@ -37,7 +37,11 @@ export default function TopUp({ isLoggedIn, token }) {
   const [errors, errorsDispatch] = useReducer(errorReducer, []);
   const input = useRef();
   const [isSending, setIsSending] = useState(false);
-  const { data, error, isLoading } = useFetch(`${API_ENDPOINT}/balance`, {
+  const {
+    data: balance,
+    error,
+    isLoading,
+  } = useFetch(`${API_ENDPOINT}/balance`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -86,6 +90,7 @@ export default function TopUp({ isLoggedIn, token }) {
           payload: data.message,
         });
         input.current.value = "";
+        balance.balance = +data.data.balance;
       })
       .catch((e) =>
         alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: e.message })
@@ -131,7 +136,10 @@ export default function TopUp({ isLoggedIn, token }) {
           {isLoading ? (
             <CreditCardSkeleton />
           ) : (
-            <CreditCard balance={data.balance} username={data.user.username} />
+            <CreditCard
+              balance={balance.balance}
+              username={balance.user.username}
+            />
           )}
         </div>
 

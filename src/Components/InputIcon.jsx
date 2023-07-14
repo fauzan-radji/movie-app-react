@@ -64,7 +64,7 @@ const InputIcon = forwardRef(
               isValid ? "text-neutralContrast" : "text-danger-600"
             } transition duration-300 peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-5 ${
               isValid
-                ? "peer-focus:text-complimentary"
+                ? "peer-focus:text-complimentaryDark"
                 : "peer-focus:text-danger-600"
             }`}
           >

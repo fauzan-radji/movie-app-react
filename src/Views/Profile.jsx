@@ -94,7 +94,7 @@ export default function Profile({ isLoggedIn, token, setToken }) {
 
         <div className="md:max-h-full">
           <Tickets
-            tickets={user?.Tickets}
+            tickets={user?.Tickets.filter((ticket) => !ticket.isCancel)}
             name={user?.name || ""}
             token={token}
           />
