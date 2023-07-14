@@ -11,6 +11,7 @@ import AlertContainer, {
 import Ticket from "../Components/Ticket";
 import TicketSkeleton from "../Skeleton/Ticket";
 import useFetch from "../hooks/useFetch";
+import { formatCurrency, formatMovieTitle } from "../utils/formatter";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_CREATED = 201;
@@ -107,8 +108,10 @@ export default function TransactionDetail({ isLoggedIn, token }) {
             )}
             <p className="text-center">@{transaction.User.username}</p>
             <h1 className="text-center text-lg font-bold">
-              {transaction.Movie.title} (
-              {transaction.Movie.releaseDate.match(/\d{4}/g)})
+              {formatMovieTitle(
+                transaction.Movie.title,
+                transaction.Movie.releaseDate
+              )}
             </h1>
           </>
         )}
@@ -133,10 +136,7 @@ export default function TransactionDetail({ isLoggedIn, token }) {
           ) : (
             <>
               <h3 className="text-2xl font-semibold text-neutralContrast">
-                {new Intl.NumberFormat("id-ID", {
-                  style: "currency",
-                  currency: "IDR",
-                }).format(transaction.total)}
+                {formatCurrency(transaction.total)}
               </h3>
               <div>
                 <p className="text-sm text-neutralContrast/60">Name</p>

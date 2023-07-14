@@ -10,6 +10,7 @@ import AlertContainer, {
 } from "../Components/AlertContainer";
 import PrimaryButton from "../Components/PrimaryButton";
 import useFetch from "../hooks/useFetch";
+import { formatMovieTitle } from "../utils/formatter";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_CREATED = 201;
@@ -80,7 +81,7 @@ export default function BookTicket({ isLoggedIn, token }) {
   useEffect(() => {
     if (!movie) return;
 
-    movie.title = `${movie.title} (${movie.releaseDate.match(/\d{4}/)[0]})`;
+    movie.title = formatMovieTitle(movie.title, movie.releaseDate);
     const seats = Array(64)
       .fill()
       .map((_, i) => {

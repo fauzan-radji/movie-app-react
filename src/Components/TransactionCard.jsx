@@ -1,8 +1,6 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-
-const dateFormat = new Intl.DateTimeFormat("id-ID", { dateStyle: "full" })
-  .format;
+import { formatDate } from "../utils/formatter";
 
 export default function TransactionCard({ transaction }) {
   return (
@@ -28,7 +26,7 @@ export default function TransactionCard({ transaction }) {
           ))}
         </span>
         <span className="text-xs text-complimentaryContrast/70">
-          {dateFormat(transaction.date)}
+          {formatDate(transaction.createdAt)}
         </span>
       </div>
       {transaction.ticket.every((ticket) => ticket.isCancel) && (

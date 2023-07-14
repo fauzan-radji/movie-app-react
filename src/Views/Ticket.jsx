@@ -13,6 +13,7 @@ import AlertContainer, {
 import SecondaryButton from "../Components/SecondaryButton";
 import useFetch from "../hooks/useFetch";
 import Icons from "../Components/Icons";
+import { formatDate, formatMovieTitle } from "../utils/formatter";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_CREATED = 201;
@@ -82,8 +83,10 @@ export default function Ticket({ isLoggedIn, token }) {
         ) : (
           <>
             <Header className="py-0">
-              {data?.Seats.Movie.title} (
-              {data?.Seats.Movie.releaseDate.match(/\d{4}/)})
+              {formatMovieTitle(
+                data?.Seats.Movie.title,
+                data?.Seats.Movie.releaseDate
+              )}
             </Header>
             <TicketComponent
               className="self-center"
@@ -124,12 +127,7 @@ export default function Ticket({ isLoggedIn, token }) {
                 <p className="text-sm text-neutralContrast/60">
                   Transaction date
                 </p>
-                {/* FIXME: use date Formatter */}
-                <p>
-                  {new Date(data.bookAt).toLocaleDateString("id-ID", {
-                    dateStyle: "long",
-                  })}
-                </p>
+                <p>{formatDate(data.bookAt)}</p>
               </div>
             </>
           )}

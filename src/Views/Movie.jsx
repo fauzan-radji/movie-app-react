@@ -7,6 +7,7 @@ import AlertContainer, {
   alertReducer,
 } from "../Components/AlertContainer";
 import useFetch from "../hooks/useFetch";
+import { formatCurrency, formatMovieTitle } from "../utils/formatter";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
@@ -48,7 +49,7 @@ export default function Movie() {
             <div className="mb-2 h-8 w-2/3 animate-pulse rounded-md bg-complimentaryDark/30"></div>
           ) : (
             <h1 className="mb-2 text-2xl font-bold [text-wrap:balance]">
-              {`${movie.title} (${movie.releaseDate.match(/\d{4}/)[0]})`}
+              {formatMovieTitle(movie.title, movie.releaseDate)}
               <sup
                 className={`mb-2 inline-block rounded bg-accent px-1 py-0.5 align-super text-[0.7rem] leading-3 text-accentContrast${
                   isLoading ? " animate-pulse" : ""
@@ -65,10 +66,7 @@ export default function Movie() {
             }`}
           >
             <Icons.PriceTag className="mr-2 inline h-4 w-4" />
-            {Intl.NumberFormat("id-ID", {
-              style: "currency",
-              currency: "IDR",
-            }).format(isLoading ? 0 : movie.price)}
+            {formatCurrency(isLoading ? 0 : movie.price)}
           </div>
 
           <hr className="border-t-2 border-t-accent" />

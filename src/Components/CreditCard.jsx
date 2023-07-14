@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import { formatCurrency } from "../utils/formatter";
 
 export default function CreditCard({ balance, email = "", username = "" }) {
   return (
@@ -11,10 +12,7 @@ export default function CreditCard({ balance, email = "", username = "" }) {
         </div>
       </div>
       <h6 className="flex flex-[3] items-center text-3xl font-bold">
-        {Intl.NumberFormat("id-ID", {
-          style: "currency",
-          currency: "IDR",
-        }).format(balance)}
+        {formatCurrency(balance)}
       </h6>
       <div className="flex flex-[3] flex-col justify-end">
         <span className="text-sm">{email ? "Email" : "Username"}</span>
