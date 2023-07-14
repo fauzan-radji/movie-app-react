@@ -100,12 +100,14 @@ export default function Home() {
             ))}
       </div>
 
-      <Pagination
-        currentPage={page}
-        pagesToShow={2}
-        totalPages={totalPages}
-        onPageChange={(page) => setSearchParams({ page })}
-      />
+      {!isLoading && (
+        <Pagination
+          currentPage={page}
+          pagesToShow={2}
+          totalPages={totalPages}
+          onPageChange={(page) => setSearchParams({ page })}
+        />
+      )}
     </div>
   );
 }
