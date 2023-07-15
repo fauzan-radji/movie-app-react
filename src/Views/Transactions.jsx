@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { Navigate } from "react-router-dom";
 import Heading from "../Components/Heading";
 import { useEffect, useReducer } from "react";
@@ -9,10 +8,12 @@ import AlertContainer, {
 import TransactionCard from "../Components/TransactionCard";
 import TransactionCardSkeleton from "../Skeleton/TransactionCard";
 import useFetch from "../hooks/useFetch";
+import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
-export default function Transactions({ isLoggedIn, token }) {
+export default function Transactions() {
+  const { isLoggedIn, token } = useAuth();
   const [alerts, dispatch] = useReducer(alertReducer, []);
   const {
     data: transactions,
@@ -47,8 +48,3 @@ export default function Transactions({ isLoggedIn, token }) {
     </div>
   );
 }
-
-Transactions.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  token: PropTypes.string.isRequired,
-};

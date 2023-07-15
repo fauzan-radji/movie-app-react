@@ -1,8 +1,10 @@
 import NavLink from "./NavLink";
 import Icons from "./Icons";
-import PropTypes from "prop-types";
+import { useAuth } from "../Context/Auth";
 
-export default function Navbar({ isLoggedIn }) {
+export default function Navbar() {
+  const { isLoggedIn } = useAuth();
+
   return (
     <nav className="border-b-0 border-t-2 border-complimentary bg-neutral md:bottom-auto md:top-0 md:border-b-2 md:border-t-0">
       <div className="container mx-auto flex h-16 items-center justify-center px-6 sm:px-6 lg:px-8">
@@ -33,7 +35,3 @@ export default function Navbar({ isLoggedIn }) {
     </nav>
   );
 }
-
-Navbar.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-};

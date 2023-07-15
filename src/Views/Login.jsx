@@ -1,5 +1,4 @@
 import { Link, Navigate } from "react-router-dom";
-import PropTypes from "prop-types";
 import Header from "../Components/Header";
 import Icons from "../Components/Icons";
 import InputIcon from "../Components/InputIcon";
@@ -9,6 +8,7 @@ import AlertContainer, {
   ACTIONS as ALERT_ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
+import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_OK = 200;
@@ -29,7 +29,8 @@ function errorReducer(state, action) {
   }
 }
 
-export default function Login({ isLoggedIn, setToken }) {
+export default function Login() {
+  const { isLoggedIn, setToken } = useAuth();
   const [alerts, alertsDispatch] = useReducer(alertReducer, []);
   const [errors, errorsDispatch] = useReducer(errorReducer, []);
   const usernameInput = useRef();
@@ -161,8 +162,3 @@ export default function Login({ isLoggedIn, setToken }) {
     </div>
   );
 }
-
-Login.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  setToken: PropTypes.func.isRequired,
-};

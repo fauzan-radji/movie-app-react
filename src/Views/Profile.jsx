@@ -1,5 +1,4 @@
 import { Link, Navigate } from "react-router-dom";
-import PropTypes from "prop-types";
 import CreditCard from "../Components/CreditCard";
 import CreditCardSkeleton from "../Skeleton/CreditCard";
 import Header from "../Components/Header";
@@ -13,10 +12,12 @@ import AlertContainer, {
   alertReducer,
 } from "../Components/AlertContainer";
 import useFetch from "../hooks/useFetch";
+import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
-export default function Profile({ isLoggedIn, token, setToken }) {
+export default function Profile() {
+  const { isLoggedIn, token, setToken } = useAuth();
   const [alerts, dispatch] = useReducer(alertReducer, []);
   const {
     data: user,
@@ -103,9 +104,3 @@ export default function Profile({ isLoggedIn, token, setToken }) {
     </div>
   );
 }
-
-Profile.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  token: PropTypes.string.isRequired,
-  setToken: PropTypes.func.isRequired,
-};

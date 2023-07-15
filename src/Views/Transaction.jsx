@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import Heading from "../Components/Heading";
 import { Navigate, useParams } from "react-router-dom";
 import Icons from "../Components/Icons";
@@ -12,11 +11,13 @@ import Ticket from "../Components/Ticket";
 import TicketSkeleton from "../Skeleton/Ticket";
 import useFetch from "../hooks/useFetch";
 import { formatCurrency, formatMovieTitle } from "../utils/formatter";
+import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_CREATED = 201;
 
-export default function TransactionDetail({ isLoggedIn, token }) {
+export default function TransactionDetail() {
+  const { isLoggedIn, token } = useAuth();
   const [alerts, dispatch] = useReducer(alertReducer, []);
   const { transactionId } = useParams();
   const [isCanceled, setIsCanceled] = useState(false);
@@ -213,8 +214,3 @@ export default function TransactionDetail({ isLoggedIn, token }) {
     </div>
   );
 }
-
-TransactionDetail.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  token: PropTypes.string.isRequired,
-};

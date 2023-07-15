@@ -1,5 +1,4 @@
 import { Navigate, useParams } from "react-router-dom";
-import PropTypes from "prop-types";
 import Icons from "../Components/Icons";
 import { useEffect, useReducer } from "react";
 import Seat from "../Components/Seat";
@@ -11,6 +10,7 @@ import AlertContainer, {
 import PrimaryButton from "../Components/PrimaryButton";
 import useFetch from "../hooks/useFetch";
 import { formatMovieTitle } from "../utils/formatter";
+import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_CREATED = 201;
@@ -48,7 +48,8 @@ function reducer(state, action) {
   }
 }
 
-export default function BookTicket({ isLoggedIn, token }) {
+export default function BookTicket() {
+  const { isLoggedIn, token } = useAuth();
   const [alerts, alertsDispatch] = useReducer(alertReducer, []);
   const { movieId } = useParams();
   const {
@@ -284,8 +285,3 @@ export default function BookTicket({ isLoggedIn, token }) {
     </div>
   );
 }
-
-BookTicket.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  token: PropTypes.string.isRequired,
-};

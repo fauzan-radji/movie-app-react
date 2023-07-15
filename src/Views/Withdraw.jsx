@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import Heading from "../Components/Heading";
 import Icons from "../Components/Icons";
 import InputIcon from "../Components/InputIcon";
@@ -12,6 +11,7 @@ import AlertContainer, {
 import CreditCard from "../Components/CreditCard";
 import CreditCardSkeleton from "../Skeleton/CreditCard";
 import useFetch from "../hooks/useFetch";
+import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_CREATED = 201;
@@ -32,7 +32,8 @@ function errorReducer(state, action) {
   }
 }
 
-export default function Withdraw({ isLoggedIn, token }) {
+export default function Withdraw() {
+  const { isLoggedIn, token } = useAuth();
   const [alerts, alertsDispatch] = useReducer(alertReducer, []);
   const [errors, errorsDispatch] = useReducer(errorReducer, []);
   const input = useRef();
@@ -167,8 +168,3 @@ export default function Withdraw({ isLoggedIn, token }) {
     </div>
   );
 }
-
-Withdraw.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  token: PropTypes.string.isRequired,
-};

@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import Heading from "../Components/Heading";
 import Header from "../Components/Header";
 import HeaderSkeleton from "../Skeleton/Header";
@@ -14,11 +13,13 @@ import SecondaryButton from "../Components/SecondaryButton";
 import useFetch from "../hooks/useFetch";
 import Icons from "../Components/Icons";
 import { formatDate, formatMovieTitle } from "../utils/formatter";
+import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_CREATED = 201;
 
-export default function Ticket({ isLoggedIn, token }) {
+export default function Ticket() {
+  const { isLoggedIn, token } = useAuth();
   const { ticketId } = useParams();
   const [alerts, dispatch] = useReducer(alertReducer, []);
   const [isCanceling, setIsCanceling] = useState(false);
@@ -153,8 +154,3 @@ export default function Ticket({ isLoggedIn, token }) {
     </div>
   );
 }
-
-Ticket.propTypes = {
-  isLoggedIn: PropTypes.bool.isRequired,
-  token: PropTypes.string.isRequired,
-};

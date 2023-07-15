@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import Icons from "../Components/Icons";
 import MovieCard from "../Components/MovieCard";
 import MovieCardSkeleton from "../Skeleton/MovieCard";
@@ -20,10 +20,9 @@ export default function Home() {
   // FIXME: use useReducer
   const [movies, setMovies] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
+  const page = +searchParams.get("page");
   const inputSearch = useRef();
 
-  // ? Is this useMemo really optimize the performance?
-  const page = useMemo(() => +searchParams.get("page"), [searchParams]);
   const { data, isLoading, error, totalPages } = useFetch(
     `${API_ENDPOINT}/movies?page=${page}&limit=${limit}`
   );
