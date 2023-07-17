@@ -12,7 +12,7 @@ export default function App() {
           <Route path="/">
             <Route index element={<View.Home />} />
             {/* FIXME: use /movies instead of /movie */}
-            <Route path="movie/:movieId">
+            <Route path="movies/:movieId">
               <Route index element={<View.Movie />} />
               <Route element={<View.BookTicket />} path="book" />
             </Route>

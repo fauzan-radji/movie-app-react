@@ -5,7 +5,7 @@ import { formatMovieTitle } from "../utils/formatter";
 export default function MovieCard({ id, poster, title, price, releaseDate }) {
   return (
     <Link
-      to={`/movie/${id}`}
+      to={`/movies/${id}`}
       className="relative isolate flex aspect-[2/3] w-full flex-col justify-end overflow-hidden rounded-xl bg-complimentary p-4 transition-opacity before:absolute before:inset-0 before:-z-10 before:bg-gradient-to-t before:from-black/50 before:to-transparent hover:opacity-80"
     >
       <img

@@ -19,7 +19,7 @@ export function formatNumber(value) {
 }
 
 export function formatMovieTitle(title, releaseDate) {
-  return `formatted ${title} (${releaseDate.match(/\d{4}/)[0]})`;
+  return `${title} (${releaseDate.match(/\d{4}/)[0]})`;
 }
 
 export default { formatCurrency, formatDate, formatNumber, formatMovieTitle };

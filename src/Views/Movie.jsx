@@ -85,7 +85,7 @@ export default function Movie() {
           )}
 
           <Link
-            to={`/movie/${movieId}/book`}
+            to={`/movies/${movieId}/book`}
             onClick={(e) => {
               if (isLoading) e.preventDefault();
             }}
