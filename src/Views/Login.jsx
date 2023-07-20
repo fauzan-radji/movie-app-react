@@ -1,10 +1,13 @@
-import { Link, Navigate } from "react-router-dom";
-import Header from "../Components/Header";
-import Icons from "../Components/Icons";
-import InputIcon from "../Components/InputIcon";
-import PrimaryButton from "../Components/PrimaryButton";
 import { useReducer, useRef, useState } from "react";
-import AlertContainer, {
+import { Link, Navigate } from "react-router-dom";
+import {
+  AlertContainer,
+  Header,
+  Icons,
+  InputIcon,
+  PrimaryButton,
+} from "../Components";
+import {
   ACTIONS as ALERT_ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";

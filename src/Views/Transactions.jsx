@@ -1,12 +1,8 @@
-import { Navigate } from "react-router-dom";
-import Heading from "../Components/Heading";
 import { useEffect, useReducer } from "react";
-import AlertContainer, {
-  ACTIONS,
-  alertReducer,
-} from "../Components/AlertContainer";
-import TransactionCard from "../Components/TransactionCard";
-import TransactionCardSkeleton from "../Skeleton/TransactionCard";
+import { Navigate } from "react-router-dom";
+import { AlertContainer, Heading, TransactionCard } from "../Components";
+import { TransactionCard as TransactionCardSkeleton } from "../Skeletons";
+import { ACTIONS, alertReducer } from "../Components/AlertContainer";
 import useFetch from "../hooks/useFetch";
 import { useAuth } from "../Context/Auth";
 

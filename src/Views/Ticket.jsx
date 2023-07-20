@@ -1,17 +1,19 @@
-import Heading from "../Components/Heading";
-import Header from "../Components/Header";
-import HeaderSkeleton from "../Skeleton/Header";
-import { Navigate, useParams } from "react-router-dom";
-import TicketComponent from "../Components/Ticket";
-import TicketSkeleton from "../Skeleton/Ticket";
 import { useEffect, useReducer, useState } from "react";
-import AlertContainer, {
-  ACTIONS,
-  alertReducer,
-} from "../Components/AlertContainer";
-import SecondaryButton from "../Components/SecondaryButton";
+import { Navigate, useParams } from "react-router-dom";
+import {
+  AlertContainer,
+  Heading,
+  Header,
+  Ticket as TicketComponent,
+  SecondaryButton,
+  Icons,
+} from "../Components";
+import {
+  Header as HeaderSkeleton,
+  Ticket as TicketSkeleton,
+} from "../Skeletons";
+import { ACTIONS, alertReducer } from "../Components/AlertContainer";
 import useFetch from "../hooks/useFetch";
-import Icons from "../Components/Icons";
 import { formatDate, formatMovieTitle } from "../utils/formatter";
 import { useAuth } from "../Context/Auth";
 

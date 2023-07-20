@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
-import TicketSkeleton from "../Skeleton/Ticket";
-import Ticket from "./Ticket";
 import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
+import { Ticket as TicketSkeleton } from "../Skeletons";
+import { Ticket } from "./";
 
 export default function Tickets({ name, className, tickets }) {
   return (

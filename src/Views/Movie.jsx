@@ -1,11 +1,7 @@
 import { useEffect, useReducer } from "react";
 import { useParams, Link } from "react-router-dom";
-import Icons from "../Components/Icons";
-import Heading from "../Components/Heading";
-import AlertContainer, {
-  ACTIONS,
-  alertReducer,
-} from "../Components/AlertContainer";
+import { AlertContainer, Icons, Heading } from "../Components";
+import { ACTIONS, alertReducer } from "../Components/AlertContainer";
 import useFetch from "../hooks/useFetch";
 import { formatCurrency, formatMovieTitle } from "../utils/formatter";
 

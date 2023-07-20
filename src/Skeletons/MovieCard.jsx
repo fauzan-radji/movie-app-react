@@ -1,4 +1,4 @@
-import Icons from "../Components/Icons";
+import { Icons } from "../Components";
 
 export default function MovieCard() {
   return (

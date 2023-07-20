@@ -1,15 +1,18 @@
-import Heading from "../Components/Heading";
-import Icons from "../Components/Icons";
-import InputIcon from "../Components/InputIcon";
-import PrimaryButton from "../Components/PrimaryButton";
-import { Navigate } from "react-router-dom";
 import { useEffect, useReducer, useRef, useState } from "react";
-import AlertContainer, {
+import { Navigate } from "react-router-dom";
+import {
+  AlertContainer,
+  Heading,
+  Icons,
+  InputIcon,
+  PrimaryButton,
+  CreditCard,
+} from "../Components";
+import { CreditCard as CreditCardSkeleton } from "../Skeletons";
+import {
   ACTIONS as ALERT_ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
-import CreditCard from "../Components/CreditCard";
-import CreditCardSkeleton from "../Skeleton/CreditCard";
 import useFetch from "../hooks/useFetch";
 import { useAuth } from "../Context/Auth";
 

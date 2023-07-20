@@ -1,15 +1,15 @@
 import { useEffect, useReducer, useRef, useState } from "react";
-import Icons from "../Components/Icons";
-import MovieCard from "../Components/MovieCard";
-import MovieCardSkeleton from "../Skeleton/MovieCard";
-import Header from "../Components/Header";
-import AlertContainer, {
-  ACTIONS,
-  alertReducer,
-} from "../Components/AlertContainer";
+import {
+  Icons,
+  MovieCard,
+  Header,
+  AlertContainer,
+  Pagination,
+} from "../Components";
+import { MovieCard as MovieCardSkeleton } from "../Skeletons";
+import { ACTIONS, alertReducer } from "../Components/AlertContainer";
 import useFetch from "../hooks/useFetch";
 import { useSearchParams } from "react-router-dom";
-import Pagination from "../Components/Pagination";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const HTTP_OK = 200;

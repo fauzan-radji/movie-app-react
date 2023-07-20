@@ -1,13 +1,16 @@
 import { Navigate, useParams } from "react-router-dom";
-import Icons from "../Components/Icons";
 import { useEffect, useReducer } from "react";
-import Seat from "../Components/Seat";
-import Heading from "../Components/Heading";
-import AlertContainer, {
+import {
+  Icons,
+  Seat,
+  Heading,
+  AlertContainer,
+  PrimaryButton,
+} from "../Components";
+import {
   ACTIONS as ALERT_ACTIONS,
   alertReducer,
 } from "../Components/AlertContainer";
-import PrimaryButton from "../Components/PrimaryButton";
 import useFetch from "../hooks/useFetch";
 import { formatMovieTitle } from "../utils/formatter";
 import { useAuth } from "../Context/Auth";
