@@ -7,10 +7,8 @@ import {
   InputIcon,
   PrimaryButton,
 } from "../Components";
-import {
-  ACTIONS as ALERT_ACTIONS,
-  alertReducer,
-} from "../Components/AlertContainer";
+import { ACTIONS as ALERT_ACTIONS } from "../Constants";
+import { alert as alertReducer } from "../Reducers";
 import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;

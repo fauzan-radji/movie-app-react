@@ -7,7 +7,8 @@ import {
   Pagination,
 } from "../Components";
 import { MovieCard as MovieCardSkeleton } from "../Skeletons";
-import { ACTIONS, alertReducer } from "../Components/AlertContainer";
+import { ACTIONS } from "../Constants";
+import { alert as alertReducer } from "../Reducers";
 import useFetch from "../hooks/useFetch";
 import { useSearchParams } from "react-router-dom";
 

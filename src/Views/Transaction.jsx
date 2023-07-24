@@ -8,7 +8,8 @@ import {
   Ticket,
 } from "../Components";
 import { Ticket as TicketSkeleton } from "../Skeletons";
-import { ACTIONS, alertReducer } from "../Components/AlertContainer";
+import { ACTIONS } from "../Constants";
+import { alert as alertReducer } from "../Reducers";
 import useFetch from "../hooks/useFetch";
 import { formatCurrency, formatMovieTitle } from "../utils/formatter";
 import { useAuth } from "../Context/Auth";

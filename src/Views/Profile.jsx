@@ -12,7 +12,8 @@ import {
   CreditCard as CreditCardSkeleton,
   Header as HeaderSkeleton,
 } from "../Skeletons";
-import { ACTIONS, alertReducer } from "../Components/AlertContainer";
+import { ACTIONS } from "../Constants";
+import { alert as alertReducer } from "../Reducers";
 import useFetch from "../hooks/useFetch";
 import { useAuth } from "../Context/Auth";
 

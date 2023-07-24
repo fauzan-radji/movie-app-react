@@ -5,54 +5,7 @@ import SuccessAlert from "./SuccessAlert";
 import WarningAlert from "./WarningAlert";
 import { twMerge } from "tailwind-merge";
 
-export const ACTIONS = {
-  ERROR_PUSH: "error-push",
-  SUCCESS_PUSH: "success-push",
-  WARNING_PUSH: "warning-push",
-  ALERT_REMOVE: "alert-remove",
-};
-
-const ALERT = {
-  ERROR: "error",
-  SUCCESS: "success",
-  WARNING: "warning",
-};
-
-export function alertReducer(alerts, action) {
-  switch (action.type) {
-    case ACTIONS.ERROR_PUSH:
-      return [
-        {
-          id: Date.now() + Math.random(),
-          type: ALERT.ERROR,
-          message: action.payload,
-        },
-        ...alerts,
-      ];
-    case ACTIONS.SUCCESS_PUSH:
-      return [
-        {
-          id: Date.now() + Math.random(),
-          type: ALERT.SUCCESS,
-          message: action.payload,
-        },
-        ...alerts,
-      ];
-    case ACTIONS.WARNING_PUSH:
-      return [
-        {
-          id: Date.now() + Math.random(),
-          type: ALERT.WARNING,
-          message: action.payload,
-        },
-        ...alerts,
-      ];
-    case ACTIONS.ALERT_REMOVE:
-      return alerts.filter((alert) => alert.id !== action.payload);
-    default:
-      return alerts;
-  }
-}
+import { ACTIONS, ALERT } from "../Constants";
 
 export default function AlertContainer({ alerts, dispatch, className }) {
   return (

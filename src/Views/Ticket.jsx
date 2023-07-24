@@ -12,7 +12,8 @@ import {
   Header as HeaderSkeleton,
   Ticket as TicketSkeleton,
 } from "../Skeletons";
-import { ACTIONS, alertReducer } from "../Components/AlertContainer";
+import { ACTIONS } from "../Constants";
+import { alert as alertReducer } from "../Reducers";
 import useFetch from "../hooks/useFetch";
 import { formatDate, formatMovieTitle } from "../utils/formatter";
 import { useAuth } from "../Context/Auth";

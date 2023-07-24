@@ -8,10 +8,8 @@ import {
   PrimaryButton,
   CreditCard,
 } from "../Components";
-import {
-  ACTIONS as ALERT_ACTIONS,
-  alertReducer,
-} from "../Components/AlertContainer";
+import { ACTIONS as ALERT_ACTIONS } from "../Constants";
+import { alert as alertReducer } from "../Reducers";
 import { CreditCard as CreditCardSkeleton } from "../Skeletons";
 import useFetch from "../hooks/useFetch";
 import { useAuth } from "../Context/Auth";
