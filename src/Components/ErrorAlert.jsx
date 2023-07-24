@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
-import Alert from "./Alert";
-import Icons from "./Icons";
+import { Alert, Icons } from "./";
 
 export default function ErrorAlert({ children, className, close }) {
   return (

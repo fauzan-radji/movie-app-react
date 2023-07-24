@@ -7,12 +7,11 @@ import {
   InputIcon,
   PrimaryButton,
 } from "../Components";
-import { ACTIONS as ALERT_ACTIONS } from "../Constants";
+import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
 import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const HTTP_OK = 200;
 
 const ERROR_ACTIONS = {
   PUSH: "push",
@@ -62,7 +61,7 @@ export default function Login() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.statusCode !== HTTP_OK) {
+        if (data.statusCode !== HTTP.OK) {
           alertsDispatch({
             type: ALERT_ACTIONS.ERROR_PUSH,
             payload: data.message,

@@ -1,10 +1,5 @@
 import { useEffect, useState } from "react";
-
-const HTTP_STATUS = {
-  OK: 200,
-  CREATED: 201,
-  ACCEPTED: 202,
-};
+import { HTTP } from "../Constants";
 
 export default function useFetch(url, options) {
   const [data, setData] = useState(null);
@@ -19,11 +14,7 @@ export default function useFetch(url, options) {
     fetch(url, { ...options, signal: controller.signal })
       .then((res) => res.json())
       .then((data) => {
-        if (
-          ![HTTP_STATUS.OK, HTTP_STATUS.CREATED, HTTP_STATUS.ACCEPTED].includes(
-            data.statusCode
-          )
-        ) {
+        if (![HTTP.OK, HTTP.CREATED, HTTP.ACCEPTED].includes(data.statusCode)) {
           setError({ statusCode: data.statusCode, message: data.message });
           return;
         }
@@ -45,6 +36,7 @@ export default function useFetch(url, options) {
       setIsLoading(false);
     };
     // FIXME: it's causing infinite re-render if options is passed in dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
 
   return { data, error, isLoading, totalPages };

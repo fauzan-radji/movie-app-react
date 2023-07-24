@@ -7,12 +7,11 @@ import {
   InputIcon,
   PrimaryButton,
 } from "../Components";
-import { ACTIONS as ALERT_ACTIONS } from "../Constants";
+import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
 import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const HTTP_CREATED = 201;
 
 const ERROR_ACTIONS = {
   PUSH: "push",
@@ -72,7 +71,7 @@ export default function Register() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.statusCode !== HTTP_CREATED) {
+        if (data.statusCode !== HTTP.CREATED) {
           if (Array.isArray(data.message)) {
             for (const message of data.message)
               alertsDispatch({

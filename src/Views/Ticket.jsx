@@ -12,14 +12,13 @@ import {
   Header as HeaderSkeleton,
   Ticket as TicketSkeleton,
 } from "../Skeletons";
-import { ACTIONS } from "../Constants";
+import { ACTIONS, HTTP } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
-import useFetch from "../hooks/useFetch";
+import { useFetch } from "../hooks";
 import { formatDate, formatMovieTitle } from "../utils/formatter";
 import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const HTTP_CREATED = 201;
 
 export default function Ticket() {
   const { isLoggedIn, token } = useAuth();
@@ -52,7 +51,7 @@ export default function Ticket() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.statusCode !== HTTP_CREATED) {
+        if (data.statusCode !== HTTP.CREATED) {
           if (Array.isArray(data.message)) {
             data.message.forEach((message) => {
               dispatch({ type: ACTIONS.ERROR_PUSH, payload: message });

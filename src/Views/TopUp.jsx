@@ -8,14 +8,13 @@ import {
   PrimaryButton,
   CreditCard,
 } from "../Components";
-import { ACTIONS as ALERT_ACTIONS } from "../Constants";
+import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
 import { CreditCard as CreditCardSkeleton } from "../Skeletons";
-import useFetch from "../hooks/useFetch";
+import { useFetch } from "../hooks";
 import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const HTTP_CREATED = 201;
 
 const ERROR_ACTIONS = {
   PUSH: "push",
@@ -78,7 +77,7 @@ export default function TopUp() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.statusCode !== HTTP_CREATED) {
+        if (data.statusCode !== HTTP.CREATED) {
           alertsDispatch({
             type: ALERT_ACTIONS.ERROR_PUSH,
             payload: data.message,

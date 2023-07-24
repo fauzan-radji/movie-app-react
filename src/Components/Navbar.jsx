@@ -1,5 +1,4 @@
-import NavLink from "./NavLink";
-import Icons from "./Icons";
+import { Icons, NavLink } from "./";
 import { useAuth } from "../Context/Auth";
 
 export default function Navbar() {

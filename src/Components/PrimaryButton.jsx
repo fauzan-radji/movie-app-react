@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { twMerge } from "tailwind-merge";
-import Button from "./Button";
+import { Button } from "./";
 
 export default function PrimaryButton({
   children,

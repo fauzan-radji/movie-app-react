@@ -7,18 +7,16 @@ import {
   Pagination,
 } from "../Components";
 import { MovieCard as MovieCardSkeleton } from "../Skeletons";
-import { ACTIONS } from "../Constants";
+import { ACTIONS, HTTP } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
-import useFetch from "../hooks/useFetch";
+import { useFetch } from "../hooks";
 import { useSearchParams } from "react-router-dom";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const HTTP_OK = 200;
 const limit = 12;
 
 export default function Home() {
   const [alerts, dispatch] = useReducer(alertReducer, []);
-  // FIXME: use useReducer
   const [movies, setMovies] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
   const page = +searchParams.get("page");
@@ -48,7 +46,7 @@ export default function Home() {
     fetch(`${API_ENDPOINT}/movies/search?title=${query}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.statusCode !== HTTP_OK) {
+        if (data.statusCode !== HTTP.OK) {
           dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
           return;
         }

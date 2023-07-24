@@ -4,7 +4,7 @@ import { AlertContainer, Heading, TransactionCard } from "../Components";
 import { TransactionCard as TransactionCardSkeleton } from "../Skeletons";
 import { ACTIONS } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
-import useFetch from "../hooks/useFetch";
+import { useFetch } from "../hooks";
 import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;

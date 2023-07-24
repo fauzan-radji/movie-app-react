@@ -1,5 +1,5 @@
-import Icons from "./Icons";
 import ProptTypes from "prop-types";
+import { Icons } from "./";
 
 export default function Pagination({
   totalPages,

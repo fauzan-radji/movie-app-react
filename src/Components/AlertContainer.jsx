@@ -1,10 +1,6 @@
-/* eslint-disable react-refresh/only-export-components */
 import PropTypes from "prop-types";
-import ErrorAlert from "./ErrorAlert";
-import SuccessAlert from "./SuccessAlert";
-import WarningAlert from "./WarningAlert";
 import { twMerge } from "tailwind-merge";
-
+import { ErrorAlert, SuccessAlert, WarningAlert } from "./";
 import { ACTIONS, ALERT } from "../Constants";
 
 export default function AlertContainer({ alerts, dispatch, className }) {

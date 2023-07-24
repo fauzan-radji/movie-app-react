@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import Icons from "./Icons";
 import { twMerge } from "tailwind-merge";
+import { Icons } from "./";
 
 export default function Heading({ children, className, rightButton }) {
   const navigate = useNavigate();

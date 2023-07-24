@@ -7,14 +7,13 @@ import {
   AlertContainer,
   PrimaryButton,
 } from "../Components";
-import { ACTIONS as ALERT_ACTIONS } from "../Constants";
+import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
-import useFetch from "../hooks/useFetch";
+import { useFetch } from "../hooks";
 import { formatMovieTitle } from "../utils/formatter";
 import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
-const HTTP_CREATED = 201;
 
 const ACTIONS = {
   SET_MOVIE: "set-movie",
@@ -145,7 +144,7 @@ export default function BookTicket() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.statusCode !== HTTP_CREATED) {
+        if (data.statusCode !== HTTP.CREATED) {
           alertsDispatch({
             type: ALERT_ACTIONS.ERROR_PUSH,
             payload: data.message,
