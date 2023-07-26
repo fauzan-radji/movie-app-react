@@ -153,16 +153,25 @@ export default function Register() {
           >
             <Icons.Envelope className="h-4 w-4" />
           </InputIcon>
-          {/* TODO: fix username validation: username only can contains alphanumeric, underscore and dot */}
           <InputIcon
             required
             ref={usernameInput}
             type="text"
             placeholder="Username"
-            validate={(value) => ({
-              isError: value.length < 3,
-              message: "Username must be at least 3 characters long",
-            })}
+            validate={(value) => {
+              if (!/^[a-zA-Z0-9_.]+$/.test(value)) {
+                return {
+                  isError: true,
+                  message:
+                    "Username only can contains alphanumeric, underscore and dot",
+                };
+              }
+
+              return {
+                isError: value.length < 3,
+                message: "Username must be at least 3 characters long",
+              };
+            }}
             onErrorChange={({ id, error }) => {
               if (error)
                 errorsDispatch({
