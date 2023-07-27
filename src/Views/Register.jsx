@@ -118,10 +118,15 @@ export default function Register() {
             ref={nameInput}
             type="text"
             placeholder="Name"
-            validate={(value) => ({
-              isError: value.length < 3,
-              message: "Name must be at least 3 characters long",
-            })}
+            validate={(value) => {
+              if (!/^[a-zA-Z\s]+$/.test(value))
+                "Name must only contains letters";
+
+              if (value.length < 3)
+                return "Name must be at least 3 characters long";
+
+              return "";
+            }}
             onErrorChange={({ id, error }) => {
               if (error)
                 errorsDispatch({
@@ -138,10 +143,11 @@ export default function Register() {
             ref={emailInput}
             type="email"
             placeholder="Email"
-            validate={(value) => ({
-              isError: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-              message: "Email must be valid",
-            })}
+            validate={(value) => {
+              if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+                return "Email must be valid";
+              return "";
+            }}
             onErrorChange={({ id, error }) => {
               if (error)
                 errorsDispatch({
@@ -189,10 +195,15 @@ export default function Register() {
             ref={passwordInput}
             type="password"
             placeholder="Password"
-            validate={(value) => ({
-              isError: value.length < 8,
-              message: "Password must be at least 8 characters long",
-            })}
+            validate={(value) => {
+              if (!/\w+/.test(value))
+                return "Password must contains at least one alphanumeric character";
+
+              if (value.length < 8)
+                return "Password must be at least 8 characters long";
+
+              return "";
+            }}
             onErrorChange={({ id, error }) => {
               if (error)
                 errorsDispatch({
@@ -210,10 +221,12 @@ export default function Register() {
             ref={confirmPasswordInput}
             type="password"
             placeholder="Confirm password"
-            validate={(value) => ({
-              isError: passwordInput.current.value !== value,
-              message: "Passwords do not match",
-            })}
+            validate={(value) => {
+              if (passwordInput.current.value !== value)
+                return "Passwords do not match";
+
+              return "";
+            }}
             onErrorChange={({ id, error }) => {
               if (error)
                 errorsDispatch({
@@ -231,10 +244,12 @@ export default function Register() {
             type="date"
             placeholder="Birth Date"
             max={new Date().toISOString().split("T")[0]}
-            validate={(value) => ({
-              isError: new Date(value) > new Date(),
-              message: "Birth date must be in the past",
-            })}
+            validate={(value) => {
+              if (new Date(value) > new Date())
+                return "Birth date must be in the past";
+
+              return "";
+            }}
             onErrorChange={({ id, error }) => {
               if (error)
                 errorsDispatch({

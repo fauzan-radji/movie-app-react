@@ -118,10 +118,11 @@ export default function TopUp() {
             min="1"
             placeholder="Amount in IDR"
             required
-            validate={(value) => ({
-              isError: +value <= 0,
-              message: "Amount must be greater than 0",
-            })}
+            validate={(value) => {
+              if (+value <= 0) return "Amount must be greater than 0";
+
+              return "";
+            }}
             onErrorChange={({ id, error }) => {
               if (error)
                 errorsDispatch({

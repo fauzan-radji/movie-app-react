@@ -46,8 +46,8 @@ const InputIcon = forwardRef(
               }
               if (!validate) return;
 
-              const { isError, message } = validate(e.target.value);
-              if (isError) {
+              const message = validate(e.target.value);
+              if (message) {
                 onErrorChange({ id: e.target.id, error: message });
                 setError(message);
                 setIsValid(false);

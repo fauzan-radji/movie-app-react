@@ -99,10 +99,12 @@ export default function Login() {
             ref={usernameInput}
             type="text"
             placeholder="Username"
-            validate={(value) => ({
-              isError: value.length < 3,
-              message: "Username must be at least 3 characters long",
-            })}
+            validate={(value) => {
+              if (value.length < 3)
+                return "Username must be at least 3 characters long";
+
+              return "";
+            }}
             onErrorChange={({ id, error }) => {
               if (error)
                 errorsDispatch({
@@ -120,10 +122,12 @@ export default function Login() {
             ref={passwordInput}
             type="password"
             placeholder="Password"
-            validate={(value) => ({
-              isError: value.length < 8,
-              message: "Password must be at least 8 characters long",
-            })}
+            validate={(value) => {
+              if (value.length < 8)
+                return "Password must be at least 8 characters long";
+
+              return "";
+            }}
             onErrorChange={({ id, error }) => {
               if (error)
                 errorsDispatch({
