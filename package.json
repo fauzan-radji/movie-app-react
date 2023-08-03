@@ -7,7 +7,9 @@
     "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "make-icons": "pwa-asset-generator ./public/logo.png ./public/icons",
+    "ngrok": "ngrok http --domain=flying-husky-national.ngrok-free.app 5173"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -28,7 +30,9 @@
     "postcss": "^8.4.24",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0",
+    "pwa-asset-generator": "^6.3.1",
     "tailwindcss": "^3.3.2",
-    "vite": "^4.3.9"
+    "vite": "^4.3.9",
+    "vite-plugin-pwa": "^0.16.4"
   }
 }
