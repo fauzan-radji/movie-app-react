@@ -1,10 +1,10 @@
 export default {
   registerType: "prompt",
-  includeAssests: ["favicon.ico", "apple-touc-icon.png", "masked-icon.svg"],
   manifest: {
-    name: "React-vite-app",
-    short_name: "react-vite-app",
-    description: "I am a simple vite app",
+    name: "Sea Cinema",
+    short_name: "Sea Cinema",
+    description:
+      "An application where you can book yourself tickets for a movie",
     icons: [
       {
         src: "public/icons/manifest-icon-192.maskable.png",
@@ -31,14 +31,11 @@ export default {
         purpose: "maskable",
       },
     ],
-    theme_color: "#171717",
-    background_color: "#f0e7db",
+    theme_color: "#fcd7a5",
+    background_color: "#fcd7a5",
     display: "standalone",
     scope: "/",
     start_url: "/",
     orientation: "portrait",
-  },
-  devOptions: {
-    enabled: true,
   },
 };
