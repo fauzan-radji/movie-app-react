@@ -1,5 +1,5 @@
-import ProptTypes from "prop-types";
 import { Icons } from "./";
+import ProptTypes from "prop-types";
 
 export default function Pagination({
   totalPages,
@@ -13,6 +13,7 @@ export default function Pagination({
         disabled={currentPage === 1}
         className="flex h-8 w-8 items-center justify-center bg-accent text-accentContrast disabled:bg-accent/60"
         onClick={() => onPageChange(currentPage - 1)}
+        aria-label="Previous page"
       >
         <Icons.ChevronLeft className="h-4 w-4" />
       </button>
@@ -74,6 +75,7 @@ export default function Pagination({
         disabled={currentPage === totalPages}
         className="flex h-8 w-8 items-center justify-center bg-accent text-accentContrast disabled:bg-accent/60"
         onClick={() => onPageChange(currentPage + 1)}
+        aria-label="Next page"
       >
         <Icons.ChevronRight className="h-4 w-4" />
       </button>
