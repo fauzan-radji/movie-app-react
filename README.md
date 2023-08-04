@@ -25,11 +25,17 @@ Basically you can:
 ## Installation
 
 1. Clone this repository
+   ```bash
+   git clone https://github.com/fauzan-radji/react-movie-app.git
+   ```
 2. Install dependencies
    ```bash
    npm install
    ```
 3. Copy `.env.example` and rename it to `.env.local`
+   ```bash
+   cp .env.example .env.local
+   ```
 4. Change the value of the variables in `.env.local` to match your environment or leave it as it is
    ```env
    VITE_API_ENDPOINT=https://movie-booking-app-production.up.railway.app/api/v1
