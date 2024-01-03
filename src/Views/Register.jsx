@@ -166,17 +166,12 @@ export default function Register() {
             placeholder="Username"
             validate={(value) => {
               if (!/^[a-zA-Z0-9_.]+$/.test(value)) {
-                return {
-                  isError: true,
-                  message:
-                    "Username only can contains alphanumeric, underscore and dot",
-                };
+                return "Username only can contains alphanumeric, underscore and dot";
               }
 
-              return {
-                isError: value.length < 3,
-                message: "Username must be at least 3 characters long",
-              };
+              if (value.length < 3) {
+                return "Username must be at least 3 characters long";
+              }
             }}
             onErrorChange={({ id, error }) => {
               if (error)
