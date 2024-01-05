@@ -1,17 +1,18 @@
+import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
+import {
+  AlertContainer,
+  Heading,
+  Icons,
+  PrimaryButton,
+  Seat,
+} from "../Components";
 import { Navigate, useParams } from "react-router-dom";
 import { useEffect, useReducer } from "react";
-import {
-  Icons,
-  Seat,
-  Heading,
-  AlertContainer,
-  PrimaryButton,
-} from "../Components";
-import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
+
 import { alert as alertReducer } from "../Reducers";
-import { useFetch } from "../hooks";
 import { formatMovieTitle } from "../utils/formatter";
 import { useAuth } from "../Context/Auth";
+import { useFetch } from "../hooks";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 

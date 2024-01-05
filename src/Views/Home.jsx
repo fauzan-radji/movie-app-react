@@ -1,13 +1,14 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { ACTIONS, HTTP } from "../Constants";
 import {
+  AlertContainer,
+  Header,
   Icons,
   MovieCard,
-  Header,
-  AlertContainer,
   Pagination,
 } from "../Components";
+import { useEffect, useReducer, useRef, useState } from "react";
+
 import { MovieCard as MovieCardSkeleton } from "../Skeletons";
-import { ACTIONS, HTTP } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
 import { useFetch } from "../hooks";
 import { useSearchParams } from "react-router-dom";

@@ -1,6 +1,6 @@
+import { Icons } from "./";
 import PropTypes from "prop-types";
 import { twMerge } from "tailwind-merge";
-import { Icons } from "./";
 
 export default function Alert({ children, bgColor, className, close }) {
   setTimeout(close, 3000);

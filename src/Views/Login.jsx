@@ -1,5 +1,4 @@
-import { useReducer, useRef, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
 import {
   AlertContainer,
   Header,
@@ -7,7 +6,9 @@ import {
   InputIcon,
   PrimaryButton,
 } from "../Components";
-import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
+import { Link, Navigate } from "react-router-dom";
+import { useReducer, useRef, useState } from "react";
+
 import { alert as alertReducer } from "../Reducers";
 import { useAuth } from "../Context/Auth";
 

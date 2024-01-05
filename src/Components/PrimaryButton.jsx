@@ -1,6 +1,6 @@
+import { Button } from "./";
 import PropTypes from "prop-types";
 import { twMerge } from "tailwind-merge";
-import { Button } from "./";
 
 export default function PrimaryButton({
   children,
@@ -12,7 +12,7 @@ export default function PrimaryButton({
     <Button
       onClick={onClick}
       disabled={disabled}
-      className={twMerge("text-accentContrast bg-accent", className)}
+      className={twMerge("bg-accent text-accentContrast", className)}
     >
       {children}
     </Button>

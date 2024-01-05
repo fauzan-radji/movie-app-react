@@ -1,7 +1,8 @@
+import { ACTIONS, ALERT } from "../Constants";
+import { ErrorAlert, SuccessAlert, WarningAlert } from "./";
+
 import PropTypes from "prop-types";
 import { twMerge } from "tailwind-merge";
-import { ErrorAlert, SuccessAlert, WarningAlert } from "./";
-import { ACTIONS, ALERT } from "../Constants";
 
 export default function AlertContainer({ alerts, dispatch, className }) {
   return (

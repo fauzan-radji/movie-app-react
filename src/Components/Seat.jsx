@@ -1,5 +1,5 @@
-import { useState } from "react";
 import PropTypes from "prop-types";
+import { useState } from "react";
 
 export default function Seat({ reserved, onSeatSelected, number }) {
   const [selected, setSelected] = useState(false);

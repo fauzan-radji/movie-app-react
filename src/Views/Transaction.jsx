@@ -1,5 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { ACTIONS, HTTP } from "../Constants";
 import {
   AlertContainer,
   Heading,
@@ -7,16 +6,18 @@ import {
   SecondaryButton,
   Ticket,
 } from "../Components";
-import { Ticket as TicketSkeleton } from "../Skeletons";
-import { ACTIONS, HTTP } from "../Constants";
-import { alert as alertReducer } from "../Reducers";
-import { useFetch } from "../hooks";
+import { Navigate, useParams } from "react-router-dom";
 import {
   formatCurrency,
   formatDate,
   formatMovieTitle,
 } from "../utils/formatter";
+import { useEffect, useReducer, useState } from "react";
+
+import { Ticket as TicketSkeleton } from "../Skeletons";
+import { alert as alertReducer } from "../Reducers";
 import { useAuth } from "../Context/Auth";
+import { useFetch } from "../hooks";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 

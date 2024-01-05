@@ -1,14 +1,14 @@
-import Home from "./Home";
-import Movie from "./Movie";
 import BookTicket from "./BookTicket";
+import Home from "./Home";
 import Login from "./Login";
-import Register from "./Register";
+import Movie from "./Movie";
 import Profile from "./Profile";
-import TopUp from "./TopUp";
-import Withdraw from "./Withdraw";
+import Register from "./Register";
 import Ticket from "./Ticket";
+import TopUp from "./TopUp";
 import Transaction from "./Transaction";
 import Transactions from "./Transactions";
+import Withdraw from "./Withdraw";
 
 export default {
   Home,

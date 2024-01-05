@@ -1,18 +1,19 @@
-import { useEffect, useReducer, useRef, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
 import {
   AlertContainer,
+  CreditCard,
   Heading,
   Icons,
   InputIcon,
   PrimaryButton,
-  CreditCard,
 } from "../Components";
+import { useEffect, useReducer, useRef, useState } from "react";
+
 import { CreditCard as CreditCardSkeleton } from "../Skeletons";
-import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
+import { Navigate } from "react-router-dom";
 import { alert as alertReducer } from "../Reducers";
-import { useFetch } from "../hooks";
 import { useAuth } from "../Context/Auth";
+import { useFetch } from "../hooks";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 

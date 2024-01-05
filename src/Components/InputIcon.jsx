@@ -1,5 +1,6 @@
-import PropTypes from "prop-types";
 import { forwardRef, useId, useState } from "react";
+
+import PropTypes from "prop-types";
 
 const InputIcon = forwardRef(
   (

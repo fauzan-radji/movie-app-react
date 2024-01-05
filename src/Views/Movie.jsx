@@ -1,10 +1,11 @@
+import { AlertContainer, Heading, Icons } from "../Components";
+import { Link, useParams } from "react-router-dom";
+import { formatCurrency, formatMovieTitle } from "../utils/formatter";
 import { useEffect, useReducer } from "react";
-import { useParams, Link } from "react-router-dom";
-import { AlertContainer, Icons, Heading } from "../Components";
+
 import { ACTIONS } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
 import { useFetch } from "../hooks";
-import { formatCurrency, formatMovieTitle } from "../utils/formatter";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
