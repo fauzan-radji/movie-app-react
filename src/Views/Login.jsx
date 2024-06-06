@@ -67,7 +67,7 @@ export default function Login() {
         return res.json();
       })
       .then((data) => {
-        setToken(data.token);
+        setToken(data.data);
         alertsDispatch({
           type: ALERT_ACTIONS.SUCCESS_PUSH,
           payload: data.message,

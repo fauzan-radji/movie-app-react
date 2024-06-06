@@ -57,7 +57,7 @@ export default function BookTicket() {
     data: movie,
     error,
     isLoading,
-  } = useFetch(`${API_ENDPOINT}/tickets/seat/${movieId}`);
+  } = useFetch(`${API_ENDPOINT}/movies/${movieId}/seats`);
 
   const [
     {
@@ -87,13 +87,13 @@ export default function BookTicket() {
     const seats = Array(64)
       .fill()
       .map((_, i) => {
-        const seat = movie.seats.find((seat) => seat.seatNumber === i + 1);
+        const seat = movie.seats.find((seat) => seat.number === i + 1);
         return seat
           ? seat
           : {
               id: i,
-              seatNumber: i + 1,
-              isBook: false,
+              number: i + 1,
+              isReserved: false,
             };
       });
 
@@ -133,26 +133,24 @@ export default function BookTicket() {
     if (isSending) return;
 
     dispatch({ type: ACTIONS.SET_IS_SENDING, payload: true });
-    fetch(`${API_ENDPOINT}/tickets/seat/${movieId}`, {
+    fetch(`${API_ENDPOINT}/movies/${movieId}/seats`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        seatNumber: selectedSeats,
+        seats: selectedSeats,
       }),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode !== HTTP.CREATED) {
-          alertsDispatch({
-            type: ALERT_ACTIONS.ERROR_PUSH,
-            payload: data.message,
-          });
-          return;
+      .then((res) => {
+        if (res.status !== HTTP.OK) {
+          throw new Error(res.statusText);
         }
 
+        return res.json();
+      })
+      .then((data) => {
         alertsDispatch({
           type: ALERT_ACTIONS.SUCCESS_PUSH,
           payload: data.message,
@@ -201,18 +199,18 @@ export default function BookTicket() {
               .map((_, i) => {
                 const seat = seats[i] || {
                   id: i,
-                  book: false,
-                  seatNumber: i + 1,
+                  isReserved: false,
+                  number: i + 1,
                 };
 
                 return (
                   <Seat
                     key={i}
                     id={i}
-                    reserved={seat.isBook}
-                    number={seat.seatNumber}
+                    reserved={seat.isReserved}
+                    number={seat.number}
                     onSeatSelected={(isSelected) =>
-                      onSeatSelected(isSelected, seat.seatNumber)
+                      onSeatSelected(isSelected, seat.number)
                     }
                   />
                 );
