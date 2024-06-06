@@ -5,7 +5,7 @@ import { HTTP } from "../Constants";
 export default function useFetch(url, options) {
   const [data, setData] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -13,13 +13,13 @@ export default function useFetch(url, options) {
     const controller = new AbortController();
 
     fetch(url, { ...options, signal: controller.signal })
-      .then((res) => res.json())
-      .then((data) => {
-        if (![HTTP.OK, HTTP.CREATED, HTTP.ACCEPTED].includes(data.statusCode)) {
-          setError({ statusCode: data.statusCode, message: data.message });
-          return;
-        }
+      .then((res) => {
+        if (![HTTP.OK, HTTP.CREATED, HTTP.ACCEPTED].includes(res.status))
+          throw new Error(res.statusText);
 
+        return res.json();
+      })
+      .then((data) => {
         if (data.totalPage) setTotalPages(data.totalPage);
         setData(data.data);
         setError(null);
@@ -27,7 +27,7 @@ export default function useFetch(url, options) {
       })
       .catch((err) => {
         if (controller.signal.aborted) return;
-        setError({ statusCode: 0, message: err.message });
+        setError(err.message);
         setIsLoading(false);
       });
 

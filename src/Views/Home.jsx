@@ -34,7 +34,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!error) return;
-    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error.message });
+    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error });
   }, [error]);
 
   // FIXME: use search param for query
@@ -45,13 +45,14 @@ export default function Home() {
     if (!query) return;
 
     fetch(`${API_ENDPOINT}/movies/search?title=${query}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode !== HTTP.OK) {
-          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
-          return;
+      .then((res) => {
+        if (res.status !== HTTP.OK) {
+          throw new Error(res.statusText);
         }
 
+        return res.json();
+      })
+      .then((data) => {
         setMovies(data.data);
       })
       .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));

@@ -108,7 +108,7 @@ export default function BookTicket() {
     if (!error) return;
     alertsDispatch({
       type: ALERT_ACTIONS.ERROR_PUSH,
-      payload: error.message,
+      payload: error,
     });
   }, [error]);
 

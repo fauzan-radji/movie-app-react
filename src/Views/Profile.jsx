@@ -27,13 +27,13 @@ export default function Profile() {
     data: user,
     error,
     isLoading,
-  } = useFetch(`${API_ENDPOINT}/user/me`, {
+  } = useFetch(`${API_ENDPOINT}/me`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
   useEffect(() => {
     if (!error) return;
-    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error.message });
+    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error });
   }, [error]);
 
   if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
@@ -99,7 +99,7 @@ export default function Profile() {
 
         <div className="md:max-h-full">
           <Tickets
-            tickets={user?.Tickets.filter((ticket) => !ticket.isCancel)}
+            tickets={user?.orders.filter((ticket) => !ticket.isCancelled)}
             name={user?.name || ""}
             token={token}
           />

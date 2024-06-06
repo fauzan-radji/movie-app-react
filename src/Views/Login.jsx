@@ -52,24 +52,21 @@ export default function Login() {
     }
 
     setIsSending(true);
-    fetch(`${API_ENDPOINT}/auth/signin`, {
+    fetch(`${API_ENDPOINT}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username: usernameInput.current.value,
-        hash: passwordInput.current.value,
+        password: passwordInput.current.value,
       }),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode !== HTTP.OK) {
-          alertsDispatch({
-            type: ALERT_ACTIONS.ERROR_PUSH,
-            payload: data.message,
-          });
-          return;
+      .then((res) => {
+        if (res.status !== HTTP.OK) {
+          throw new Error(res.statusText);
         }
-
+        return res.json();
+      })
+      .then((data) => {
         setToken(data.token);
         alertsDispatch({
           type: ALERT_ACTIONS.SUCCESS_PUSH,
