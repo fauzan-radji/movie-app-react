@@ -6,8 +6,8 @@ import {
   InputIcon,
   PrimaryButton,
 } from "../Components";
-import { Link, Navigate } from "react-router-dom";
-import { useReducer, useRef, useState } from "react";
+import { Link, Navigate, useLocation } from "react-router-dom";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 
 import { alert as alertReducer } from "../Reducers";
 import { useAuth } from "../Context/Auth";
@@ -37,6 +37,30 @@ export default function Login() {
   const usernameInput = useRef();
   const passwordInput = useRef();
   const [isSending, setIsSending] = useState(false);
+
+  const onInputError = useCallback(({ id, error }) => {
+    if (error)
+      errorsDispatch({
+        type: ERROR_ACTIONS.PUSH,
+        payload: { id, error },
+      });
+    else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
+  }, []);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!location.state) return;
+
+    const { successMessage } = location.state;
+    delete location.state;
+    if (successMessage) {
+      alertsDispatch({
+        type: ALERT_ACTIONS.SUCCESS_PUSH,
+        payload: successMessage,
+      });
+    }
+  }, [location]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -103,14 +127,7 @@ export default function Login() {
 
               return "";
             }}
-            onErrorChange={({ id, error }) => {
-              if (error)
-                errorsDispatch({
-                  type: ERROR_ACTIONS.PUSH,
-                  payload: { id, error },
-                });
-              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
-            }}
+            onInputError={onInputError}
           >
             <Icons.User className="h-4 w-4" />
           </InputIcon>
@@ -126,14 +143,7 @@ export default function Login() {
 
               return "";
             }}
-            onErrorChange={({ id, error }) => {
-              if (error)
-                errorsDispatch({
-                  type: ERROR_ACTIONS.PUSH,
-                  payload: { id, error },
-                });
-              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
-            }}
+            onInputError={onInputError}
           >
             <Icons.Lock className="h-4 w-4" />
           </InputIcon>

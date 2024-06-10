@@ -6,8 +6,8 @@ import {
   InputIcon,
   PrimaryButton,
 } from "../Components";
-import { Link, Navigate } from "react-router-dom";
-import { useReducer, useRef, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useCallback, useReducer, useRef, useState } from "react";
 
 import { alert as alertReducer } from "../Reducers";
 import { useAuth } from "../Context/Auth";
@@ -41,6 +41,16 @@ export default function Register() {
   const confirmPasswordInput = useRef();
   const birthDateInput = useRef();
   const [isSending, setIsSending] = useState(false);
+  const navigate = useNavigate();
+
+  const onInputError = useCallback(({ id, error }) => {
+    if (error)
+      errorsDispatch({
+        type: ERROR_ACTIONS.PUSH,
+        payload: { id, error },
+      });
+    else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
+  }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -56,7 +66,7 @@ export default function Register() {
     }
 
     setIsSending(true);
-    fetch(`${API_ENDPOINT}/auth/signup`, {
+    fetch(`${API_ENDPOINT}/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -65,33 +75,27 @@ export default function Register() {
         name: nameInput.current.value,
         email: emailInput.current.value,
         username: usernameInput.current.value,
-        hash: passwordInput.current.value,
-        birth: birthDateInput.current.value,
-        confirmPassword: confirmPasswordInput.current.value,
+        password: passwordInput.current.value,
+        birthDate: new Date(birthDateInput.current.value),
       }),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode !== HTTP.CREATED) {
-          if (Array.isArray(data.message)) {
-            for (const message of data.message)
-              alertsDispatch({
-                type: ALERT_ACTIONS.ERROR_PUSH,
-                payload: message,
-              });
-            return;
-          }
-
-          alertsDispatch({
-            type: ALERT_ACTIONS.ERROR_PUSH,
-            payload: data.message,
-          });
-          return;
+      .then((res) => {
+        if (res.status !== HTTP.OK) {
+          throw new Error(res.statusText);
         }
 
-        alertsDispatch({
-          type: ALERT_ACTIONS.SUCCESS_PUSH,
-          payload: data.message,
+        return res.json();
+      })
+      .then((data) => {
+        // alertsDispatch({
+        //   type: ALERT_ACTIONS.SUCCESS_PUSH,
+        //   payload: data.message,
+        // });
+
+        navigate("/login", {
+          state: {
+            successMessage: data.message,
+          },
         });
       })
       .catch((e) =>
@@ -128,14 +132,7 @@ export default function Register() {
 
               return "";
             }}
-            onErrorChange={({ id, error }) => {
-              if (error)
-                errorsDispatch({
-                  type: ERROR_ACTIONS.PUSH,
-                  payload: { id, error },
-                });
-              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
-            }}
+            onErrorChange={onInputError}
           >
             <Icons.User className="h-4 w-4" />
           </InputIcon>
@@ -147,16 +144,10 @@ export default function Register() {
             validate={(value) => {
               if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
                 return "Email must be valid";
+
               return "";
             }}
-            onErrorChange={({ id, error }) => {
-              if (error)
-                errorsDispatch({
-                  type: ERROR_ACTIONS.PUSH,
-                  payload: { id, error },
-                });
-              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
-            }}
+            onErrorChange={onInputError}
           >
             <Icons.Envelope className="h-4 w-4" />
           </InputIcon>
@@ -166,22 +157,15 @@ export default function Register() {
             type="text"
             placeholder="Username"
             validate={(value) => {
-              if (!/^[a-zA-Z0-9_.]+$/.test(value)) {
+              if (!/^[a-zA-Z0-9_.]+$/.test(value))
                 return "Username only can contains alphanumeric, underscore and dot";
-              }
 
-              if (value.length < 3) {
+              if (value.length < 3)
                 return "Username must be at least 3 characters long";
-              }
+
+              return "";
             }}
-            onErrorChange={({ id, error }) => {
-              if (error)
-                errorsDispatch({
-                  type: ERROR_ACTIONS.PUSH,
-                  payload: { id, error },
-                });
-              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
-            }}
+            onErrorChange={onInputError}
           >
             <Icons.AtSymbol className="h-4 w-4" />
           </InputIcon>
@@ -200,14 +184,7 @@ export default function Register() {
 
               return "";
             }}
-            onErrorChange={({ id, error }) => {
-              if (error)
-                errorsDispatch({
-                  type: ERROR_ACTIONS.PUSH,
-                  payload: { id, error },
-                });
-              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
-            }}
+            onErrorChange={onInputError}
           >
             <Icons.Lock className="h-4 w-4" />
           </InputIcon>
@@ -223,14 +200,7 @@ export default function Register() {
 
               return "";
             }}
-            onErrorChange={({ id, error }) => {
-              if (error)
-                errorsDispatch({
-                  type: ERROR_ACTIONS.PUSH,
-                  payload: { id, error },
-                });
-              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
-            }}
+            onErrorChange={onInputError}
           >
             <Icons.Lock className="h-4 w-4" />
           </InputIcon>
@@ -246,14 +216,7 @@ export default function Register() {
 
               return "";
             }}
-            onErrorChange={({ id, error }) => {
-              if (error)
-                errorsDispatch({
-                  type: ERROR_ACTIONS.PUSH,
-                  payload: { id, error },
-                });
-              else errorsDispatch({ type: ERROR_ACTIONS.CLEAR, payload: id });
-            }}
+            onErrorChange={onInputError}
           >
             <Icons.Calendar className="h-4 w-4" />
           </InputIcon>
