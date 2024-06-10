@@ -1,4 +1,3 @@
-import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
 import {
   AlertContainer,
   Heading,
@@ -9,7 +8,9 @@ import {
 import { Navigate, useParams } from "react-router-dom";
 import { useEffect, useReducer } from "react";
 
+import { ACTIONS as ALERT_ACTIONS } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
+import fetch from "../utils/fetch";
 import { formatMovieTitle } from "../utils/formatter";
 import { useAuth } from "../Context/Auth";
 import { useFetch } from "../hooks";
@@ -143,13 +144,6 @@ export default function BookTicket() {
         seats: selectedSeats,
       }),
     })
-      .then((res) => {
-        if (res.status !== HTTP.OK) {
-          throw new Error(res.statusText);
-        }
-
-        return res.json();
-      })
       .then((data) => {
         alertsDispatch({
           type: ALERT_ACTIONS.SUCCESS_PUSH,

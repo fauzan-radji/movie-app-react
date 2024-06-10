@@ -9,19 +9,19 @@ export default function TransactionCard({ transaction }) {
       className="flex items-start justify-between rounded-md bg-complimentary/50 px-4 py-2 text-complimentaryContrast"
     >
       <div className="flex flex-col ">
-        <h4 className="font-bold">{transaction.Movie.title}</h4>
+        <h4 className="font-bold">{transaction.tickets[0].seat.movie.title}</h4>
         <span className="flex gap-1 text-xs font-semibold">
           <span>Seats:</span>
-          {transaction.ticket.map((ticket) => (
+          {transaction.tickets.map((ticket) => (
             <span
-              key={ticket.Seats.id}
+              key={ticket.seat.id}
               className={`${
-                ticket.isCancel
+                ticket.isCancelled
                   ? "bg-danger-300 text-danger-800"
                   : "bg-success-300 text-success-900"
               } rounded px-1`}
             >
-              {ticket.Seats.seatNumber}
+              {ticket.seat.number}
             </span>
           ))}
         </span>
@@ -29,7 +29,7 @@ export default function TransactionCard({ transaction }) {
           {formatDate(transaction.createdAt)}
         </span>
       </div>
-      {transaction.ticket.every((ticket) => ticket.isCancel) && (
+      {transaction.tickets.every((ticket) => ticket.isCancelled) && (
         <span className="rounded bg-danger-300 px-1 text-xs font-semibold text-danger-700">
           Canceled
         </span>

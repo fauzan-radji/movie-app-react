@@ -1,4 +1,3 @@
-import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
 import {
   AlertContainer,
   CreditCard,
@@ -9,9 +8,11 @@ import {
 } from "../Components";
 import { useEffect, useReducer, useRef, useState } from "react";
 
+import { ACTIONS as ALERT_ACTIONS } from "../Constants";
 import { CreditCard as CreditCardSkeleton } from "../Skeletons";
 import { Navigate } from "react-router-dom";
 import { alert as alertReducer } from "../Reducers";
+import fetch from "../utils/fetch";
 import { useAuth } from "../Context/Auth";
 import { useFetch } from "../hooks";
 
@@ -76,16 +77,7 @@ export default function Withdraw() {
         withdrawal: +input.current.value,
       }),
     })
-      .then((res) => res.json())
       .then((data) => {
-        if (data.statusCode !== HTTP.CREATED) {
-          alertsDispatch({
-            type: ALERT_ACTIONS.ERROR_PUSH,
-            payload: data.message,
-          });
-          return;
-        }
-
         // FIXME: data.messageWarning
         if (data.messageWarning) {
           alertsDispatch({

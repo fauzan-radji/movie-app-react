@@ -1,4 +1,3 @@
-import { ACTIONS, HTTP } from "../Constants";
 import {
   AlertContainer,
   Header,
@@ -8,8 +7,10 @@ import {
 } from "../Components";
 import { useEffect, useReducer, useRef, useState } from "react";
 
+import { ACTIONS } from "../Constants";
 import { MovieCard as MovieCardSkeleton } from "../Skeletons";
 import { alert as alertReducer } from "../Reducers";
+import fetch from "../utils/fetch";
 import { useFetch } from "../hooks";
 import { useSearchParams } from "react-router-dom";
 
@@ -45,13 +46,6 @@ export default function Home() {
     if (!query) return;
 
     fetch(`${API_ENDPOINT}/movies/search?title=${query}`)
-      .then((res) => {
-        if (res.status !== HTTP.OK) {
-          throw new Error(res.statusText);
-        }
-
-        return res.json();
-      })
       .then((data) => {
         setMovies(data.data);
       })

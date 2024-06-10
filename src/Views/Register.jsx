@@ -1,4 +1,3 @@
-import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
 import {
   AlertContainer,
   Header,
@@ -9,7 +8,9 @@ import {
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useCallback, useReducer, useRef, useState } from "react";
 
+import { ACTIONS as ALERT_ACTIONS } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
+import fetch from "../utils/fetch";
 import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
@@ -79,19 +80,7 @@ export default function Register() {
         birthDate: new Date(birthDateInput.current.value),
       }),
     })
-      .then((res) => {
-        if (res.status !== HTTP.OK) {
-          throw new Error(res.statusText);
-        }
-
-        return res.json();
-      })
       .then((data) => {
-        // alertsDispatch({
-        //   type: ALERT_ACTIONS.SUCCESS_PUSH,
-        //   payload: data.message,
-        // });
-
         navigate("/login", {
           state: {
             successMessage: data.message,

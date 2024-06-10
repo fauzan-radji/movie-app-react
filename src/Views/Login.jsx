@@ -1,4 +1,3 @@
-import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
 import {
   AlertContainer,
   Header,
@@ -9,7 +8,9 @@ import {
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 
+import { ACTIONS as ALERT_ACTIONS } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
+import fetch from "../utils/fetch";
 import { useAuth } from "../Context/Auth";
 
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
@@ -84,12 +85,6 @@ export default function Login() {
         password: passwordInput.current.value,
       }),
     })
-      .then((res) => {
-        if (res.status !== HTTP.OK) {
-          throw new Error(res.statusText);
-        }
-        return res.json();
-      })
       .then((data) => {
         setToken(data.data);
         alertsDispatch({

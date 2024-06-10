@@ -1,4 +1,3 @@
-import { ACTIONS, HTTP } from "../Constants";
 import {
   AlertContainer,
   Header,
@@ -15,7 +14,9 @@ import { Navigate, useParams } from "react-router-dom";
 import { formatDate, formatMovieTitle } from "../utils/formatter";
 import { useEffect, useReducer, useState } from "react";
 
+import { ACTIONS } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
+import fetch from "../utils/fetch";
 import { useAuth } from "../Context/Auth";
 import { useFetch } from "../hooks";
 
@@ -50,20 +51,7 @@ export default function Ticket() {
       },
       body: JSON.stringify({ ticketsId: [ticketId] }),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.statusCode !== HTTP.CREATED) {
-          if (Array.isArray(data.message)) {
-            data.message.forEach((message) => {
-              dispatch({ type: ACTIONS.ERROR_PUSH, payload: message });
-            });
-            return;
-          }
-
-          dispatch({ type: ACTIONS.ERROR_PUSH, payload: data.message });
-          return;
-        }
-
+      .then(() => {
         setIsCanceled(true);
       })
       .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }))
