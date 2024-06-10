@@ -99,9 +99,10 @@ export default function Profile() {
 
         <div className="md:max-h-full">
           <Tickets
-            tickets={user?.orders.filter((ticket) => !ticket.isCancelled)}
+            tickets={user?.orders
+              .flatMap((order) => order.tickets)
+              .filter((ticket) => !ticket.isCancelled)}
             name={user?.name || ""}
-            token={token}
           />
         </div>
       </div>

@@ -25,9 +25,9 @@ export default function Tickets({ name, className, tickets }) {
             <Ticket
               key={ticket.id}
               id={ticket.id}
-              movieTitle={ticket.Seats.Movie.title}
+              movieTitle={ticket.seat.movie.title}
               name={name}
-              seat={ticket.Seats.seatNumber}
+              seat={ticket.seat.number}
             />
           ))
         )
