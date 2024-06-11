@@ -39,7 +39,7 @@ export default function TransactionDetail() {
 
   useEffect(() => {
     if (!transaction) return;
-    setIsCanceled(transaction.ticket.every((ticket) => ticket.isCancel));
+    setIsCanceled(transaction.tickets.every((ticket) => ticket.isCancelled));
   }, [transaction]);
 
   useEffect(() => {
@@ -100,11 +100,11 @@ export default function TransactionDetail() {
                 </span>
               </>
             )}
-            <p className="text-center">@{transaction.User.username}</p>
+            <p className="text-center">@{transaction.user.username}</p>
             <h1 className="text-center text-lg font-bold">
               {formatMovieTitle(
-                transaction.Movie.title,
-                transaction.Movie.releaseDate
+                transaction.tickets[0].seat.movie.title,
+                transaction.tickets[0].seat.movie.releaseDate
               )}
             </h1>
           </>
@@ -134,12 +134,12 @@ export default function TransactionDetail() {
               </h3>
               <div>
                 <p className="text-sm text-neutralContrast/60">Name</p>
-                <p>{transaction.User.name}</p>
+                <p>{transaction.user.name}</p>
               </div>
               <div>
                 <p className="text-sm text-neutralContrast/60">Seats</p>
                 <p className="flex gap-1">
-                  {transaction.ticket.map((ticket) => (
+                  {transaction.tickets.map((ticket) => (
                     <span
                       key={ticket.id}
                       className={`${
@@ -148,7 +148,7 @@ export default function TransactionDetail() {
                           : "bg-success-300 text-success-900"
                       } rounded px-1 text-sm font-semibold`}
                     >
-                      {ticket.Seats.seatNumber}
+                      {ticket.seat.number}
                     </span>
                   ))}
                 </p>
@@ -183,14 +183,15 @@ export default function TransactionDetail() {
       <div>
         {!isLoading && (
           <div className="flex flex-wrap items-center justify-center gap-4">
-            {transaction.ticket
-              ? transaction.ticket.map((ticket) => (
+            {/* FIXME: there is no way transation.tickets is falsy */}
+            {transaction.tickets
+              ? transaction.tickets.map((ticket) => (
                   <Ticket
                     key={ticket.id}
                     id={ticket.id}
-                    movieTitle={transaction.Movie.title}
-                    name={transaction.User.name}
-                    seat={ticket.Seats.seatNumber}
+                    movieTitle={ticket.seat.movie.title}
+                    name={transaction.user.name}
+                    seat={ticket.seat.number}
                   />
                 ))
               : Array(3)

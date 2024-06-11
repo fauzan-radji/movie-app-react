@@ -15,6 +15,7 @@ import { useEffect, useReducer } from "react";
 
 import { ACTIONS } from "../Constants";
 import { alert as alertReducer } from "../Reducers";
+import { calculateAge } from "../utils";
 import { useAuth } from "../Context/Auth";
 import { useFetch } from "../hooks";
 
@@ -37,6 +38,7 @@ export default function Profile() {
   }, [error]);
 
   if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
+  if (!isLoading && !user) setToken("");
 
   return (
     <div className="flex flex-col pb-4">
@@ -67,7 +69,7 @@ export default function Profile() {
               <>
                 <Header className="py-0">{user.name}</Header>
                 <p className="text-center text-neutralContrast/50">
-                  @{user.username} | {user.age} y.o
+                  @{user.username} | {calculateAge(user.birthDate)} y.o
                 </p>
               </>
             )}
