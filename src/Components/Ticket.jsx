@@ -53,6 +53,6 @@ Ticket.propTypes = {
   movieTitle: PropTypes.string.isRequired,
   seat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   name: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
   className: PropTypes.string,
 };

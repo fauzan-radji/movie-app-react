@@ -26,19 +26,19 @@ export default function Profile() {
   const [alerts, dispatch] = useReducer(alertReducer, []);
   const {
     data: user,
-    error,
-    isLoading,
+    error: userError,
+    isLoading: userIsLoading,
   } = useFetch(`${API_ENDPOINT}/me`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
   useEffect(() => {
-    if (!error) return;
-    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error });
-  }, [error]);
+    if (!userError) return;
+    dispatch({ type: ACTIONS.ERROR_PUSH, payload: userError });
+  }, [userError]);
 
   if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
-  if (!isLoading && !user) setToken("");
+  if (!userIsLoading && !user) setToken("");
 
   return (
     <div className="flex flex-col pb-4">
@@ -60,7 +60,7 @@ export default function Profile() {
       <div className="flex flex-col items-center justify-between gap-4 md:flex-row md:items-start md:gap-12">
         <div className="flex flex-col gap-4 md:sticky">
           <div className="flex flex-col gap-1">
-            {isLoading ? (
+            {userIsLoading ? (
               <>
                 <HeaderSkeleton />
                 <span className="mx-auto h-5 w-32 animate-pulse rounded bg-complimentaryDark/30"></span>
@@ -74,7 +74,7 @@ export default function Profile() {
               </>
             )}
           </div>
-          {isLoading ? (
+          {userIsLoading ? (
             <CreditCardSkeleton />
           ) : (
             <CreditCard balance={user.balance} email={user.email} />
@@ -83,7 +83,7 @@ export default function Profile() {
             <Link
               to="/profile/topup"
               className={`flex flex-1 items-center justify-center gap-2 rounded-md bg-accent px-2 py-3 text-accentContrast ${
-                isLoading && "pointer-events-none opacity-50"
+                userIsLoading && "pointer-events-none opacity-50"
               }`}
             >
               <Icons.TopUp className="h-6 w-6" /> Top Up
@@ -91,7 +91,7 @@ export default function Profile() {
             <Link
               to="/profile/withdraw"
               className={`flex flex-1 items-center justify-center gap-2 rounded-md bg-complimentary px-2 py-3 text-complimentaryContrast ${
-                isLoading && "pointer-events-none opacity-50"
+                userIsLoading && "pointer-events-none opacity-50"
               }`}
             >
               <Icons.Withdraw className="h-6 w-6" /> Withdraw
@@ -100,12 +100,7 @@ export default function Profile() {
         </div>
 
         <div className="md:max-h-full">
-          <Tickets
-            tickets={user?.orders
-              .flatMap((order) => order.tickets)
-              .filter((ticket) => !ticket.isCancelled)}
-            name={user?.name || ""}
-          />
+          <Tickets excludeCancelled={true} alertDispatch={dispatch} />
         </div>
       </div>
     </div>

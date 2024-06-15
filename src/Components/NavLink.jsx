@@ -22,5 +22,5 @@ export default function NavLink({ to, icon: Icon, children }) {
 NavLink.propTypes = {
   to: PropTypes.string.isRequired,
   children: PropTypes.node.isRequired,
-  icon: PropTypes.node,
+  icon: PropTypes.func,
 };

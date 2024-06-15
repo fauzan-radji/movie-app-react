@@ -29,7 +29,7 @@ export default function Ticket() {
   const [isCanceling, setIsCanceling] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
   const { data, isLoading, error } = useFetch(
-    `${API_ENDPOINT}/user/tickets/${ticketId}`,
+    `${API_ENDPOINT}/tickets/${ticketId}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
 
@@ -76,16 +76,16 @@ export default function Ticket() {
           <>
             <Header className="py-0">
               {formatMovieTitle(
-                data?.Seats.Movie.title,
-                data?.Seats.Movie.releaseDate
+                data?.seat.movie.title,
+                data?.seat.movie.releaseDate
               )}
             </Header>
             <TicketComponent
               className="self-center"
-              movieTitle={data?.Seats.Movie.title}
-              id={ticketId}
-              name={data?.User.name}
-              seat={data?.Seats.seatNumber}
+              movieTitle={data?.seat.movie.title}
+              id={data?.id}
+              name={data?.order.user.name}
+              seat={data?.seat.number}
             />
           </>
         )}
@@ -109,25 +109,25 @@ export default function Ticket() {
             <>
               <div>
                 <p className="text-sm text-neutralContrast/60">Name</p>
-                <p>{data?.User.name}</p>
+                <p>{data?.order.user.name}</p>
               </div>
               <div>
                 <p className="text-sm text-neutralContrast/60">Seat</p>
-                <p>{data?.Seats.seatNumber}</p>
+                <p>{data?.seat.number}</p>
               </div>
               <div>
                 <p className="text-sm text-neutralContrast/60">
                   Transaction date
                 </p>
-                <p>{formatDate(data.bookAt)}</p>
+                <p>{formatDate(data?.createdAt)}</p>
               </div>
             </>
           )}
-          {(data?.isCancel || isCanceled) && (
+          {(data?.isCancelled || isCanceled) && (
             <p className="font-bold text-danger-700">Canceled</p>
           )}
         </div>
-        {!(data?.isCancel || isCanceled) && (
+        {!(data?.isCancelled || isCanceled) && (
           <SecondaryButton
             disabled={isLoading || isCanceling}
             onClick={handleClick}
