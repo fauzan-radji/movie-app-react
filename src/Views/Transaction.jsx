@@ -51,15 +51,9 @@ export default function TransactionDetail() {
     if (isCanceling) return;
 
     setIsCanceling(true);
-    fetch(`${API_ENDPOINT}/orders/cancel`, {
+    fetch(`${API_ENDPOINT}/orders/${transactionId}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        ticketsId: transaction.ticket.map((ticket) => ticket.id),
-      }),
+      headers: { Authorization: `Bearer ${token}` },
     })
       .then(() => {
         setIsCanceled(true);
@@ -143,7 +137,7 @@ export default function TransactionDetail() {
                     <span
                       key={ticket.id}
                       className={`${
-                        ticket.isCancelled
+                        isCancelled || ticket.isCancelled
                           ? "bg-danger-300 text-danger-700"
                           : "bg-success-300 text-success-900"
                       } rounded px-1 text-sm font-semibold`}
