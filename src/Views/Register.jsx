@@ -67,7 +67,7 @@ export default function Register() {
     }
 
     setIsSending(true);
-    fetch(`${API_ENDPOINT}/signup`, {
+    fetch(`${API_ENDPOINT}/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
