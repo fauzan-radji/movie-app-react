@@ -152,7 +152,7 @@ export default function BookTicket() {
         dispatch({ type: ACTIONS.SET_IS_SUCCESS, payload: true });
         dispatch({
           type: ACTIONS.SET_TRANSACTION_ID,
-          payload: data.ordersId.id,
+          payload: data.data.id,
         });
       })
       .catch((e) =>
