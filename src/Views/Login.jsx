@@ -49,7 +49,6 @@ export default function Login() {
   }, []);
 
   const location = useLocation();
-
   useEffect(() => {
     if (!location.state) return;
 

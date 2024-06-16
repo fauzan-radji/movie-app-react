@@ -6,11 +6,11 @@ import {
   InputIcon,
   PrimaryButton,
 } from "../Components";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useReducer, useRef, useState } from "react";
 
 import { ACTIONS as ALERT_ACTIONS } from "../Constants";
 import { CreditCard as CreditCardSkeleton } from "../Skeletons";
-import { Navigate } from "react-router-dom";
 import { alert as alertReducer } from "../Reducers";
 import fetch from "../utils/fetch";
 import { useAuth } from "../Context/Auth";
@@ -38,19 +38,20 @@ export default function Withdraw() {
   const { isLoggedIn, token } = useAuth();
   const [alerts, alertsDispatch] = useReducer(alertReducer, []);
   const [errors, errorsDispatch] = useReducer(errorReducer, []);
+  const navigate = useNavigate();
   const input = useRef();
   const [isSending, setIsSending] = useState(false);
   const {
-    data: balance,
+    data: user,
     error,
     isLoading,
-  } = useFetch(`${API_ENDPOINT}/balance`, {
+  } = useFetch(`${API_ENDPOINT}/me`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
   useEffect(() => {
     if (!error) return;
-    alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: error.message });
+    alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: error });
   }, [error]);
 
   function handleSubmit(e) {
@@ -67,31 +68,23 @@ export default function Withdraw() {
     }
 
     setIsSending(true);
-    fetch(`${API_ENDPOINT}/balance/withdraw`, {
-      method: "POST",
+    fetch(`${API_ENDPOINT}/balance`, {
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        withdrawal: +input.current.value,
+        amount: +input.current.value,
       }),
     })
       .then((data) => {
-        // FIXME: data.messageWarning
-        if (data.messageWarning) {
-          alertsDispatch({
-            type: ALERT_ACTIONS.WARNING_PUSH,
-            payload: data.messageWarning,
-          });
-        }
-
-        alertsDispatch({
-          type: ALERT_ACTIONS.SUCCESS_PUSH,
-          payload: data.message,
+        navigate("/profile", {
+          state: {
+            successMessage: data.message,
+          },
         });
         input.current.value = "";
-        balance.balance = +data.data.balance;
       })
       .catch((e) =>
         alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: e.message })
@@ -139,10 +132,7 @@ export default function Withdraw() {
           {isLoading ? (
             <CreditCardSkeleton />
           ) : (
-            <CreditCard
-              balance={balance.balance}
-              username={balance.user.username}
-            />
+            <CreditCard balance={user.balance} username={user.username} />
           )}
         </div>
 

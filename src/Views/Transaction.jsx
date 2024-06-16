@@ -44,7 +44,7 @@ export default function TransactionDetail() {
 
   useEffect(() => {
     if (!error) return;
-    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error.message });
+    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error });
   }, [error]);
 
   function handleClick() {

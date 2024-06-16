@@ -10,7 +10,7 @@ import {
   CreditCard as CreditCardSkeleton,
   Header as HeaderSkeleton,
 } from "../Skeletons";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { useEffect, useReducer } from "react";
 
 import { ACTIONS } from "../Constants";
@@ -36,6 +36,20 @@ export default function Profile() {
     if (!userError) return;
     dispatch({ type: ACTIONS.ERROR_PUSH, payload: userError });
   }, [userError]);
+
+  const location = useLocation();
+  useEffect(() => {
+    if (!location.state) return;
+
+    const { successMessage } = location.state;
+    delete location.state;
+    if (successMessage) {
+      dispatch({
+        type: ACTIONS.SUCCESS_PUSH,
+        payload: successMessage,
+      });
+    }
+  }, [location]);
 
   if (!isLoggedIn) return <Navigate to="/login" replace={true} />;
   if (!userIsLoading && !user) setToken("");

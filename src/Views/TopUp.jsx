@@ -1,4 +1,3 @@
-import { ACTIONS as ALERT_ACTIONS, HTTP } from "../Constants";
 import {
   AlertContainer,
   CreditCard,
@@ -7,10 +6,11 @@ import {
   InputIcon,
   PrimaryButton,
 } from "../Components";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useReducer, useRef, useState } from "react";
 
+import { ACTIONS as ALERT_ACTIONS } from "../Constants";
 import { CreditCard as CreditCardSkeleton } from "../Skeletons";
-import { Navigate } from "react-router-dom";
 import { alert as alertReducer } from "../Reducers";
 import fetch from "../utils/fetch";
 import { useAuth } from "../Context/Auth";
@@ -38,19 +38,20 @@ export default function TopUp() {
   const { isLoggedIn, token } = useAuth();
   const [alerts, alertsDispatch] = useReducer(alertReducer, []);
   const [errors, errorsDispatch] = useReducer(errorReducer, []);
+  const navigate = useNavigate();
   const input = useRef();
   const [isSending, setIsSending] = useState(false);
   const {
-    data: balance,
+    data: user,
     error,
     isLoading,
-  } = useFetch(`${API_ENDPOINT}/balance`, {
+  } = useFetch(`${API_ENDPOINT}/me`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
   useEffect(() => {
     if (!error) return;
-    alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: error.message });
+    alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: error });
   }, [error]);
 
   function handleSubmit(e) {
@@ -74,25 +75,16 @@ export default function TopUp() {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        balance: +input.current.value,
+        amount: +input.current.value,
       }),
     })
       .then((data) => {
-        if (data.statusCode !== HTTP.CREATED) {
-          alertsDispatch({
-            type: ALERT_ACTIONS.ERROR_PUSH,
-            payload: data.message,
-          });
-          return;
-        }
-
-        // TODO: update balance to new balance after top up
-        alertsDispatch({
-          type: ALERT_ACTIONS.SUCCESS_PUSH,
-          payload: data.message,
+        navigate("/profile", {
+          state: {
+            successMessage: data.message,
+          },
         });
         input.current.value = "";
-        balance.balance = +data.data.balance;
       })
       .catch((e) =>
         alertsDispatch({ type: ALERT_ACTIONS.ERROR_PUSH, payload: e.message })
@@ -139,10 +131,7 @@ export default function TopUp() {
           {isLoading ? (
             <CreditCardSkeleton />
           ) : (
-            <CreditCard
-              balance={balance.balance}
-              username={balance.user.username}
-            />
+            <CreditCard balance={user.balance} username={user.username} />
           )}
         </div>
 

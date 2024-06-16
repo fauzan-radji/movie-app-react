@@ -20,7 +20,7 @@ export default function Movie() {
 
   useEffect(() => {
     if (!error) return;
-    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error.message });
+    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error });
   }, [error]);
 
   return (

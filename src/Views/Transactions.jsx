@@ -23,7 +23,7 @@ export default function Transactions() {
 
   useEffect(() => {
     if (!error) return;
-    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error.message });
+    dispatch({ type: ACTIONS.ERROR_PUSH, payload: error });
   }, [error]);
 
   if (!isLoggedIn) return <Navigate to="/login" replace />;
