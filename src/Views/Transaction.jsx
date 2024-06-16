@@ -26,7 +26,7 @@ export default function TransactionDetail() {
   const { isLoggedIn, token } = useAuth();
   const [alerts, dispatch] = useReducer(alertReducer, []);
   const { transactionId } = useParams();
-  const [isCanceled, setIsCanceled] = useState(false);
+  const [isCancelled, setIsCanceled] = useState(false);
   const [isCanceling, setIsCanceling] = useState(false);
 
   const {
@@ -85,7 +85,7 @@ export default function TransactionDetail() {
           </>
         ) : (
           <>
-            {isCanceled ? (
+            {isCancelled ? (
               <>
                 <Icons.XCircle className="mx-auto aspect-square w-20 text-danger-700" />
                 <span className="mx-auto mb-2 w-max rounded bg-danger-300 px-1 text-center text-sm font-semibold text-danger-800">
@@ -143,7 +143,7 @@ export default function TransactionDetail() {
                     <span
                       key={ticket.id}
                       className={`${
-                        ticket.isCancel
+                        ticket.isCancelled
                           ? "bg-danger-300 text-danger-700"
                           : "bg-success-300 text-success-900"
                       } rounded px-1 text-sm font-semibold`}
@@ -163,7 +163,7 @@ export default function TransactionDetail() {
           )}
         </div>
 
-        {!isCanceled && (
+        {!isCancelled && (
           <SecondaryButton
             disabled={isCanceling || isLoading}
             onClick={handleClick}

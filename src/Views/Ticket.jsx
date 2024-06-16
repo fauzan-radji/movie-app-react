@@ -43,13 +43,11 @@ export default function Ticket() {
     if (isCanceling) return;
 
     setIsCanceling(true);
-    fetch(`${API_ENDPOINT}/orders/cancel`, {
+    fetch(`${API_ENDPOINT}/tickets/${ticketId}`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ ticketsId: [ticketId] }),
     })
       .then(() => {
         setIsCanceled(true);
