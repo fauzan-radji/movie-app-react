@@ -17,16 +17,27 @@ import { useSearchParams } from "react-router-dom";
 const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 const limit = 12;
 
+function generateUrl({ page, limit, query }) {
+  return `${API_ENDPOINT}/movies?${
+    query ? `query=${query}` : `page=${page}&limit=${limit}`
+  }`;
+}
+
 export default function Home() {
   const [alerts, dispatch] = useReducer(alertReducer, []);
   const [movies, setMovies] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
   const page = +searchParams.get("page");
+  const query = searchParams.get("query");
   const inputSearch = useRef();
 
   const { data, isLoading, error, totalPages } = useFetch(
-    `${API_ENDPOINT}/movies?page=${page}&limit=${limit}`
+    generateUrl({ page, limit, query })
   );
+
+  useEffect(() => {
+    inputSearch.current.value = query;
+  }, [query]);
 
   useEffect(() => {
     if (!data) return;
@@ -38,14 +49,17 @@ export default function Home() {
     dispatch({ type: ACTIONS.ERROR_PUSH, payload: error });
   }, [error]);
 
-  // FIXME: use search param for query
   function handleSubmit(e) {
     e.preventDefault();
 
     const query = inputSearch.current.value;
-    if (!query) return;
 
-    fetch(`${API_ENDPOINT}/movies/search?title=${query}`)
+    if (query) {
+      setSearchParams({ query });
+    } else {
+      setSearchParams({ page });
+    }
+    fetch(generateUrl({ page, limit, query }))
       .then((data) => {
         setMovies(data.data);
       })
@@ -53,7 +67,14 @@ export default function Home() {
   }
 
   function handleChange() {
-    if (!inputSearch.current.value) setMovies(data);
+    if (inputSearch.current.value) return;
+
+    setSearchParams({ page });
+    fetch(generateUrl({ page, limit, query: "" }))
+      .then((data) => {
+        setMovies(data.data);
+      })
+      .catch((e) => dispatch({ type: ACTIONS.ERROR_PUSH, payload: e.message }));
   }
 
   return (
@@ -96,7 +117,7 @@ export default function Home() {
 
       {!isLoading && (
         <Pagination
-          currentPage={page}
+          currentPage={Math.max(1, Math.min(totalPages, page))}
           pagesToShow={2}
           totalPages={totalPages}
           onPageChange={(page) => setSearchParams({ page })}
